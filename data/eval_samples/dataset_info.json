@@ -1,0 +1,116 @@
+{
+  "citation": "",
+  "description": "",
+  "features": {
+    "Dokument_ID": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "Nachname": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "Vorname": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "Pseudonym": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "Gender": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "Titel": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "Untertitel_im_Text": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "Untertitel_im_Inhaltsverzeichnis": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "Jahr_ED": {
+      "dtype": "float64",
+      "_type": "Value"
+    },
+    "entstanden": {
+      "dtype": "float64",
+      "_type": "Value"
+    },
+    "Gattungslabel_ED": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "Medium_ED": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "Medientyp_ED": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "Hg.": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "Kanon_Status": {
+      "dtype": "float64",
+      "_type": "Value"
+    },
+    "seriell": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "Seiten": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "Medium_Zweitdruck": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "Jahr_Zweitdruck": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "Label_Zweitdruck": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "Medium_Drittdruck": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "Jahr_Drittdruck": {
+      "dtype": "float64",
+      "_type": "Value"
+    },
+    "Label_Drittdruck": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "in_Deutscher_Novellenschatz_(Heyse)": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "in_Pantheon": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "in_RUB_Sammlung": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "in_B-v-Wiese": {
+      "dtype": "string",
+      "_type": "Value"
+    }
+  },
+  "homepage": "",
+  "license": ""
+}
