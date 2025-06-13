@@ -141,7 +141,7 @@ def prompt_model(prompt_dataset, eval_dataset, model_id = "meta-llama/Llama-3.2-
     few_shots = create_few_shot_samples(eval_dataset, shots)
     
     prompt_dataset = prompt_dataset.select([i for i in range(shots, len(prompt_dataset))]) # Remove few-shot-examples
-    outputs = prompt_dataset.map(generate_text(pipe=pipe, few_shot=few_shots, max_new_tokens=max_new_tokens, instructions=instructions, system_prompt=system_prompt))
+    outputs = prompt_dataset.map(lambda x: generate_text(sample=x, pipe=pipe, few_shot=few_shots, max_new_tokens=max_new_tokens, instructions=instructions, system_prompt=system_prompt))
 
     os.makedirs(f"./output/{model_id}/{shots}")
     outputs.save_to_disc(f"./output/{model_id}/{shots}/hf")
