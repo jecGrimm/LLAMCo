@@ -176,11 +176,12 @@ def prompt_model_dataset(prompt_dataset, eval_dataset, model_id = "meta-llama/Ll
 
     few_shots = create_few_shot_samples(eval_dataset, shots)
     
-    prompt_dataset = prompt_dataset.select([i for i in range(shots, len(prompt_dataset))]) # Remove few-shot-examples
-    
+    #prompt_dataset = prompt_dataset.select([i for i in range(shots, len(prompt_dataset))]) # Remove few-shot-examples
+    prompt_dataset = prompt_dataset.skip(shots)
+
     message_dataset = prompt_dataset.map(lambda x: create_message_dataset(sample=x, few_shot=few_shots, instructions=instructions, system_prompt=system_prompt))
-    
-    outputs = pipe(message_dataset)
+
+    outputs = pipe(message_dataset["messages"])
 
     print(outputs)
     # for out in tqdm(pipe(message_dataset)):
