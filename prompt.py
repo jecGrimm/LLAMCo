@@ -2,6 +2,7 @@ import torch
 from transformers import pipeline
 import os
 from data import Data
+from tqdm.auto import tqdm
 
 DEFAULT_SYSTEM_PROMPT = """\
 You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe.\
@@ -118,6 +119,11 @@ def generate_text(sample, pipe, few_shot, max_new_tokens = 500, instructions=DEF
     # TODO: check for correctness + 3 tries to get it correct
     return {"outputs": outputs[0]["generated_text"][-1]} # dictionary to turn it automatically into a Huggingface dataset
 
+def create_message_dataset(sample, few_shot, instructions=DEFAULT_PROMPT, system_prompt=DEFAULT_SYSTEM_PROMPT):
+    prompt = create_prompt(sample, few_shots=few_shot, instructions=instructions)
+    messages = create_messages(prompt, system_prompt=system_prompt)
+    return {"messages": messages}
+
 def prompt_model(prompt_dataset, eval_dataset, model_id = "meta-llama/Llama-3.2-1B-Instruct", shots = 0, max_new_tokens = 500, instructions=DEFAULT_PROMPT, system_prompt=DEFAULT_SYSTEM_PROMPT):
     """
     This function prompts the whole dataset to the model in a x-shot manner. Saves the generated text as a Huggingface dataset (not human readable) and as a json file (human readable).
@@ -141,10 +147,46 @@ def prompt_model(prompt_dataset, eval_dataset, model_id = "meta-llama/Llama-3.2-
     few_shots = create_few_shot_samples(eval_dataset, shots)
     
     prompt_dataset = prompt_dataset.select([i for i in range(shots, len(prompt_dataset))]) # Remove few-shot-examples
+    
     outputs = prompt_dataset.map(lambda x: generate_text(sample=x, pipe=pipe, few_shot=few_shots, max_new_tokens=max_new_tokens, instructions=instructions, system_prompt=system_prompt))
 
     os.makedirs(f"./output/{model_id}/{shots}")
     outputs.save_to_disc(f"./output/{model_id}/{shots}/hf")
+    outputs.to_json(f"./output/{model_id}/{shots}/outputs_{model_id}_{shots}.json")
+
+def prompt_model_dataset(prompt_dataset, eval_dataset, model_id = "meta-llama/Llama-3.2-1B-Instruct", shots = 0, max_new_tokens = 500, instructions=DEFAULT_PROMPT, system_prompt=DEFAULT_SYSTEM_PROMPT):
+    """
+    This function prompts the whole dataset to the model in a x-shot manner. Saves the generated text as a Huggingface dataset (not human readable) and as a json file (human readable).
+
+    @params
+        prompt_dataset: prompt samples
+        eval_dataset: evaluation samples
+        model_id: Huggingface model name
+        shots: number of examples in the instructions
+        max_new_tokens: limit of the number of generated tokens
+        instructions: model instructions
+        system_prompt: general system instructions 
+    """
+    pipe = pipeline(
+        "text-generation",
+        model=model_id,
+        torch_dtype=torch.bfloat16,
+        device_map="auto",
+    )
+
+    few_shots = create_few_shot_samples(eval_dataset, shots)
+    
+    prompt_dataset = prompt_dataset.select([i for i in range(shots, len(prompt_dataset))]) # Remove few-shot-examples
+    
+    message_dataset = prompt_dataset.map(lambda x: create_message_dataset(sample=x, few_shot=few_shots, instructions=instructions, system_prompt=system_prompt))
+    
+    outputs = pipe(message_dataset)
+
+    print(outputs)
+    # for out in tqdm(pipe(message_dataset)):
+    #     print(out)
+    os.makedirs(f"./output/{model_id}/{shots}")
+    # outputs.save_to_disc(f"./output/{model_id}/{shots}/hf")
     outputs.to_json(f"./output/{model_id}/{shots}/outputs_{model_id}_{shots}.json")
 
 
@@ -152,4 +194,5 @@ if __name__ == "__main__":
     data = Data()
     shots = [0, 1, 5]
     for shot in shots:
-        prompt_model(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots=shot)
+        #prompt_model(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots=shot)
+        prompt_model_dataset(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots=shot)
