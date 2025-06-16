@@ -6,6 +6,20 @@ This repository test whether Large Language Models (LLMs) can be used as metadat
 2. Create environment:<br> `conda env create -f env.yml`
 3. Activate environment:<br> `conda activate llamco`
 
+## Usage
+### Slurm
+#### Commands
+`sbatch --partition=NvidiaAll ./scripts/prompt.sh`
+#### Jobs
+prompt (test Llama): 
+- 11035: failed because of missing output directory (possibly)
+- 11037 (output dir kreiert): failed weil das Repo falsche benannt war
+- 11050 (LLAMCO in LLAMCo umbenannt): failed weil das Modell nicht geladen werden konnte
+- 11456 (mit accelerate installed): failed, weil sample in generate_text nicht übergeben wurde
+- 11457 (lamdba function in generate): cancelled, um das ganze Datenset laufen zu lassen
+- 11458 (pipe mit ganzem Datenset): failed, weil pipe ein Dataset übergeben bekommen hat
+- 11460 (pipe mit List): failed, weil Liste keine Funktion tojson hat
+
 ## Structure
 ### data
 This directory contains the hugginface datasets.

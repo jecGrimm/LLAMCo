@@ -3,6 +3,7 @@ from transformers import pipeline
 import os
 from data import Data
 from tqdm.auto import tqdm
+import json
 
 DEFAULT_SYSTEM_PROMPT = """\
 You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe.\
@@ -20,6 +21,7 @@ Create a dictionary containing only the given output keys and the corresponding 
 Please refer to the explanations of the output keys to fill in the correct information.\
 Please return "" as value if you don't know the answer.\
 Please return only the output dictionary.\
+Please answer in German.\
 \
 Input keys:\
 "author": name of an author\
@@ -181,14 +183,16 @@ def prompt_model_dataset(prompt_dataset, eval_dataset, model_id = "meta-llama/Ll
 
     message_dataset = prompt_dataset.map(lambda x: create_message_dataset(sample=x, few_shot=few_shots, instructions=instructions, system_prompt=system_prompt))
 
-    outputs = pipe(message_dataset["messages"])
+    outputs = tqdm(pipe(message_dataset["messages"]))
 
     print(outputs)
     # for out in tqdm(pipe(message_dataset)):
     #     print(out)
     os.makedirs(f"./output/{model_id}/{shots}")
     # outputs.save_to_disc(f"./output/{model_id}/{shots}/hf")
-    outputs.to_json(f"./output/{model_id}/{shots}/outputs_{model_id}_{shots}.json")
+    with open(f"./output/{model_id}/{shots}/outputs_{model_id}_{shots}.json", "w", encoding = "utf-8") as f:
+        json.dump(outputs, f)
+    #outputs.to_json(f"./output/{model_id}/{shots}/outputs_{model_id}_{shots}.json")
 
 
 if __name__ == "__main__":
