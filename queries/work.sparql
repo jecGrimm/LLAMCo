@@ -1,0 +1,12 @@
+PREFIX prop: <http://www.wikidata.org/prop/direct/>
+
+Select DISTINCT ?work_info 
+{
+  ?author ?p1 "E. T. A. Hoffmann" ;
+          ?p2 ?work .
+  
+  ?work prop:P1476 "Der Sandmann"@de ;
+        ?p3 ?work_info .
+  
+  FILTER(isLiteral(?work_info))
+}

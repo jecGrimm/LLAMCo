@@ -152,7 +152,7 @@ def prompt_model(prompt_dataset, eval_dataset, model_id = "meta-llama/Llama-3.2-
     
     outputs = prompt_dataset.map(lambda x: generate_text(sample=x, pipe=pipe, few_shot=few_shots, max_new_tokens=max_new_tokens, instructions=instructions, system_prompt=system_prompt))
 
-    os.makedirs(f"./output/{model_id}/{shots}")
+    os.makedirs(f"./output/{model_id}/{shots}", exist_ok=True)
     outputs.save_to_disc(f"./output/{model_id}/{shots}/hf")
     outputs.to_json(f"./output/{model_id}/{shots}/outputs_{model_id}_{shots}.json")
 
@@ -188,7 +188,7 @@ def prompt_model_dataset(prompt_dataset, eval_dataset, model_id = "meta-llama/Ll
     print(outputs)
     # for out in tqdm(pipe(message_dataset)):
     #     print(out)
-    os.makedirs(f"./output/{model_id}/{shots}")
+    os.makedirs(f"./output/{model_id}/{shots}", exist_ok=True)
     # outputs.save_to_disc(f"./output/{model_id}/{shots}/hf")
     with open(f"./output/{model_id}/{shots}/outputs_{model_id}_{shots}.json", "w", encoding = "utf-8") as f:
         json.dump(outputs, f)
@@ -196,8 +196,10 @@ def prompt_model_dataset(prompt_dataset, eval_dataset, model_id = "meta-llama/Ll
 
 
 if __name__ == "__main__":
+    print("Running script prompt.py")
     data = Data()
     shots = [0, 1, 5]
     for shot in shots:
+        print(f"Starting {shot}-shot prompting")
         #prompt_model(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots=shot)
         prompt_model_dataset(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots=shot)
