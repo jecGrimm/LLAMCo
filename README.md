@@ -20,7 +20,11 @@ prompt (test Llama):
 - 11457 (lamdba function in generate): cancelled, um das ganze Datenset laufen zu lassen
 - 11458 (pipe mit ganzem Datenset): failed, weil pipe ein Dataset übergeben bekommen hat
 - 11460 (pipe mit List): failed, weil Liste keine Funktion tojson hat
-- 12492 (save list as normal json): Running
+- 12492 (save list as normal json): failed, weil die directories schon bestanden 
+- 13191 (fixed existing output dir, data only first 3): failed, weil prompt_samples ein dict ist
+- 13192 (fixed huggingface issue): failed, weil indexing dir zurückgibt
+- 13193 (select für testindices): failed, weil ich das exist_ok nicht gepullt habe
+- 13194 (exist_ok = True gesetzt): Running
 
 ## Structure
 ### data

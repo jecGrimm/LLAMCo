@@ -190,7 +190,7 @@ def prompt_model_dataset(prompt_dataset, eval_dataset, model_id = "meta-llama/Ll
     #     print(out)
     os.makedirs(f"./output/{model_id}/{shots}", exist_ok=True)
     # outputs.save_to_disc(f"./output/{model_id}/{shots}/hf")
-    with open(f"./output/{model_id}/{shots}/outputs_{model_id}_{shots}.json", "w", encoding = "utf-8") as f:
+    with open(f"./output/{model_id}/{shots}/outputs_{model_id.split('/')[-1]}_{shots}.json", "w", encoding = "utf-8") as f:
         json.dump(outputs, f)
     #outputs.to_json(f"./output/{model_id}/{shots}/outputs_{model_id}_{shots}.json")
 
