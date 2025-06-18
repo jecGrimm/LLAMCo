@@ -83,7 +83,7 @@ def create_few_shot_samples(eval_dataset, shots = 0):
     few_shots = ""
     for shot in range(shots):
         few_shots += f"Input: {{'Vorname': '{eval_dataset["Vorname"][shot]}, 'Nachname': '{eval_dataset["Nachname"][shot]}, 'Titel': {eval_dataset["Titel"][shot]}}}\n"
-        few_shots += f"Output: {eval_dataset.select[shot]}\n"
+        few_shots += f"Output: {eval_dataset.select(shot)}\n"
     return few_shots
 
 def create_prompt(prompt_sample, few_shots, instructions=DEFAULT_PROMPT):

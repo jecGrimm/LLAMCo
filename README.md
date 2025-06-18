@@ -24,7 +24,8 @@ prompt (test Llama):
 - 13191 (fixed existing output dir, data only first 3): failed, weil prompt_samples ein dict ist
 - 13192 (fixed huggingface issue): failed, weil indexing dir zurückgibt
 - 13193 (select für testindices): failed, weil ich das exist_ok nicht gepullt habe
-- 13194 (exist_ok = True gesetzt): Running
+- 13194 (exist_ok = True gesetzt): failed, weil output json keine Datei ist
+- 13195 (model_id in json gesplittet): failed, weil select mit falschen Klammern benutzt wurde
 
 ## Structure
 ### data
