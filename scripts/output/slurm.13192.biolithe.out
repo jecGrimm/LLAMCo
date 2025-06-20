@@ -1,0 +1,10 @@
+slurmstepd-biolithe: error: Unable to create TMPDIR [/tmp/user/32202]: Permission denied
+slurmstepd-biolithe: error: Setting TMPDIR to /tmp
+Device set to use cuda:0
+Traceback (most recent call last):
+  File "/home/g/grimmj/LLAMCo/prompt.py", line 204, in <module>
+    prompt_model_dataset(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots=shot)
+  File "/home/g/grimmj/LLAMCo/prompt.py", line 184, in prompt_model_dataset
+    message_dataset = prompt_dataset[:10].map(lambda x: create_message_dataset(sample=x, few_shot=few_shots, instructions=instructions, system_prompt=system_prompt))
+                      ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'dict' object has no attribute 'map'

@@ -1,0 +1,44 @@
+slurmstepd-biolithe: error: Unable to create TMPDIR [/tmp/user/32202]: Permission denied
+slurmstepd-biolithe: error: Setting TMPDIR to /tmp
+Traceback (most recent call last):
+  File "/home/g/grimmj/LLAMCo/prompt.py", line 155, in <module>
+    prompt_model(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots=shot)
+  File "/home/g/grimmj/LLAMCo/prompt.py", line 134, in prompt_model
+    pipe = pipeline(
+           ^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/llamco/lib/python3.12/site-packages/transformers/pipelines/__init__.py", line 942, in pipeline
+    framework, model = infer_framework_load_model(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/llamco/lib/python3.12/site-packages/transformers/pipelines/base.py", line 305, in infer_framework_load_model
+    raise ValueError(
+ValueError: Could not load model meta-llama/Llama-3.2-1B-Instruct with any of the following classes: (<class 'transformers.models.auto.modeling_auto.AutoModelForCausalLM'>, <class 'transformers.models.llama.modeling_llama.LlamaForCausalLM'>). See the original errors:
+
+while loading with AutoModelForCausalLM, an error is thrown:
+Traceback (most recent call last):
+  File "/home/g/grimmj/miniconda3/envs/llamco/lib/python3.12/site-packages/transformers/pipelines/base.py", line 292, in infer_framework_load_model
+    model = model_class.from_pretrained(model, **kwargs)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/llamco/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 571, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/llamco/lib/python3.12/site-packages/transformers/modeling_utils.py", line 309, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/llamco/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4286, in from_pretrained
+    raise ValueError(
+ValueError: Using a `device_map`, `tp_plan`, `torch.device` context manager or setting `torch.set_default_device(device)` requires `accelerate`. You can install it with `pip install accelerate`
+
+while loading with LlamaForCausalLM, an error is thrown:
+Traceback (most recent call last):
+  File "/home/g/grimmj/miniconda3/envs/llamco/lib/python3.12/site-packages/transformers/pipelines/base.py", line 292, in infer_framework_load_model
+    model = model_class.from_pretrained(model, **kwargs)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/llamco/lib/python3.12/site-packages/transformers/modeling_utils.py", line 309, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/llamco/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4286, in from_pretrained
+    raise ValueError(
+ValueError: Using a `device_map`, `tp_plan`, `torch.device` context manager or setting `torch.set_default_device(device)` requires `accelerate`. You can install it with `pip install accelerate`
+
+
+

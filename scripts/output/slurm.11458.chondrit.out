@@ -1,0 +1,23 @@
+slurmstepd-chondrit: error: Unable to create TMPDIR [/tmp/user/32202]: Permission denied
+slurmstepd-chondrit: error: Setting TMPDIR to /tmp
+Device set to use cuda:0
+Map:   0%|          | 0/1346 [00:00<?, ? examples/s]Map: 100%|██████████| 1346/1346 [00:00<00:00, 8220.59 examples/s]Map: 100%|██████████| 1346/1346 [00:00<00:00, 7804.79 examples/s]
+Traceback (most recent call last):
+  File "/home/g/grimmj/LLAMCo/prompt.py", line 198, in <module>
+    prompt_model_dataset(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots=shot)
+  File "/home/g/grimmj/LLAMCo/prompt.py", line 183, in prompt_model_dataset
+    outputs = pipe(message_dataset)
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/llamco/lib/python3.12/site-packages/transformers/pipelines/text_generation.py", line 302, in __call__
+    return super().__call__(text_inputs, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/llamco/lib/python3.12/site-packages/transformers/pipelines/base.py", line 1431, in __call__
+    return self.run_single(inputs, preprocess_params, forward_params, postprocess_params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/llamco/lib/python3.12/site-packages/transformers/pipelines/base.py", line 1437, in run_single
+    model_inputs = self.preprocess(inputs, **preprocess_params)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/llamco/lib/python3.12/site-packages/transformers/pipelines/text_generation.py", line 340, in preprocess
+    inputs = self.tokenizer(prefix + prompt_text, return_tensors=self.framework, **tokenizer_kwargs)
+                            ~~~~~~~^~~~~~~~~~~~~
+TypeError: can only concatenate str (not "Dataset") to str

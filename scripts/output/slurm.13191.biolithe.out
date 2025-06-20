@@ -1,0 +1,10 @@
+slurmstepd-biolithe: error: Unable to create TMPDIR [/tmp/user/32202]: Permission denied
+slurmstepd-biolithe: error: Setting TMPDIR to /tmp
+Device set to use cuda:0
+Traceback (most recent call last):
+  File "/home/g/grimmj/LLAMCo/prompt.py", line 203, in <module>
+    prompt_model_dataset(prompt_dataset=data.prompt_samples[:3], eval_dataset=data.eval_samples[:3], shots=shot)
+  File "/home/g/grimmj/LLAMCo/prompt.py", line 182, in prompt_model_dataset
+    prompt_dataset = prompt_dataset.skip(shots)
+                     ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'dict' object has no attribute 'skip'

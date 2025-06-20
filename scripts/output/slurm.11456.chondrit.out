@@ -1,0 +1,10 @@
+slurmstepd-chondrit: error: Unable to create TMPDIR [/tmp/user/32202]: Permission denied
+slurmstepd-chondrit: error: Setting TMPDIR to /tmp
+Device set to use cuda:0
+Traceback (most recent call last):
+  File "/home/g/grimmj/LLAMCo/prompt.py", line 155, in <module>
+    prompt_model(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots=shot)
+  File "/home/g/grimmj/LLAMCo/prompt.py", line 144, in prompt_model
+    outputs = prompt_dataset.map(generate_text(pipe=pipe, few_shot=few_shots, max_new_tokens=max_new_tokens, instructions=instructions, system_prompt=system_prompt))
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: generate_text() missing 1 required positional argument: 'sample'

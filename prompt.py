@@ -152,7 +152,7 @@ def prompt_model(prompt_dataset, eval_dataset, model_id = "meta-llama/Llama-3.2-
     
     outputs = prompt_dataset.map(lambda x: generate_text(sample=x, pipe=pipe, few_shot=few_shots, max_new_tokens=max_new_tokens, instructions=instructions, system_prompt=system_prompt))
 
-    os.makedirs(f"./output/{model_id}/{shots}", exist_ok=True)
+    os.makedirs(f"./output/{model_id}/{shots}", exist_ok = True)
     outputs.save_to_disc(f"./output/{model_id}/{shots}/hf")
     outputs.to_json(f"./output/{model_id}/{shots}/outputs_{model_id}_{shots}.json")
 
@@ -180,10 +180,10 @@ def prompt_model_dataset(prompt_dataset, eval_dataset, model_id = "meta-llama/Ll
     
     #prompt_dataset = prompt_dataset.select([i for i in range(shots, len(prompt_dataset))]) # Remove few-shot-examples
     prompt_dataset = prompt_dataset.skip(shots)
+	
+    message_dataset = prompt_dataset.select(range(10)).map(lambda x: create_message_dataset(sample=x, few_shot=few_shots, instructions=instructions, system_prompt=system_prompt))
 
-    message_dataset = prompt_dataset.map(lambda x: create_message_dataset(sample=x, few_shot=few_shots, instructions=instructions, system_prompt=system_prompt))
-
-    outputs = tqdm(pipe(message_dataset["messages"]))
+    outputs = pipe(message_dataset["messages"])
 
     print(outputs)
     # for out in tqdm(pipe(message_dataset)):
@@ -196,10 +196,9 @@ def prompt_model_dataset(prompt_dataset, eval_dataset, model_id = "meta-llama/Ll
 
 
 if __name__ == "__main__":
-    print("Running script prompt.py")
     data = Data()
     shots = [0, 1, 5]
     for shot in shots:
-        print(f"Starting {shot}-shot prompting")
+	#print("Data:", data.prompt_samples[:10])
         #prompt_model(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots=shot)
         prompt_model_dataset(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots=shot)
