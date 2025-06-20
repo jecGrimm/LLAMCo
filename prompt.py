@@ -15,6 +15,15 @@ If you don’t know the answer to a question, please don’t share false informa
 If you don’t know the answer to a question, please answer with "NAN".\
 """
 
+DEFAULT_SYSTEM_PROMPT_DE = """\
+Du bist ein hilfreicher, respektvoller und ehrlicher Assistent. Antworte immer so hilfreich wie möglich und bleibe dabei ein sicherer Umgang.\
+Deine Antworten sollten keinen verletzenden, unethischen, rassistischen, sexistischen, toxischen, gefährlichen oder illegalen Inhalt enthalten.\
+Bitte stelle sicher, dass deine Antworten keine sozialen Vorurteile widerspiegeln und bleibe positiv.\
+
+Wenn eine Frage keinen Sinn macht oder faktisch nicht kohärent ist, erkläre bitte, warum, statt eine falsche Antwort zu geben.\
+Wenn du die Antwort auf eine Frage nicht kennst, teile bitte keine falschen Informationen und antworte mit "NAN".\
+"""
+
 DEFAULT_PROMPT = """\
 Please help me to collect structured metadata information about a published literary text.
 Create a dictionary containing only the given output keys and the corresponding missing information for the author and title given by the input keys.\
@@ -53,6 +62,78 @@ Output keys:\
 "in_Deutscher_Novellenschatz_Heyse": if the creative work given in the input is listed in "Deutscher Novellenschatz" by Paul Heyse; possible values are True (creative work given in the input is listed in "Deutscher Novellenschatz" by Paul Heyse), False (creative work given in the input is not listed in "Deutscher Novellenschatz" by Paul Heyse)\
 "in_Pantheon_Hoffmann": if the creative work given in the input is listed in "Pantheon" by Carl Hoffmann (publisher); possible values are True (creative work given in the input is listed in "Pantheon" by Carl Hoffmann (publisher)), False (creative work given in the input is not listed in "Pantheon" by Carl Hoffmann (publisher))\
 "in_Novelle_von_Wiese": if the creative work given in the input is listed in "Novelle" by Benno von Wiese; possible values are True (creative work given in the input is listed in "Novelle" by Benno von Wiese), False (creative work given in the input is not listed in "Novelle" by Benno von Wiese)\
+\
+"""
+
+DEFAULT_PROMPT_DE = """\
+Du bist ein wissenschaftlicher Assistent, der Metadaten über die Veröffentlichung eines literarischen Textes sammelt.\
+Erstelle ein Python-Dictionary, das nur die gegebenen Output Keys enthält und diese den entsprechenden Informationen des Autors und Titels aus dem Input zuweist.\
+Bitte sammle die Informationen selbst entweder aus deinem Wissen oder mit einer Websuche.\
+Bitte nutze die Erklärungen für die Output Keys, um die korrekten Informationen zu erfassen.\
+Bitte fülle als Wert "" ein, wenn du eine Information nicht finden kannst.\
+Bitte gib nur das Output Dictionary zurück. Bitte gib das Dictionary wie im Output Format angegeben zurück.\
+Bitte antworte auf Deutsch.\
+
+Input Keys:\
+"Vorname": Vorname des Autors\
+"Nachname": Nachname des Autors\
+"Titel": Titel des Werks, das von dem Autor geschrieben wurde\
+
+Output Keys:\
+"Vorname": Vorname des Autors aus dem Input\
+"Nachname": Nachname des Autors aus dem Input\
+"Pseudonym": Pseudonym des Autors aus dem Input\
+"Gender": Angenommenes Gender des Autors aus dem Input; mögliche Werte sind "m" (männlich), "f" (weiblich)\
+"Titel": Titel aus dem Input\	
+"Untertitel_im_Text": Untertitel des gedruckten Textes aus dem Input\	
+"Untertitel_im_Inhaltsverzeichnis": Untertitel des Textes aus dem Input im Inhaltsverzeichnis der Veröffentlichung\ 	
+"Jahr_ED": Jahr der ersten Veröffentlichung des Textes aus dem Input\
+"entstanden": Jahr der Entstehung des Textes aus dem Input\	
+"Gattungslabel_ED":	Genre der Erstveröffentlichung des Textes aus dem Input\
+"Medium_ED": Medium der Erstveröffentlichung des Textes aus dem Input\
+"Medientyp_ED": Typ des Mediums der Erstveröffentlichung des Textes aus dem Input\
+"Hg.": Herausgeber der Erstveröffentlichung des Textes aus dem Input\	
+"Kanon_Status":	Kanonstatus des Autors aus dem Input; mögliche Werte sind 0 (vergessener Autor, Autor ist nicht Teil des literarischen Kanons, keine digitalisierten Texte des Autors sind im Internet verfügbar), 1 (heute vergessener Autor, Autor ist nicht Teil des literarischen Kanons, digitalisierte Texte des Autors sind im Internet verfügbar), 2 (bekannter Autor, Autor ist nicht Teil des literarischen Kanons, digitalisierte Texte des Autors sind im Internet verfügbar), 3 (bekannter Autor, Autor ist Teil des literarischen Kanons, digitalisierte Texte des Autors sind im Internet verfügbar)\
+"seriell": ob der Text aus dem Input seriell veröffentlicht wurde, mögliche Werte sind True (der Text aus dem Input wurde seriell veröffentlicht) und False (der Text aus dem Input wurde nicht seriell veröffentlicht)\
+"Seiten": Seitenzahlen der Erstveröffentlichung des Textes aus dem Input; das Format der Seitenzahlen ist <erste Seite>-<letzte Seite>\	
+"Medium_Zweitdruck": Medium der Zweitveröffentlichung des Textes aus dem Input\	
+"Jahr_Zweitdruck": Jahr der zweiten Veröffentlichung des Textes aus dem Input\
+"Label_Zweitdruck": Genre der Zweitveröffentlichung des Textes aus dem Input\
+"Medium_Drittdruck": Medium der Drittveröffentlichung des Textes aus dem Input\	
+"Jahr_Drittdruck": Jahr der dritten Veröffentlichung des Textes aus dem Input\
+"Label_Drittdruck": Genre der Drittveröffentlichung des Textes aus dem Input\
+"in_Deutscher_Novellenschatz_(Heyse)": ob der Text aus dem Input in "Deutscher Novellenschatz" von Paul Heyse aufgelistet wird; mögliche Werte sind True (der Text aus dem Input wird in "Deutscher Novellenschatz" von Paul Heyse gelistet) und False (der Text aus dem Input wird nicht in "Deutscher Novellenschatz" von Paul Heyse gelistet)\
+"in_Pantheon": ob der Text aus dem Input in "Pantheon" von Carl Hoffmann (Herausgeber) aufgelistet wird; mögliche Werte sind True (der Text aus dem Input wird in "Pantheon" von Carl Hoffmann (Herausgeber) gelistet) und False (der Text aus dem Input wird nicht in "Pantheon" von Carl Hoffmann (Herausgeber) gelistet)\		
+"in_B-v-Wiese": ob der Text aus dem Input in "Novelle" von Benno von Wiese aufgelistet wird; mögliche Werte sind True (der Text aus dem Input wird in "Novelle" von Benno von Wiese gelistet) und False (der Text aus dem Input wird nicht in "Novelle" von Benno von Wiese gelistet)\
+
+Output Format:\
+{\
+    "Vorname": "",\
+    "Nachname": "",\
+    "Pseudonym": "",\
+    "Gender": "",\
+    "Titel": "",\
+    "Untertitel_im_Text": "",\
+    "Untertitel_im_Inhaltsverzeichnis": "",\
+    "Jahr_ED": "",\
+    "entstanden": "",\
+    "Gattungslabel_ED": "",\
+    "Medium_ED": "",\
+    "Medientyp_ED": "",\
+    "Hg.": "",\
+    "Kanon_Status": "",\
+    "seriell": "",\
+    "Seiten": "",\
+    "Medium_Zweitdruck": "",\
+    "Jahr_Zweitdruck": "",\
+    "Label_Zweitdruck": "",\
+    "Medium_Drittdruck": "",\
+    "Jahr_Drittdruck": "",\
+    "Label_Drittdruck": "",\
+    "in_Deutscher_Novellenschatz_(Heyse)": "",\
+    "in_Pantheon": "",\
+    "in_B-v-Wiese": "",\
+}\
 \
 """
 
@@ -128,6 +209,7 @@ def create_message_dataset(sample, few_shot, instructions=DEFAULT_PROMPT, system
 
 def prompt_model(prompt_dataset, eval_dataset, model_id = "meta-llama/Llama-3.2-1B-Instruct", shots = 0, max_new_tokens = 500, instructions=DEFAULT_PROMPT, system_prompt=DEFAULT_SYSTEM_PROMPT):
     """
+    @deprected: Use prompt_model_dataset instead
     This function prompts the whole dataset to the model in a x-shot manner. Saves the generated text as a Huggingface dataset (not human readable) and as a json file (human readable).
 
     @params
@@ -193,6 +275,7 @@ def prompt_model_dataset(prompt_dataset, eval_dataset, model_id = "meta-llama/Ll
     with open(f"./output/{model_id}/{shots}/outputs_{model_id.split('/')[-1]}_{shots}.json", "w", encoding = "utf-8") as f:
         json.dump(outputs, f)
     #outputs.to_json(f"./output/{model_id}/{shots}/outputs_{model_id}_{shots}.json")
+
 
 
 if __name__ == "__main__":

@@ -26,6 +26,8 @@ prompt (test Llama):
 - 13193 (select für testindices): failed, weil ich das exist_ok nicht gepullt habe
 - 13194 (exist_ok = True gesetzt): failed, weil output json keine Datei ist
 - 13195 (model_id in json gesplittet): failed, weil select mit falschen Klammern benutzt wurde
+- 13196 (fixed select): failed, weil man nicht über einen int iterieren kann in select
+- 13198 (fixed select list): COMPLETED
 
 ## Structure
 ### data
