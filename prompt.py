@@ -137,7 +137,7 @@ Output Format:\
 \
 """
 
-def create_messages(prompt, system_prompt = DEFAULT_SYSTEM_PROMPT):
+def create_messages(prompt, system_prompt = DEFAULT_SYSTEM_PROMPT_DE):
     """
     This function creates the prompt template for Llama.
 
@@ -167,7 +167,7 @@ def create_few_shot_samples(eval_dataset, shots = 0):
         few_shots += f"Output: {eval_dataset.select([shot])}\n"
     return few_shots
 
-def create_prompt(prompt_sample, few_shots, instructions=DEFAULT_PROMPT):
+def create_prompt(prompt_sample, few_shots, instructions=DEFAULT_PROMPT_DE):
     """
     This function combines the parts of the prompt.
 
@@ -179,7 +179,7 @@ def create_prompt(prompt_sample, few_shots, instructions=DEFAULT_PROMPT):
     """
     return instructions + few_shots + f"Input: {prompt_sample}\nOutput: "
 
-def generate_text(sample, pipe, few_shot, max_new_tokens = 500, instructions=DEFAULT_PROMPT, system_prompt=DEFAULT_SYSTEM_PROMPT):
+def generate_text(sample, pipe, few_shot, max_new_tokens = 500, instructions=DEFAULT_PROMPT_DE, system_prompt=DEFAULT_SYSTEM_PROMPT_DE):
     """
     This function creates the prompts the model and returns the output text.
 
@@ -202,12 +202,12 @@ def generate_text(sample, pipe, few_shot, max_new_tokens = 500, instructions=DEF
     # TODO: check for correctness + 3 tries to get it correct
     return {"outputs": outputs[0]["generated_text"][-1]} # dictionary to turn it automatically into a Huggingface dataset
 
-def create_message_dataset(sample, few_shot, instructions=DEFAULT_PROMPT, system_prompt=DEFAULT_SYSTEM_PROMPT):
+def create_message_dataset(sample, few_shot, instructions=DEFAULT_PROMPT_DE, system_prompt=DEFAULT_SYSTEM_PROMPT_DE):
     prompt = create_prompt(sample, few_shots=few_shot, instructions=instructions)
     messages = create_messages(prompt, system_prompt=system_prompt)
     return {"messages": messages}
 
-def prompt_model(prompt_dataset, eval_dataset, model_id = "meta-llama/Llama-3.2-1B-Instruct", shots = 0, max_new_tokens = 500, instructions=DEFAULT_PROMPT, system_prompt=DEFAULT_SYSTEM_PROMPT):
+def prompt_model(prompt_dataset, eval_dataset, model_id = "meta-llama/Llama-3.2-1B-Instruct", shots = 0, max_new_tokens = 500, instructions=DEFAULT_PROMPT_DE, system_prompt=DEFAULT_SYSTEM_PROMPT_DE):
     """
     @deprected: Use prompt_model_dataset instead
     This function prompts the whole dataset to the model in a x-shot manner. Saves the generated text as a Huggingface dataset (not human readable) and as a json file (human readable).
@@ -238,7 +238,7 @@ def prompt_model(prompt_dataset, eval_dataset, model_id = "meta-llama/Llama-3.2-
     outputs.save_to_disc(f"./output/{model_id}/{shots}/hf")
     outputs.to_json(f"./output/{model_id}/{shots}/outputs_{model_id}_{shots}.json")
 
-def prompt_model_dataset(prompt_dataset, eval_dataset, model_id = "meta-llama/Llama-3.2-1B-Instruct", shots = 0, max_new_tokens = 500, instructions=DEFAULT_PROMPT, system_prompt=DEFAULT_SYSTEM_PROMPT):
+def prompt_model_dataset(prompt_dataset, eval_dataset, model_id = "meta-llama/Llama-3.2-1B-Instruct", shots = 0, max_new_tokens = 1000, instructions=DEFAULT_PROMPT_DE, system_prompt=DEFAULT_SYSTEM_PROMPT_DE):
     """
     This function prompts the whole dataset to the model in a x-shot manner. Saves the generated text as a Huggingface dataset (not human readable) and as a json file (human readable).
 
@@ -265,7 +265,7 @@ def prompt_model_dataset(prompt_dataset, eval_dataset, model_id = "meta-llama/Ll
 	
     message_dataset = prompt_dataset.select(range(10)).map(lambda x: create_message_dataset(sample=x, few_shot=few_shots, instructions=instructions, system_prompt=system_prompt))
 
-    outputs = pipe(message_dataset["messages"])
+    outputs = pipe(message_dataset["messages"], max_new_tokens = max_new_tokens)
 
     print(outputs)
     # for out in tqdm(pipe(message_dataset)):
@@ -284,4 +284,4 @@ if __name__ == "__main__":
     for shot in shots:
 	#print("Data:", data.prompt_samples[:10])
         #prompt_model(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots=shot)
-        prompt_model_dataset(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots=shot)
+        prompt_model_dataset(model_id = "meta-llama/Llama-3.1-8B-Instruct", prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots=shot)
