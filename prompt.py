@@ -306,7 +306,7 @@ def prompt_llama8b_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT
 
         #answer = chain.invoke({"question": question})
         #answer = chain.invoke(prompt)
-        answer = chain.invoke(prompt_sample)
+        answer = chain.invoke({"instructions": instructions, "few_shots": few_shots, "prompt_sample": str(prompt_sample)})
 
         print(answer)
 
