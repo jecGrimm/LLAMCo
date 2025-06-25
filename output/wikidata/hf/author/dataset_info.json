@@ -1,0 +1,31 @@
+{
+  "citation": "",
+  "description": "",
+  "features": {
+    "Dokument_ID": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "Nachname": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "Vorname": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "Titel": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "Output": {
+      "feature": {
+        "dtype": "string",
+        "_type": "Value"
+      },
+      "_type": "Sequence"
+    }
+  },
+  "homepage": "",
+  "license": ""
+}

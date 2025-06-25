@@ -2,6 +2,7 @@ import requests
 import os
 from data import Data
 import json
+from tqdm import tqdm
 import argparse
 # https://query.wikidata.org/bigdata/namespace/wdq/sparql?query={SPARQL}
 
@@ -36,16 +37,36 @@ def scrape_API(sample, modus = "author"):
         \
             FILTER(isLiteral(?info))\
         }}'
+    elif modus == "author_sloppy":
+        query = f'PREFIX prop: <http://www.wikidata.org/prop/direct/>\
+        \
+        SELECT DISTINCT ?info \
+        {{\
+            ?author ?p1 "{sample["Vorname"] + " " + sample["Nachname"]}" ;\
+                    ?p2 ?info .\
+        \
+            FILTER(isLiteral(?info))\
+        }}'
     elif modus == "work":
         query = f'PREFIX prop: <http://www.wikidata.org/prop/direct/>\
         \
-        SELECT DISTINCT ?info \ 
+        SELECT DISTINCT ?info \
         {{\
             ?author ?p1 "{sample["Vorname"] + " " + sample["Nachname"]}" ;\
                 ?p2 ?work .\
         \
             ?work prop:P1476 "{sample["Titel"]}"@de ;\
                 ?p3 ?info .\
+        \
+            FILTER(isLiteral(?info))\
+        }}'
+    elif modus == "work_sloppy":
+        query = f'PREFIX prop: <http://www.wikidata.org/prop/direct/>\
+        \
+        SELECT DISTINCT ?info \
+        {{\
+            ?work prop:P1476 "{sample["Titel"]}"@de ;\
+                ?p1 ?info .\
         \
             FILTER(isLiteral(?info))\
         }}'
@@ -62,30 +83,37 @@ def scrape_API(sample, modus = "author"):
     try:
         DATA = R.json()
 
-        return filter_api_result(DATA)
+        values = filter_api_result(DATA)
+
+        if len(values) == 0 and "sloppy" not in modus:
+            return scrape_API(sample, modus = f"{modus}_sloppy")
+
+        return {"Output": list(values)}
     except:
         print(f"Sample {sample["Dokument_ID"]} could not be processed:\n\t{R.reason}")
 
 def filter_api_result(api_data):
     values = {entry["info"]["value"] for entry in api_data["results"]["bindings"]}
-    return {"output": list(values)}
+    return values
 
 def fetch_info(modus = "author"):
+    print("Fetching corpus data...")
     corpus_data = Data()
 
-    outputs = {sample["Dokument_ID"]: scrape_API(sample, modus=modus) for sample in corpus_data.prompt_samples}
-    # outputs = corpus_data.prompt_samples.map(lambda x: scrape_API(sample = x))
+    print(f"Posting SPARQL queries for '{modus}'...")
+    #outputs = {sample["Dokument_ID"]: scrape_API(sample, modus=modus) for sample in tqdm(corpus_data.prompt_samples)}
+    outputs = corpus_data.prompt_samples.map(lambda x: scrape_API(sample = x, modus = modus))
 
-    os.makedirs("./output/wikidata/", exist_ok=True)
-    # outputs.save_to_disk("./output/wikidata/hf")
-    #outputs.to_json("./output/wikidata/outputs_wikidata.json")
+    print("Saving output...")
+    os.makedirs("./output/wikidata/hf", exist_ok=True)
+    outputs.save_to_disk(f"./output/wikidata/hf/{modus}")
+    outputs.to_json(f"./output/wikidata/{modus}_outputs_wikidata_hf.json")
 
-    # outputs.save_to_disc(f"./output/{model_id}/{shots}/hf")
-    with open(f"./output/wikidata/{modus}_outputs_wikidata.json", "w", encoding = "utf-8") as f:
-        json.dump(outputs, f)
+    # with open(f"./output/wikidata/{modus}_outputs_wikidata.json", "w", encoding = "utf-8") as f:
+    #     json.dump(outputs, f)
 
 if __name__ == "__main__":
-    #fetch_info(modus="author")
+    fetch_info(modus="author")
     fetch_info(modus="work")
 
     # outputs = load_from_disk("./output/wikidata/hf")

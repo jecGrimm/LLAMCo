@@ -28,6 +28,10 @@ prompt (test Llama):
 - 13195 (model_id in json gesplittet): failed, weil select mit falschen Klammern benutzt wurde
 - 13196 (fixed select): failed, weil man nicht über einen int iterieren kann in select
 - 13198 (fixed select list): COMPLETED
+- 14941 (Llama 8B): failed, weil env nicht aktiviert war
+- 14942 (Llama 8B mit llamco-env): failed, weil hf down ist
+- 14943 (hf langsam, aber wieder da): failed, weil hf immer noch down ist
+- 15002 (hf wieder up): failed, OOM
 
 ## Structure
 ### data

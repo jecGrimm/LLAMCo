@@ -1,5 +1,5 @@
 import json
-from datasets import Dataset
+from datasets import Dataset, load_from_disk
 import ast
 
 def read_output():
@@ -27,5 +27,11 @@ def clean_model_out(model_out: str):
     cleaned = cleaned_first.split("}")[0]+'}' 
     return cleaned
 
+def read_wiki_out():
+    author_wiki_out = load_from_disk("output/wikidata/hf/author")
+    work_wiki_out = load_from_disk("output/wikidata/hf/work")
+    print(len(author_wiki_out))
+
 if __name__=="__main__":
-    read_output()
+    #read_output()
+    read_wiki_out()

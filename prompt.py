@@ -4,6 +4,9 @@ import os
 from data import Data
 from tqdm.auto import tqdm
 import json
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_ollama.llms import OllamaLLM
+import ast
 
 DEFAULT_SYSTEM_PROMPT = """\
 You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe.\
@@ -276,7 +279,69 @@ def prompt_model_dataset(prompt_dataset, eval_dataset, model_id = "meta-llama/Ll
         json.dump(outputs, f)
     #outputs.to_json(f"./output/{model_id}/{shots}/outputs_{model_id}_{shots}.json")
 
+def prompt_llama8b_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT_SYSTEM_PROMPT_DE, instructions = DEFAULT_PROMPT_DE, shots=0):
+    prompt = ChatPromptTemplate.from_messages([
+    ("system", system_prompt),
+    ("human", "{instructions}"),
+    ])
 
+    few_shots = create_few_shot_samples(eval_dataset, shots)
+    
+    prompt_dataset = prompt_dataset.skip(shots)
+    outputs = prompt_dataset.add_column("Output", [None for i in range(len(prompt_dataset))])
+	
+    # TODO: Über mapping lösen
+    for prompt_sample in prompt_dataset:
+        template = create_prompt(prompt_sample, few_shots, instructions=instructions)
+
+        prompt = ChatPromptTemplate.from_template(template)
+
+        model = OllamaLLM(model="llama3")
+
+        chain = prompt | model
+
+        answer = chain.invoke({"question": instructions})
+
+        print(answer)
+
+        print(type(answer))
+        s = answer
+
+        # Test if Dictionary is contained in the answer
+        try:
+            if s.find("{") != -1:
+
+                s = s[s.find("{"):]
+
+            if s.find("}") != -1:
+                s = s[:s.find("}")+1]
+
+            answer = s
+        except:
+            print("Dictionary could not be found in answer")
+            #answer = answer
+
+        print(answer)
+
+        # Store Dict
+        try:
+            outputs["Output"] = ast.literal_eval(answer)
+        except:
+            print(f"Dictionary error for sample {prompt_sample}")
+
+    print(outputs)
+
+    model_id = "Llama_8B"
+    os.makedirs(f"./output/{model_id}/{shots}", exist_ok=True)
+    try:
+        outputs.save_to_disk(f"./output/{model_id}/{shots}/hf")
+        outputs.to_json(f"./output/{model_id}/{shots}/outputs_{model_id}_{shots}.json")
+    except:
+
+        with open(f"./output/{model_id}/{shots}/outputs_{model_id}_{shots}.json", "w", encoding = "utf-8") as f:
+            json.dump(outputs, f)
+
+    
 
 if __name__ == "__main__":
     data = Data()
@@ -284,4 +349,5 @@ if __name__ == "__main__":
     for shot in shots:
 	#print("Data:", data.prompt_samples[:10])
         #prompt_model(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots=shot)
-        prompt_model_dataset(model_id = "meta-llama/Llama-3.1-8B-Instruct", prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots=shot)
+        #prompt_model_dataset(model_id = "meta-llama/Llama-3.1-8B-Instruct", prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots=shot)
+        prompt_llama8b_dataset(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots = shot)
