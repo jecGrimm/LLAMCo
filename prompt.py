@@ -310,9 +310,9 @@ def prompt_llama8b_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT
 
         answer = chain.invoke({"instructions": instructions, "few_shots": few_shots, "prompt_sample": str(prompt_sample)})
 
-        outputs[prompt_sample["Dokument_ID"]] = answer
-        print("chain answer", answer)
-        print("output answer", outputs[prompt_sample["Dokument_ID"]])
+        #outputs[prompt_sample["Dokument_ID"]] = answer
+        #print("chain answer", answer)
+        #print("output answer", outputs[prompt_sample["Dokument_ID"]])
 
         s = answer
 
@@ -334,13 +334,12 @@ def prompt_llama8b_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT
         #print(answer)
 
         # Store Dict
-        # try:
-        # TODO: fix errors
-        #     outputs["Output"][i] = ast.literal_eval(answer)
-        # except:
-        #     print(f"Dictionary error for sample {prompt_sample}")
+        try:
+            outputs[prompt_sample["Dokument_ID"]] = ast.literal_eval(answer)
+        except:
+            print(f"Dictionary error for sample {prompt_sample}")
 
-    #print(outputs)
+    print(outputs)
 
     model_id = "Llama_8B"
     os.makedirs(f"./output/{model_id}/{shots}", exist_ok=True)
