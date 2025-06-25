@@ -295,7 +295,7 @@ def prompt_llama8b_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT
     outputs = prompt_dataset.add_column("Output", [None for i in range(len(prompt_dataset))])
 	
     # TODO: Über mapping lösen
-    for prompt_sample in prompt_dataset:
+    for i, prompt_sample in enumerate(prompt_dataset):
         print("curr sample: ", prompt_sample)
         #question = create_prompt(prompt_sample, few_shots, instructions=instructions)
         template = "{instructions}{few_shots}Input: {prompt_sample}\nOutput: "
@@ -313,7 +313,7 @@ def prompt_llama8b_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT
         #answer = chain.invoke(prompt)
         answer = chain.invoke({"instructions": instructions, "few_shots": few_shots, "prompt_sample": str(prompt_sample)})
 
-        outputs["Chat"] = answer
+        outputs["Chat"][i] = answer
         #print(answer)
 
         #print(type(answer))
@@ -338,7 +338,7 @@ def prompt_llama8b_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT
         # Store Dict
         # try:
         # TODO: fix errors
-        #     outputs["Output"] = ast.literal_eval(answer)
+        #     outputs["Output"][i] = ast.literal_eval(answer)
         # except:
         #     print(f"Dictionary error for sample {prompt_sample}")
 
