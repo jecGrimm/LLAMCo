@@ -288,6 +288,7 @@ def prompt_llama8b_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT
     few_shots = create_few_shot_samples(eval_dataset, shots)
     
     prompt_dataset = prompt_dataset.skip(shots)
+    prompt_dataset = prompt_dataset.select(range(10))
     outputs = prompt_dataset.add_column("Output", [None for i in range(len(prompt_dataset))])
 	
     # TODO: Über mapping lösen
@@ -296,9 +297,9 @@ def prompt_llama8b_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT
         #question = create_prompt(prompt_sample, few_shots, instructions=instructions)
         template = "{instructions}{few_shots}Input: {prompt_sample}\nOutput: "
 
-        print("before template", prompt)
+        #print("before template", prompt)
         prompt = ChatPromptTemplate.from_template(template)
-        print("after template", prompt)
+        #print("after template", prompt)
 
         model = OllamaLLM(model="llama3")
 
