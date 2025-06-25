@@ -282,7 +282,7 @@ def prompt_model_dataset(prompt_dataset, eval_dataset, model_id = "meta-llama/Ll
 def prompt_llama8b_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT_SYSTEM_PROMPT_DE, instructions = DEFAULT_PROMPT_DE, shots=0):
     prompt = ChatPromptTemplate.from_messages([
     ("system", system_prompt),
-    ("human", "{instructions}"),
+    ("human", "{question}"),
     ])
 
     few_shots = create_few_shot_samples(eval_dataset, shots)
@@ -292,15 +292,21 @@ def prompt_llama8b_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT
 	
     # TODO: Über mapping lösen
     for prompt_sample in prompt_dataset:
-        template = create_prompt(prompt_sample, few_shots, instructions=instructions)
+        print("curr sample: ", prompt_sample)
+        #question = create_prompt(prompt_sample, few_shots, instructions=instructions)
+        template = "{instructions}{few_shots}Input: {prompt_sample}\nOutput: "
 
+        print("before template", prompt)
         prompt = ChatPromptTemplate.from_template(template)
+        print("after template", prompt)
 
         model = OllamaLLM(model="llama3")
 
         chain = prompt | model
 
-        answer = chain.invoke({"question": instructions})
+        #answer = chain.invoke({"question": question})
+        #answer = chain.invoke(prompt)
+        answer = chain.invoke(prompt_sample)
 
         print(answer)
 
