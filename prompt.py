@@ -8,6 +8,8 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_ollama.llms import OllamaLLM
 import ast
 
+# TODO: Unsichere Prompts ausprobieren
+
 DEFAULT_SYSTEM_PROMPT = """\
 You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe.\
 Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content.\
@@ -289,6 +291,7 @@ def prompt_llama8b_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT
     
     prompt_dataset = prompt_dataset.skip(shots)
     prompt_dataset = prompt_dataset.select(range(10))
+    outputs = prompt_dataset.add_column("Chat", [None for i in range(len(prompt_dataset))])
     outputs = prompt_dataset.add_column("Output", [None for i in range(len(prompt_dataset))])
 	
     # TODO: Über mapping lösen
@@ -305,13 +308,15 @@ def prompt_llama8b_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT
 
         chain = prompt | model
 
+        print(prompt)
         #answer = chain.invoke({"question": question})
         #answer = chain.invoke(prompt)
         answer = chain.invoke({"instructions": instructions, "few_shots": few_shots, "prompt_sample": str(prompt_sample)})
 
-        print(answer)
+        outputs["Chat"] = answer
+        #print(answer)
 
-        print(type(answer))
+        #print(type(answer))
         s = answer
 
         # Test if Dictionary is contained in the answer
@@ -328,15 +333,16 @@ def prompt_llama8b_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT
             print("Dictionary could not be found in answer")
             #answer = answer
 
-        print(answer)
+        #print(answer)
 
         # Store Dict
-        try:
-            outputs["Output"] = ast.literal_eval(answer)
-        except:
-            print(f"Dictionary error for sample {prompt_sample}")
+        # try:
+        # TODO: fix errors
+        #     outputs["Output"] = ast.literal_eval(answer)
+        # except:
+        #     print(f"Dictionary error for sample {prompt_sample}")
 
-    print(outputs)
+    #print(outputs)
 
     model_id = "Llama_8B"
     os.makedirs(f"./output/{model_id}/{shots}", exist_ok=True)
