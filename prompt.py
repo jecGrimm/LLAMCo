@@ -291,8 +291,9 @@ def prompt_llama8b_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT
     
     prompt_dataset = prompt_dataset.skip(shots)
     prompt_dataset = prompt_dataset.select(range(10))
-    outputs = prompt_dataset.add_column("Chat", [None for i in range(len(prompt_dataset))])
-    outputs = prompt_dataset.add_column("Output", [None for i in range(len(prompt_dataset))])
+    outputs = prompt_dataset
+    outputs = outputs.add_column("Answer", [None for i in range(len(prompt_dataset))])
+    #outputs = outputs.add_column("Output", [None for i in range(len(prompt_dataset))])
 	
     # TODO: Über mapping lösen
     for i, prompt_sample in enumerate(prompt_dataset):
@@ -313,7 +314,7 @@ def prompt_llama8b_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT
         #answer = chain.invoke(prompt)
         answer = chain.invoke({"instructions": instructions, "few_shots": few_shots, "prompt_sample": str(prompt_sample)})
 
-        outputs["Chat"][i] = answer
+        outputs["Answer"][i] = answer
         #print(answer)
 
         #print(type(answer))
