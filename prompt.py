@@ -7,6 +7,7 @@ import json
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_ollama.llms import OllamaLLM
 import ast
+from collections import defaultdict
 
 # TODO: Unsichere Prompts ausprobieren
 
@@ -291,37 +292,32 @@ def prompt_llama8b_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT
     
     prompt_dataset = prompt_dataset.skip(shots)
     prompt_dataset = prompt_dataset.select(range(10))
-    outputs = prompt_dataset
-    outputs = outputs.add_column("Answer", [None for i in range(len(prompt_dataset))])
+    # outputs = prompt_dataset
+    # outputs = outputs.add_column("Answer", [None for i in range(len(prompt_dataset))])
     #outputs = outputs.add_column("Output", [None for i in range(len(prompt_dataset))])
+    outputs = defaultdict(str)
 	
     # TODO: Über mapping lösen
     for i, prompt_sample in enumerate(prompt_dataset):
         print("curr sample: ", prompt_sample)
-        #question = create_prompt(prompt_sample, few_shots, instructions=instructions)
         template = "{instructions}{few_shots}Input: {prompt_sample}\nOutput: "
 
-        #print("before template", prompt)
         prompt = ChatPromptTemplate.from_template(template)
-        #print("after template", prompt)
 
         model = OllamaLLM(model="llama3")
 
         chain = prompt | model
 
-        #print(prompt)
-        #answer = chain.invoke({"question": question})
-        #answer = chain.invoke(prompt)
         answer = chain.invoke({"instructions": instructions, "few_shots": few_shots, "prompt_sample": str(prompt_sample)})
 
-        outputs["Answer"][i] = str(answer)
+        outputs[prompt_sample["Dokument_ID"]] = answer
         print("chain answer", answer)
-        print("output answer", outputs["Answer"][i])
+        print("output answer", outputs[prompt_sample["Dokument_ID"]])
 
-        #print(type(answer))
         s = answer
 
         # Test if Dictionary is contained in the answer
+        # TODO: add retry
         try:
             if s.find("{") != -1:
 
