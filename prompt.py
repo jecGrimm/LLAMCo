@@ -282,6 +282,43 @@ def prompt_model_dataset(prompt_dataset, eval_dataset, model_id = "meta-llama/Ll
         json.dump(outputs, f)
     #outputs.to_json(f"./output/{model_id}/{shots}/outputs_{model_id}_{shots}.json")
 
+def sanity_check(answer, expected_keys):
+    s = answer
+
+    # Test if Dictionary is contained in the answer
+    # TODO: add retry
+    try:
+        if s.find("{") != -1:
+
+            s = s[s.find("{"):]
+
+        if s.find("}") != -1:
+            s = s[:s.find("}")+1]
+
+        answer = s
+    except:
+        retry = True
+        print("Dictionary could not be found in answer")
+        #answer = answer
+
+    #print(answer)
+
+    # Store Dict
+    model_dict = ast.literal_eval(answer)
+    model_keys = set(model_dict.keys())
+    if len(model_keys) == len(expected_keys) and len(model_keys & expected_keys) == len(expected_keys):
+        return model_dict
+    else:
+        return ""
+    
+def get_answer(chain, instructions, few_shots, prompt_sample, expected_keys):
+    answer = chain.invoke({"instructions": instructions, "few_shots": few_shots, "prompt_sample": str(prompt_sample)})
+
+    model_dict = sanity_check(answer, expected_keys)
+
+    return answer, model_dict
+
+
 def prompt_llama8b_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT_SYSTEM_PROMPT_DE, instructions = DEFAULT_PROMPT_DE, shots=0):
     prompt = ChatPromptTemplate.from_messages([
     ("system", system_prompt),
@@ -289,16 +326,19 @@ def prompt_llama8b_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT
     ])
 
     few_shots = create_few_shot_samples(eval_dataset, shots)
+    expected_keys = set(eval_dataset.features)
     
     prompt_dataset = prompt_dataset.skip(shots)
     prompt_dataset = prompt_dataset.select(range(10))
-    # outputs = prompt_dataset
-    # outputs = outputs.add_column("Answer", [None for i in range(len(prompt_dataset))])
-    #outputs = outputs.add_column("Output", [None for i in range(len(prompt_dataset))])
+
     outputs = defaultdict(str)
+    answers = defaultdict(list)
+    answers["system_prompt"] = system_prompt
+    answers["instructions"] = instructions
 	
     # TODO: Über mapping lösen
     for i, prompt_sample in enumerate(prompt_dataset):
+        tries = 0
         print("curr sample: ", prompt_sample)
         template = "{instructions}{few_shots}Input: {prompt_sample}\nOutput: "
 
@@ -308,36 +348,15 @@ def prompt_llama8b_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT
 
         chain = prompt | model
 
-        answer = chain.invoke({"instructions": instructions, "few_shots": few_shots, "prompt_sample": str(prompt_sample)})
+        answer, model_dict = get_answer(chain, instructions, few_shots, prompt_sample, expected_keys)
+        answers[prompt_sample["Dokument_ID"]].append(answer)
 
-        #outputs[prompt_sample["Dokument_ID"]] = answer
-        #print("chain answer", answer)
-        #print("output answer", outputs[prompt_sample["Dokument_ID"]])
-
-        s = answer
-
-        # Test if Dictionary is contained in the answer
-        # TODO: add retry
-        try:
-            if s.find("{") != -1:
-
-                s = s[s.find("{"):]
-
-            if s.find("}") != -1:
-                s = s[:s.find("}")+1]
-
-            answer = s
-        except:
-            print("Dictionary could not be found in answer")
-            #answer = answer
-
-        #print(answer)
-
-        # Store Dict
-        try:
-            outputs[prompt_sample["Dokument_ID"]] = ast.literal_eval(answer)
-        except:
-            print(f"Dictionary error for sample {prompt_sample}")
+        while model_dict == "" or tries < 3:
+            answer, model_dict = get_answer(chain, instructions, few_shots, prompt_sample, expected_keys)
+            answers[prompt_sample["Dokument_ID"]].append(answer)
+            tries += 1
+        
+        outputs[prompt_sample["Dokument_ID"]] = model_dict
 
     print(outputs)
 
@@ -350,6 +369,8 @@ def prompt_llama8b_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT
 
         with open(f"./output/{model_id}/{shots}/outputs_{model_id}_{shots}.json", "w", encoding = "utf-8") as f:
             json.dump(outputs, f)
+        with open(f"./output/{model_id}/{shots}/answers_{model_id}_{shots}.json", "w", encoding = "utf-8") as f:
+            json.dump(answers, f)
 
     
 
@@ -357,7 +378,6 @@ if __name__ == "__main__":
     data = Data()
     shots = [0, 1, 5]
     for shot in shots:
-	#print("Data:", data.prompt_samples[:10])
         #prompt_model(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots=shot)
         #prompt_model_dataset(model_id = "meta-llama/Llama-3.1-8B-Instruct", prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots=shot)
         prompt_llama8b_dataset(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots = shot)
