@@ -300,7 +300,7 @@ def sanity_check(answer, expected_keys):
         # Save dict
         model_dict = ast.literal_eval(answer)
         model_keys = set(model_dict.keys())
-        if len(model_keys) == len(expected_keys) and len(model_keys & expected_keys) == len(expected_keys)-1: # -1 to exclude Dokument_ID
+        if len(model_keys) == len(expected_keys)-1 and len(model_keys & expected_keys) == len(expected_keys)-1: # -1 to exclude Dokument_ID
             return model_dict
         else:
             print(f"Dictionary does not have the correct format:\n{answer}")
