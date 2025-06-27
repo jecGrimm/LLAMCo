@@ -65,7 +65,8 @@ class Data:
             "ist_spätere_Fassung_von",\
             "UrhGeschBis",\
             "falls_Episode_als_Ganztext_erfasst",\
-            "Kontrafaktizität_annotiert"\
+            "Kontrafaktizität_annotiert",\
+            "in_RUB_Sammlung"\
         ]
         return self.whole_idx_corpus.remove_columns(rem_feats)
     
