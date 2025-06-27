@@ -303,9 +303,10 @@ def sanity_check(answer, expected_keys):
         if len(model_keys) == len(expected_keys) and len(model_keys & expected_keys) == len(expected_keys):
             return model_dict
         else:
+            print(f"Dictionary does not have the correct format:\n{answer}")
             return ""
     except:
-        print("No dictionary in the answer.")
+        print(f"No dictionary in the answer:\n{answer}")
         return ""
         #answer = answer
 
@@ -359,7 +360,7 @@ def prompt_llama8b_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT
         answer, model_dict = get_answer(chain, instructions, few_shots, prompt_sample, expected_keys)
         answers[prompt_sample["Dokument_ID"]].append(answer)
 
-        while model_dict == "" or tries < 3:
+        while model_dict == "" and tries < 3:
             print(f"Tried {tries+1} times, prompting again...")
             answer, model_dict = get_answer(chain, instructions, few_shots, prompt_sample, expected_keys)
             answers[prompt_sample["Dokument_ID"]].append(answer)
