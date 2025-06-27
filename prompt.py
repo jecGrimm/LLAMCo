@@ -360,6 +360,7 @@ def prompt_llama8b_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT
         answers[prompt_sample["Dokument_ID"]].append(answer)
 
         while model_dict == "" or tries < 3:
+            print(f"Tried {tries+1} times, prompting again...")
             answer, model_dict = get_answer(chain, instructions, few_shots, prompt_sample, expected_keys)
             answers[prompt_sample["Dokument_ID"]].append(answer)
             tries += 1
