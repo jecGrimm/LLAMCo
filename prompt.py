@@ -296,20 +296,28 @@ def sanity_check(answer, expected_keys):
             s = s[:s.find("}")+1]
 
         answer = s
+
+        # Save dict
+        model_dict = ast.literal_eval(answer)
+        model_keys = set(model_dict.keys())
+        if len(model_keys) == len(expected_keys) and len(model_keys & expected_keys) == len(expected_keys):
+            return model_dict
+        else:
+            return ""
     except:
-        retry = True
-        print("Dictionary could not be found in answer")
+        print("No dictionary in the answer.")
+        return ""
         #answer = answer
 
     #print(answer)
 
     # Store Dict
-    model_dict = ast.literal_eval(answer)
-    model_keys = set(model_dict.keys())
-    if len(model_keys) == len(expected_keys) and len(model_keys & expected_keys) == len(expected_keys):
-        return model_dict
-    else:
-        return ""
+    # model_dict = ast.literal_eval(answer)
+    # model_keys = set(model_dict.keys())
+    # if len(model_keys) == len(expected_keys) and len(model_keys & expected_keys) == len(expected_keys):
+    #     return model_dict
+    # else:
+    #     return ""
     
 def get_answer(chain, instructions, few_shots, prompt_sample, expected_keys):
     answer = chain.invoke({"instructions": instructions, "few_shots": few_shots, "prompt_sample": str(prompt_sample)})
