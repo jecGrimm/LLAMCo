@@ -304,6 +304,7 @@ def sanity_check(answer, expected_keys):
             return model_dict
         else:
             print(f"Dictionary does not have the correct format:\n{answer}")
+            print("model keys:", model_keys)
             return ""
     except:
         print(f"No dictionary in the answer:\n{answer}")
@@ -336,6 +337,7 @@ def prompt_llama8b_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT
 
     few_shots = create_few_shot_samples(eval_dataset, shots)
     expected_keys = set(eval_dataset.features)
+    print("expected_keys:", expected_keys)
     
     prompt_dataset = prompt_dataset.skip(shots)
     prompt_dataset = prompt_dataset.select(range(10))
