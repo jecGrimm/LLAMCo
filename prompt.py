@@ -71,7 +71,7 @@ Output keys:\n\
 \n\
 """
 
-DEFAULT_PROMPT_DE = """\
+DEFAULT_PROMPT_DE_0 = """\
 Du bist ein wissenschaftlicher Assistent, der Metadaten über die Veröffentlichung eines literarischen Textes sammelt.\n\
 Erstelle ein Python-Dictionary, das nur die gegebenen Output Keys enthält und diese den entsprechenden Informationen des Autors und Titels aus dem Input zuweist.\n\
 Bitte sammle die Informationen selbst entweder aus deinem Wissen oder mit einer Websuche.\n\
@@ -95,7 +95,7 @@ Output Keys:\n\
 "Untertitel_im_Inhaltsverzeichnis": Untertitel des Textes aus dem Input im Inhaltsverzeichnis der Veröffentlichung\n\
 "Jahr_ED": Jahr der ersten Veröffentlichung des Textes aus dem Input\n\
 "entstanden": Jahr der Entstehung des Textes aus dem Input\n\
-"Gattungslabel_ED":	Genre der Erstveröffentlichung des Textes aus dem Input\n\
+"Gattungslabel_ED":	Genrebezeichnung bei der Erstveröffentlichung des Textes aus dem Input\n\
 "Medium_ED": Medium der Erstveröffentlichung des Textes aus dem Input\n\
 "Medientyp_ED": Typ des Mediums der Erstveröffentlichung des Textes aus dem Input\n\
 "Hg.": Herausgeber der Erstveröffentlichung des Textes aus dem Input\n\
@@ -111,6 +111,78 @@ Output Keys:\n\
 "in_Deutscher_Novellenschatz_(Heyse)": ob der Text aus dem Input in "Deutscher Novellenschatz" von Paul Heyse aufgelistet wird; mögliche Werte sind True (der Text aus dem Input wird in "Deutscher Novellenschatz" von Paul Heyse gelistet) und False (der Text aus dem Input wird nicht in "Deutscher Novellenschatz" von Paul Heyse gelistet)\n\
 "in_Pantheon": ob der Text aus dem Input in "Pantheon" von Carl Hoffmann (Herausgeber) aufgelistet wird; mögliche Werte sind True (der Text aus dem Input wird in "Pantheon" von Carl Hoffmann (Herausgeber) gelistet) und False (der Text aus dem Input wird nicht in "Pantheon" von Carl Hoffmann (Herausgeber) gelistet)\n\
 "in_B-v-Wiese": ob der Text aus dem Input in "Novelle" von Benno von Wiese aufgelistet wird; mögliche Werte sind True (der Text aus dem Input wird in "Novelle" von Benno von Wiese gelistet) und False (der Text aus dem Input wird nicht in "Novelle" von Benno von Wiese gelistet)\n\
+\n\
+Output Format:\n\
+{\n\
+    "Vorname": "",\n\
+    "Nachname": "",\n\
+    "Pseudonym": "",\n\
+    "Gender": "",\n\
+    "Titel": "",\n\
+    "Untertitel_im_Text": "",\n\
+    "Untertitel_im_Inhaltsverzeichnis": "",\n\
+    "Jahr_ED": "",\n\
+    "entstanden": "",\n\
+    "Gattungslabel_ED": "",\n\
+    "Medium_ED": "",\n\
+    "Medientyp_ED": "",\n\
+    "Hg.": "",\n\
+    "Kanon_Status": "",\n\
+    "seriell": "",\n\
+    "Seiten": "",\n\
+    "Medium_Zweitdruck": "",\n\
+    "Jahr_Zweitdruck": "",\n\
+    "Label_Zweitdruck": "",\n\
+    "Medium_Drittdruck": "",\n\
+    "Jahr_Drittdruck": "",\n\
+    "Label_Drittdruck": "",\n\
+    "in_Deutscher_Novellenschatz_(Heyse)": "",\n\
+    "in_Pantheon": "",\n\
+    "in_B-v-Wiese": "",\n\
+}\n\
+\n\
+"""
+
+DEFAULT_PROMPT_DE = """\
+Du bist ein wissenschaftlicher Assistent, der Metadaten über die Veröffentlichung eines literarischen Textes sammelt.\n\
+Erstelle ein Python-Dictionary, das nur die gegebenen Output Keys enthält und diese den entsprechenden Informationen des Autors und Titels aus dem Input zuweist.\n\
+Bitte sammle die Informationen selbst entweder aus deinem Wissen oder mit einer Websuche.\n\
+Bitte nutze die Erklärungen für die Output Keys, um die korrekten Informationen zu erfassen.\n\
+Bitte fülle als Wert "" ein, wenn du eine Information nicht finden kannst.\n\
+Bitte gib nur das Output Dictionary zurück. Bitte gib das Dictionary wie im Output Format angegeben zurück.\n\
+Bitte antworte auf Deutsch.\n\
+\n\
+Input Keys:\n\
+"Vorname": Vorname des Autors\n\
+"Nachname": Nachname des Autors\n\
+"Titel": Titel des Werks, das von dem Autor geschrieben wurde\n\
+\n\
+Output Keys:\n\
+"Vorname": Vorname des Autors\n\
+"Nachname": Nachname des Autors\n\
+"Pseudonym": Pseudonym des Autors\n\
+"Gender": Angenommenes Gender des Autors; mögliche Werte sind "m" (männlich), "f" (weiblich)\n\
+"Titel": Titel\n\
+"Untertitel_im_Text": Untertitel des gedruckten Textes\n\
+"Untertitel_im_Inhaltsverzeichnis": Untertitel des Textes im Inhaltsverzeichnis der Veröffentlichung\n\
+"Jahr_ED": Jahr der ersten Veröffentlichung des Textes\n\
+"entstanden": Jahr der Entstehung des Textes\n\
+"Gattungslabel_ED":	Genrebezeichnung bei der Erstveröffentlichung des Textes\n\
+"Medium_ED": Medium der Erstveröffentlichung des Textes\n\
+"Medientyp_ED": Typ des Mediums der Erstveröffentlichung des Textes\n\
+"Hg.": Herausgeber der Erstveröffentlichung des Textes\n\
+"Kanon_Status":	Kanonstatus des Autors; mögliche Werte sind 0 (vergessener Autor, Autor ist nicht Teil des literarischen Kanons, keine digitalisierten Texte des Autors sind im Internet verfügbar), 1 (heute vergessener Autor, Autor ist nicht Teil des literarischen Kanons, digitalisierte Texte des Autors sind im Internet verfügbar), 2 (bekannter Autor, Autor ist nicht Teil des literarischen Kanons, digitalisierte Texte des Autors sind im Internet verfügbar), 3 (bekannter Autor, Autor ist Teil des literarischen Kanons, digitalisierte Texte des Autors sind im Internet verfügbar)\n\
+"seriell": ob der Text seriell veröffentlicht wurde, mögliche Werte sind True (der Text wurde seriell veröffentlicht) und False (der Text wurde nicht seriell veröffentlicht)\n\
+"Seiten": Seitenzahlen der Erstveröffentlichung des Textes; das Format der Seitenzahlen ist <erste Seite>-<letzte Seite>\n\
+"Medium_Zweitdruck": Medium der Zweitveröffentlichung des Textes\n\
+"Jahr_Zweitdruck": Jahr der zweiten Veröffentlichung des Textes\n\
+"Label_Zweitdruck": Genre der Zweitveröffentlichung des Textes\n\
+"Medium_Drittdruck": Medium der Drittveröffentlichung des Textes\n\
+"Jahr_Drittdruck": Jahr der dritten Veröffentlichung des Textes\n\
+"Label_Drittdruck": Genre der Drittveröffentlichung des Textes\n\
+"in_Deutscher_Novellenschatz_(Heyse)": ob der Text in "Deutscher Novellenschatz" von Paul Heyse aufgelistet wird; mögliche Werte sind True (der Text wird in "Deutscher Novellenschatz" von Paul Heyse gelistet) und False (der Text wird nicht in "Deutscher Novellenschatz" von Paul Heyse gelistet)\n\
+"in_Pantheon": ob der Text in "Pantheon" von Carl Hoffmann (Herausgeber) aufgelistet wird; mögliche Werte sind True (der Text wird in "Pantheon" von Carl Hoffmann (Herausgeber) gelistet) und False (der Text wird nicht in "Pantheon" von Carl Hoffmann (Herausgeber) gelistet)\n\
+"in_B-v-Wiese": ob der Text in "Novelle" von Benno von Wiese aufgelistet wird; mögliche Werte sind True (der Text wird in "Novelle" von Benno von Wiese gelistet) und False (der Text wird nicht in "Novelle" von Benno von Wiese gelistet)\n\
 \n\
 Output Format:\n\
 {\n\
@@ -329,7 +401,7 @@ def get_answer(chain, instructions, few_shots, prompt_sample, expected_keys):
     return answer, model_dict
 
 
-def prompt_llama8b_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT_SYSTEM_PROMPT_DE, instructions = DEFAULT_PROMPT_DE, shots=0):
+def prompt_llama8b_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT_SYSTEM_PROMPT_DE, instructions = DEFAULT_PROMPT_DE, shots=0, experiment_mode = "dev"):
     prompt = ChatPromptTemplate.from_messages([
     ("system", system_prompt),
     ("human", "{question}"),
@@ -337,10 +409,14 @@ def prompt_llama8b_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT
 
     few_shots = create_few_shot_samples(eval_dataset, shots)
     expected_keys = set(eval_dataset.features)
-    print("expected_keys:", expected_keys)
+    #print("expected_keys:", expected_keys)
     
     prompt_dataset = prompt_dataset.skip(shots)
-    prompt_dataset = prompt_dataset.select(range(10))
+
+    if experiment_mode == "dev":
+        prompt_dataset = prompt_dataset.select(range(10)) # only select development samples
+    else:
+        prompt_dataset = prompt_dataset.skip(10) # exclude development samples
 
     outputs = defaultdict(str)
     answers = defaultdict(list)
@@ -350,7 +426,7 @@ def prompt_llama8b_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT
     # TODO: Über mapping lösen
     for i, prompt_sample in enumerate(prompt_dataset):
         tries = 0
-        print("curr sample: ", prompt_sample)
+        #print("curr sample: ", prompt_sample)
         template = "{instructions}{few_shots}Input: {prompt_sample}\nOutput: "
 
         prompt = ChatPromptTemplate.from_template(template)

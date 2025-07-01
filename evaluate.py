@@ -1,6 +1,10 @@
 import json
 from datasets import Dataset, load_from_disk
 import ast
+import os
+from collections import defaultdict
+import pandas as pd
+from data import Data
 
 def read_output():
     with open("output/meta-llama/Llama-3.2-1B-Instruct/5/outputs_Llama-3.2-1B-Instruct_5.json", 'r', encoding="utf-8") as f:
@@ -32,6 +36,118 @@ def read_wiki_out():
     work_wiki_out = load_from_disk("output/wikidata/hf/work")
     print(len(author_wiki_out))
 
+def evaluate_llama_8b(experiment_mode = "dev"):
+    output = "Evaluation:\n"
+
+    data = Data()
+
+    path = "./output/Llama_8B"
+    num_cols = len(data.eval_samples.features) - 1
+
+    for shot in os.listdir(path):
+        output = "Evaluation:\n"
+        eval_samples = data.eval_samples
+        shot = int(shot)
+        model_out_file = f"{path}/{shot}/outputs_Llama_8B_{shot}.json"
+
+        with open(model_out_file, 'r', encoding="utf-8") as f:
+            model_out = json.load(f)
+
+        # check correct labels
+        eval_samples = eval_samples.skip(shot)        
+
+        if experiment_mode == "dev":
+            eval_samples = eval_samples.select(range(10))
+        else:
+            eval_samples = eval_samples.skip(10)
+        
+        num_rows = len(eval_samples) # exclude dev samples and shots 
+
+        # TODO: Fix bool-return bei shot = 5
+        eval_out = eval_samples
+        #eval_out = eval_samples.map(lambda x: prep_eval_data(x))
+        cols = [feat for feat in eval_out.features if feat not in ["Dokument_ID", "Label"]]
+        eval_out = eval_out.map(lambda x: validate_sample(x, model_out, cols = cols))    
+        
+        # accuracy
+        total_acc = 0.0
+        row_acc = defaultdict(float)
+        column_acc = {col: 0.0 for col in cols}
+
+        for i, val_lbls in enumerate(eval_out["Label"]):
+            corr_lbls = sum(val_lbls)
+            total_acc += corr_lbls # count correct labels
+            row_acc[eval_out["Dokument_ID"][i]] = corr_lbls/num_cols
+
+            for j, col in enumerate(cols): # TODO: ist das dieselbe Reihenfolge wie bei val_lbls?
+                if val_lbls[j]:
+                    column_acc[col] += 1
+        
+        total_acc = total_acc/(num_rows*num_cols)
+
+        column_acc = {col:(corr/num_rows) for col, corr in column_acc.items()}
+
+        max_row_idx = max(row_acc, key = lambda x: row_acc[x])
+        min_row_idx = min(row_acc, key = lambda x: row_acc[x])
+
+        max_col_idx = max(column_acc, key = lambda x: column_acc[x])
+        min_col_idx = min(column_acc, key = lambda x: column_acc[x])
+
+        output += f"\n{shot}-shot:\n\n"
+        output += f"Total Accuracy: {total_acc}\n\n"
+        output += f"Row with the highest Accuracy: {max_row_idx} - {row_acc[max_row_idx]}\n"
+        output += f"Row with the highest Accuracy: {min_row_idx} - {row_acc[min_row_idx]}\n"
+        
+        output += f"\nColumn with the highest Accuracy: {max_col_idx} - {column_acc[max_col_idx]}\n"
+        output += f"Column with the highest Accuracy: {min_col_idx} - {column_acc[min_col_idx]}\n"
+
+        output += f"\nAccuracy per column:\n"
+        for col, acc in column_acc.items():
+            output += f"{col}: {acc}\n"
+        
+        with open(f"{path}/{shot}/evaluation_Llama_8B_{shot}.txt", 'w',encoding = "utf-8") as f:
+            f.write(output)
+
+def validate_sample(sample, model_out, cols):
+    model_dict = model_out[sample["Dokument_ID"]]
+    num_cols = len(cols)
+
+    val_labels = []
+    if model_dict != "":
+        prepped_sample = prep_eval_data(sample)
+        for col in cols:
+            model_val = model_dict[col]
+
+            if model_val != "" and type(model_val) == str and type(prepped_sample[col]) == int:
+                model_val = int(model_val)
+
+            if (prepped_sample[col] == model_val) or (prepped_sample[col] in [None, "unknown"] and model_val == '') or (str(prepped_sample[col]).lower().strip() == str(model_val).lower().strip()):
+                val_labels.append(True)
+            else:
+                val_labels.append(False) #TODO: check for Kanon_Status and Jahr_ED
+            #val_labels.append((sample[col] == model_val))
+    else:
+        val_labels = [False for i in range(num_cols)]
+    
+    return {"Label": val_labels}
+
+def prep_eval_data(sample):
+    prepped_sample = sample
+    for col, val in sample.items():
+        if val == None:
+            prepped_sample[col] = ""
+        else:
+            if col in ["Jahr_ED", "entstanden", "Jahr_Zweitdruck", "Jahr_Drittdruck", "Kanon_Status"]:
+                prepped_sample[col] = int(val)
+            elif col in ["seriell", "in_Deutscher_Novellenschatz_(Heyse)", "in_Pantheon", "in_B-v-Wiese"]:
+                if val.lower() in ["1", "true"]:
+                    prepped_sample[col] = 1
+                else:
+                    prepped_sample[col] = 0
+               # sample[col] = bool(val)
+    return prepped_sample
+
 if __name__=="__main__":
     #read_output()
-    read_wiki_out()
+    #read_wiki_out()
+    evaluate_llama_8b()
