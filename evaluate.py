@@ -44,7 +44,8 @@ def evaluate_llama_8b(experiment_mode = "dev"):
     path = "./output/Llama_8B"
     num_cols = len(data.eval_samples.features) - 1
 
-    for shot in os.listdir(path):
+    shot_dirs = [dir for dir in os.listdir(path) if dir.isdigit()]
+    for shot in shot_dirs:
         output = "Evaluation:\n"
         eval_samples = data.eval_samples
         shot = int(shot)
