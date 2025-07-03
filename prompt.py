@@ -455,9 +455,11 @@ def sanity_check(answer, expected_keys):
             s = s[:s.find("}")+1]
 
         answer = s
+        print("Found Dictionary:", s)
 
         # Save dict
         model_dict = ast.literal_eval(answer)
+        print("Parsed dict: ", model_dict)
         model_keys = set(model_dict.keys())
         if len(model_keys) == len(expected_keys)-1 and len(model_keys & expected_keys) == len(expected_keys)-1: # -1 to exclude Dokument_ID
             return model_dict
