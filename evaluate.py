@@ -41,7 +41,7 @@ def evaluate_llama_8b(experiment_mode = "dev"):
 
     data = Data()
 
-    path = "./output/Llama_8B"
+    path = f"./output/Llama_8B/{experiment_mode}"
     num_cols = len(data.eval_samples.features) - 1
 
     shot_dirs = [dir for dir in os.listdir(path) if dir.isdigit()]
@@ -49,7 +49,7 @@ def evaluate_llama_8b(experiment_mode = "dev"):
         output = "Evaluation:\n"
         eval_samples = data.eval_samples
         shot = int(shot)
-        model_out_file = f"{path}/{shot}/outputs_Llama_8B_{shot}.json"
+        model_out_file = f"{path}/{experiment_mode}/{shot}/outputs_Llama_8B_{experiment_mode}_{shot}.json"
 
         with open(model_out_file, 'r', encoding="utf-8") as f:
             model_out = json.load(f)
@@ -106,7 +106,7 @@ def evaluate_llama_8b(experiment_mode = "dev"):
         for col, acc in column_acc.items():
             output += f"{col}: {acc}\n"
         
-        with open(f"{path}/{shot}/evaluation_Llama_8B_{shot}.txt", 'w',encoding = "utf-8") as f:
+        with open(f"{path}/{experiment_mode}/{shot}/evaluation_Llama_8B_{experiment_mode}_{shot}.txt", 'w',encoding = "utf-8") as f:
             f.write(output)
 
 def validate_sample(sample, model_out, cols):

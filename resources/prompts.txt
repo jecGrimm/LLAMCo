@@ -261,7 +261,7 @@ Output Format:\n\
 \n\
 """
 
-DEFAULT_PROMPT_DE Output of Chat-GPT optimized for Llama3-8B:
+DEFAULT_PROMPT_DE_2 simpler prompt without Output Format:
 """\
 Du bist ein wissenschaftlicher Assistent, der Metadaten über die Veröffentlichung eines literarischen Textes sammelt.\n\
 Bitte sammle die Informationen selbst entweder aus deinem Wissen oder mit einer Websuche.\n\
@@ -302,7 +302,9 @@ Output Keys:\n\
 "in_Pantheon": ob der Text in "Pantheon" von Carl Hoffmann (Herausgeber) aufgelistet wird; mögliche Werte sind True (der Text wird in "Pantheon" von Carl Hoffmann (Herausgeber) gelistet) und False (der Text wird nicht in "Pantheon" von Carl Hoffmann (Herausgeber) gelistet)\n\
 "in_B-v-Wiese": ob der Text in "Novelle" von Benno von Wiese aufgelistet wird; mögliche Werte sind True (der Text wird in "Novelle" von Benno von Wiese gelistet) und False (der Text wird nicht in "Novelle" von Benno von Wiese gelistet)\n\
 \n\
-"""; DEFAULT_PROMPT_DE_2 simpler prompt without Output Format
+"""
+
+DEFAULT_PROMPT_DE_3 Output of Chat-GPT optimized for Llama3-8B:
 """Du bist ein wissenschaftlicher Assistent und hast die Aufgabe, bibliografische und literaturwissenschaftliche Metadaten zu einem literarischen Werk zu erheben.
 
 Gegeben ist ein Input mit den drei Informationen:

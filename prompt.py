@@ -257,6 +257,51 @@ Output Keys:\n\
 \n\
 """
 
+DEFAULT_PROMPT_DE_3 = """Du bist ein wissenschaftlicher Assistent und hast die Aufgabe, bibliografische und literaturwissenschaftliche Metadaten zu einem literarischen Werk zu erheben.
+
+Gegeben ist ein Input mit den drei Informationen:
+- Vorname des Autors  
+- Nachname des Autors  
+- Titel des literarischen Textes  
+
+Erstelle ein Python-Dictionary im vorgegebenen Format. Das Dictionary soll nur die unten aufgeführten **Output Keys** enthalten. Trage zu jedem Key, sofern möglich, die passende Information ein. Nutze dabei dein vorhandenes Wissen oder führe eine Websuche durch. Falls eine Information nicht auffindbar ist, trage einen leeren String "" als Wert ein.
+
+Wichtige Hinweise:
+- Verwende die Erklärungen zu den Output Keys, um jede Information korrekt einzuordnen.  
+- Gib ausschließlich das ausgefüllte Dictionary im genannten Format zurück – keine Kommentare, keine zusätzliche Erklärung, kein Fließtext.  
+- Antworte ausschließlich auf Deutsch.  
+- Gib das Ergebnis exakt im folgenden Format zurück:
+
+```python
+{
+    "Vorname": "",
+    "Nachname": "",
+    "Pseudonym": "",
+    "Gender": "",
+    "Titel": "",
+    "Untertitel_im_Text": "",
+    "Untertitel_im_Inhaltsverzeichnis": "",
+    "Jahr_ED": "",
+    "entstanden": "",
+    "Gattungslabel_ED": "",
+    "Medium_ED": "",
+    "Medientyp_ED": "",
+    "Hg.": "",
+    "Kanon_Status": "",
+    "seriell": "",
+    "Seiten": "",
+    "Medium_Zweitdruck": "",
+    "Jahr_Zweitdruck": "",
+    "Label_Zweitdruck": "",
+    "Medium_Drittdruck": "",
+    "Jahr_Drittdruck": "",
+    "Label_Drittdruck": "",
+    "in_Deutscher_Novellenschatz_(Heyse)": "",
+    "in_Pantheon": "",
+    "in_B-v-Wiese": ""
+}
+"""
+
 DEFAULT_PROMPT_DE = """Du bist ein wissenschaftlicher Assistent und hast die Aufgabe, bibliografische und literaturwissenschaftliche Metadaten zu einem literarischen Werk zu erheben.
 
 Gegeben ist ein Input mit den drei Informationen:
@@ -270,6 +315,8 @@ Wichtige Hinweise:
 - Verwende die Erklärungen zu den Output Keys, um jede Information korrekt einzuordnen.  
 - Gib ausschließlich das ausgefüllte Dictionary im genannten Format zurück – keine Kommentare, keine zusätzliche Erklärung, kein Fließtext.  
 - Antworte ausschließlich auf Deutsch.  
+- Gib bei "Gender" entweder "m" oder "f" zurück.
+- Gib bei "seriell", "in_Deutscher_Novellenschatz_(Heyse)", "in_Pantheon" und "in_B-v-Wiese" entweder "true" oder "false" zurück.
 - Gib das Ergebnis exakt im folgenden Format zurück:
 
 ```python
@@ -537,16 +584,16 @@ def prompt_llama8b_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT
 
     #print(outputs)
 
-    model_id = "Llama_8B"
-    os.makedirs(f"./output/{model_id}/{shots}", exist_ok=True)
+    model_id = "Llama3_8B"
+    os.makedirs(f"./output/{model_id}/{experiment_mode}/{shots}", exist_ok=True)
     try:
-        outputs.save_to_disk(f"./output/{model_id}/{shots}/hf")
-        outputs.to_json(f"./output/{model_id}/{shots}/outputs_{model_id}_{shots}.json")
+        outputs.save_to_disk(f"./output/{model_id}/{experiment_mode}/{shots}/hf")
+        outputs.to_json(f"./output/{model_id}/{experiment_mode}/{shots}/outputs_{model_id}_{experiment_mode}_{shots}.json")
     except:
 
-        with open(f"./output/{model_id}/{shots}/outputs_{model_id}_{shots}.json", "w", encoding = "utf-8") as f:
+        with open(f"./output/{model_id}/{experiment_mode}/{shots}/outputs_{model_id}_{experiment_mode}_{shots}.json", "w", encoding = "utf-8") as f:
             json.dump(outputs, f)
-        with open(f"./output/{model_id}/{shots}/answers_{model_id}_{shots}.json", "w", encoding = "utf-8") as f:
+        with open(f"./output/{model_id}/{experiment_mode}/{shots}/answers_{model_id}_{experiment_mode}_{shots}.json", "w", encoding = "utf-8") as f:
             json.dump(answers, f)
 
     
