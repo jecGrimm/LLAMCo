@@ -215,7 +215,7 @@ Output Format:\n\
 \n\
 """
 
-DEFAULT_PROMPT_DE = """\
+DEFAULT_PROMPT_DE_2 = """\
 Du bist ein wissenschaftlicher Assistent, der Metadaten über die Veröffentlichung eines literarischen Textes sammelt.\n\
 Bitte sammle die Informationen selbst entweder aus deinem Wissen oder mit einer Websuche.\n\
 Bitte nutze die Erklärungen für die Output Keys, um die korrekten Informationen zu erfassen.\n\
@@ -255,6 +255,51 @@ Output Keys:\n\
 "in_Pantheon": ob der Text in "Pantheon" von Carl Hoffmann (Herausgeber) aufgelistet wird; mögliche Werte sind True (der Text wird in "Pantheon" von Carl Hoffmann (Herausgeber) gelistet) und False (der Text wird nicht in "Pantheon" von Carl Hoffmann (Herausgeber) gelistet)\n\
 "in_B-v-Wiese": ob der Text in "Novelle" von Benno von Wiese aufgelistet wird; mögliche Werte sind True (der Text wird in "Novelle" von Benno von Wiese gelistet) und False (der Text wird nicht in "Novelle" von Benno von Wiese gelistet)\n\
 \n\
+"""
+
+DEFAULT_PROMPT_DE = """Du bist ein wissenschaftlicher Assistent und hast die Aufgabe, bibliografische und literaturwissenschaftliche Metadaten zu einem literarischen Werk zu erheben.
+
+Gegeben ist ein Input mit den drei Informationen:
+- Vorname des Autors  
+- Nachname des Autors  
+- Titel des literarischen Textes  
+
+Erstelle ein Python-Dictionary im vorgegebenen Format. Das Dictionary soll nur die unten aufgeführten **Output Keys** enthalten. Trage zu jedem Key, sofern möglich, die passende Information ein. Nutze dabei dein vorhandenes Wissen oder führe eine Websuche durch. Falls eine Information nicht auffindbar ist, trage einen leeren String "" als Wert ein.
+
+Wichtige Hinweise:
+- Verwende die Erklärungen zu den Output Keys, um jede Information korrekt einzuordnen.  
+- Gib ausschließlich das ausgefüllte Dictionary im genannten Format zurück – keine Kommentare, keine zusätzliche Erklärung, kein Fließtext.  
+- Antworte ausschließlich auf Deutsch.  
+- Gib das Ergebnis exakt im folgenden Format zurück:
+
+```python
+{
+    "Vorname": "",
+    "Nachname": "",
+    "Pseudonym": "",
+    "Gender": "",
+    "Titel": "",
+    "Untertitel_im_Text": "",
+    "Untertitel_im_Inhaltsverzeichnis": "",
+    "Jahr_ED": "",
+    "entstanden": "",
+    "Gattungslabel_ED": "",
+    "Medium_ED": "",
+    "Medientyp_ED": "",
+    "Hg.": "",
+    "Kanon_Status": "",
+    "seriell": "",
+    "Seiten": "",
+    "Medium_Zweitdruck": "",
+    "Jahr_Zweitdruck": "",
+    "Label_Zweitdruck": "",
+    "Medium_Drittdruck": "",
+    "Jahr_Drittdruck": "",
+    "Label_Drittdruck": "",
+    "in_Deutscher_Novellenschatz_(Heyse)": "",
+    "in_Pantheon": "",
+    "in_B-v-Wiese": ""
+}
 """
 
 def create_messages(prompt, system_prompt = DEFAULT_SYSTEM_PROMPT_DE):

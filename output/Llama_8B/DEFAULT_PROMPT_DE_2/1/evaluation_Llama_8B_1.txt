@@ -1,0 +1,38 @@
+Evaluation:
+
+1-shot:
+
+Total Accuracy: 0.404
+
+Row with the highest Accuracy: 00001-00 - 0.6
+Row with the highest Accuracy: 00008-00 - 0.0
+
+Column with the highest Accuracy: Pseudonym - 0.8
+Column with the highest Accuracy: Jahr_ED - 0.0
+
+Accuracy per column:
+Nachname: 0.1
+Vorname: 0.1
+Pseudonym: 0.8
+Gender: 0.5
+Titel: 0.1
+Untertitel_im_Text: 0.8
+Untertitel_im_Inhaltsverzeichnis: 0.8
+Jahr_ED: 0.0
+entstanden: 0.5
+Gattungslabel_ED: 0.0
+Medium_ED: 0.0
+Medientyp_ED: 0.0
+Hg.: 0.8
+Kanon_Status: 0.6
+seriell: 0.2
+Seiten: 0.0
+Medium_Zweitdruck: 0.8
+Jahr_Zweitdruck: 0.8
+Label_Zweitdruck: 0.8
+Medium_Drittdruck: 0.8
+Jahr_Drittdruck: 0.8
+Label_Drittdruck: 0.8
+in_Deutscher_Novellenschatz_(Heyse): 0.0
+in_Pantheon: 0.0
+in_B-v-Wiese: 0.0

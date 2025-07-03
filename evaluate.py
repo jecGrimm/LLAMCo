@@ -142,9 +142,9 @@ def prep_eval_data(sample):
                 prepped_sample[col] = int(val)
             elif col in ["seriell", "in_Deutscher_Novellenschatz_(Heyse)", "in_Pantheon", "in_B-v-Wiese"]:
                 if val.lower() in ["1", "true"]:
-                    prepped_sample[col] = 1
+                    prepped_sample[col] = "true"
                 else:
-                    prepped_sample[col] = 0
+                    prepped_sample[col] = "false"
                # sample[col] = bool(val)
     return prepped_sample
 
