@@ -586,7 +586,7 @@ def prompt_llama_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT_S
     model_path_id = ""
     if model_id == "llama3":
         model_path_id = "Llama3_8B"
-    elif model_id.lower() == "llama3:80b":
+    elif model_id.lower() == "llama3:70b":
         model_path_id = "Llama3_70B"
     else:
         model_path_id = model_id
@@ -610,4 +610,4 @@ if __name__ == "__main__":
     for shot in shots:
         #prompt_model(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots=shot)
         #prompt_model_dataset(model_id = "meta-llama/Llama-3.1-8B-Instruct", prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots=shot)
-        prompt_llama_dataset(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots = shot, model_id = "llama3:80B")
+        prompt_llama_dataset(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots = shot, model_id = "llama3:70B")
