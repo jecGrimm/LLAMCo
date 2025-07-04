@@ -537,7 +537,7 @@ def get_answer(chain, instructions, few_shots, prompt_sample, expected_keys):
     return answer, model_dict
 
 
-def prompt_llama8b_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT_SYSTEM_PROMPT_DE, instructions = DEFAULT_PROMPT_DE, shots=0, experiment_mode = "dev"):
+def prompt_llama_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT_SYSTEM_PROMPT_DE, instructions = DEFAULT_PROMPT_DE, shots=0, experiment_mode = "dev", model_id = "llama3"):
     prompt = ChatPromptTemplate.from_messages([
     ("system", system_prompt),
     ("human", "{question}"),
@@ -567,7 +567,7 @@ def prompt_llama8b_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT
 
         prompt = ChatPromptTemplate.from_template(template)
 
-        model = OllamaLLM(model="llama3")
+        model = OllamaLLM(model=model_id)
 
         chain = prompt | model
 
@@ -583,17 +583,23 @@ def prompt_llama8b_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT
         outputs[prompt_sample["Dokument_ID"]] = model_dict
 
     #print(outputs)
+    model_path_id = ""
+    if model_id == "llama3":
+        model_path_id = "Llama3_8B"
+    elif model_id.lower() == "llama3:80b":
+        model_path_id = "Llama3_70B"
+    else:
+        model_path_id = model_id
 
-    model_id = "Llama3_8B"
-    os.makedirs(f"./output/{model_id}/{experiment_mode}/{shots}", exist_ok=True)
+    os.makedirs(f"./output/{model_path_id}/{experiment_mode}/{shots}", exist_ok=True)
     try:
-        outputs.save_to_disk(f"./output/{model_id}/{experiment_mode}/{shots}/hf")
-        outputs.to_json(f"./output/{model_id}/{experiment_mode}/{shots}/outputs_{model_id}_{experiment_mode}_{shots}.json")
+        outputs.save_to_disk(f"./output/{model_path_id}/{experiment_mode}/{shots}/hf")
+        outputs.to_json(f"./output/{model_path_id}/{experiment_mode}/{shots}/outputs_{model_path_id}_{experiment_mode}_{shots}.json")
     except:
 
-        with open(f"./output/{model_id}/{experiment_mode}/{shots}/outputs_{model_id}_{experiment_mode}_{shots}.json", "w", encoding = "utf-8") as f:
+        with open(f"./output/{model_path_id}/{experiment_mode}/{shots}/outputs_{model_path_id}_{experiment_mode}_{shots}.json", "w", encoding = "utf-8") as f:
             json.dump(outputs, f)
-        with open(f"./output/{model_id}/{experiment_mode}/{shots}/answers_{model_id}_{experiment_mode}_{shots}.json", "w", encoding = "utf-8") as f:
+        with open(f"./output/{model_path_id}/{experiment_mode}/{shots}/answers_{model_path_id}_{experiment_mode}_{shots}.json", "w", encoding = "utf-8") as f:
             json.dump(answers, f)
 
     
@@ -604,4 +610,4 @@ if __name__ == "__main__":
     for shot in shots:
         #prompt_model(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots=shot)
         #prompt_model_dataset(model_id = "meta-llama/Llama-3.1-8B-Instruct", prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots=shot)
-        prompt_llama8b_dataset(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots = shot)
+        prompt_llama_dataset(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots = shot, model_id = "llama3:80B")
