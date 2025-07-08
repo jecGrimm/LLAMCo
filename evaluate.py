@@ -5,6 +5,7 @@ import os
 from collections import defaultdict
 import pandas as pd
 from data import Data
+import re
 
 def read_output():
     with open("output/meta-llama/Llama-3.2-1B-Instruct/5/outputs_Llama-3.2-1B-Instruct_5.json", 'r', encoding="utf-8") as f:
@@ -33,8 +34,93 @@ def clean_model_out(model_out: str):
 
 def read_wiki_out():
     author_wiki_out = load_from_disk("output/wikidata/hf/author")
-    work_wiki_out = load_from_disk("output/wikidata/hf/work")
     print(len(author_wiki_out))
+
+def evaluate_wiki():
+    data = Data()
+    eval_samples = data.eval_samples
+
+    author_wiki_out = load_from_disk("output/wikidata/hf/author")
+    work_wiki_out = load_from_disk("output/wikidata/hf/work")
+
+    cols = [feat for feat in eval_samples.features if feat != "Dokument_ID"]
+    eval_out = eval_samples.map(lambda x: validate_wiki_sample(sample = x, author_wiki_data=author_wiki_out, work_wiki_data = work_wiki_out, cols = cols))
+
+    # accuracy
+    total_acc = 0.0
+    row_acc = defaultdict(float)
+    column_acc = {col: 0.0 for col in cols}
+    num_cols = len(cols)
+    num_rows = len(eval_out)
+
+    for i, val_lbls in enumerate(eval_out["Label"]):
+        corr_lbls = sum(val_lbls)
+        total_acc += corr_lbls # count correct labels
+        row_acc[eval_out["Dokument_ID"][i]] = corr_lbls/num_cols
+
+        for j, col in enumerate(cols): # TODO: ist das dieselbe Reihenfolge wie bei val_lbls?
+            if val_lbls[j]:
+                column_acc[col] += 1
+    
+    total_acc = total_acc/(num_rows*num_cols)
+
+    column_acc = {col:(corr/num_rows) for col, corr in column_acc.items()}
+
+    max_row_idx = max(row_acc, key = lambda x: row_acc[x])
+    min_row_idx = min(row_acc, key = lambda x: row_acc[x])
+
+    max_col_idx = max(column_acc, key = lambda x: column_acc[x])
+    min_col_idx = min(column_acc, key = lambda x: column_acc[x])
+
+    # TODO: format as 0.00
+    output = "Evaluation:\n"
+    output += f"\nTotal Accuracy: {total_acc}\n\n"
+    output += f"Row with the highest Accuracy: {max_row_idx} - {row_acc[max_row_idx]}\n"
+    output += f"Row with the highest Accuracy: {min_row_idx} - {row_acc[min_row_idx]}\n"
+    
+    output += f"\nColumn with the highest Accuracy: {max_col_idx} - {column_acc[max_col_idx]}\n"
+    output += f"Column with the highest Accuracy: {min_col_idx} - {column_acc[min_col_idx]}\n"
+
+    output += f"\nAccuracy per column:\n"
+    for col, acc in column_acc.items():
+        output += f"{col}: {acc}\n"
+    
+    with open(f"output/wikidata/evaluation_wiki.txt", 'w',encoding = "utf-8") as f:
+        f.write(output)
+
+def validate_wiki_sample(sample, author_wiki_data, work_wiki_data, cols):
+    val_labels = []
+    author_wiki_sample = author_wiki_data.filter(lambda x: x["Dokument_ID"] == sample["Dokument_ID"]) 
+    work_wiki_sample = work_wiki_data.filter(lambda x: x["Dokument_ID"] == sample["Dokument_ID"]) 
+    
+    wiki_vals = set(author_wiki_sample["Output"][0]).union(set(work_wiki_sample["Output"][0]))
+        
+    # get years from datestrings
+    for val in author_wiki_sample["Output"][0]:
+        match = re.match(r"(\d{4})-.*Z", val)
+        if match:
+            wiki_vals.add(match.group(1))
+
+    for val in work_wiki_sample["Output"][0]:
+        match = re.match(r"(\d{4})-.*Z", val)
+        if match:
+            wiki_vals.add(match.group(1))
+
+    prepped_sample = prep_eval_data(sample)
+    # eval_vals = set(prepped_sample.values())
+
+    # found_vals = eval_vals & wiki_vals
+
+    if len(wiki_vals) != 0: 
+        for col in cols:
+            if prepped_sample[col] in wiki_vals or str(prepped_sample[col]).lower() in wiki_vals:
+                val_labels.append(True)
+            else:
+                val_labels.append(False)
+    else:
+        val_labels = [False for _ in range(len(cols))]
+
+    return {f"Label": val_labels}
 
 def evaluate_llama_8b(experiment_mode = "dev"):
     output = "Evaluation:\n"
@@ -119,8 +205,8 @@ def validate_sample(sample, model_out, cols):
         for col in cols:
             model_val = model_dict[col]
 
-            if model_val != "" and type(model_val) == str and type(prepped_sample[col]) == int:
-                model_val = int(model_val)
+            # if model_val != "" and type(model_val) == str and type(prepped_sample[col]) == int:
+            #     model_val = int(model_val)
 
             if (prepped_sample[col] == model_val) or (prepped_sample[col] in [None, "unknown"] and model_val == '') or (str(prepped_sample[col]).lower().strip() == str(model_val).lower().strip()):
                 val_labels.append(True)
@@ -128,7 +214,7 @@ def validate_sample(sample, model_out, cols):
                 val_labels.append(False) #TODO: check for Kanon_Status and Jahr_ED
             #val_labels.append((sample[col] == model_val))
     else:
-        val_labels = [False for i in range(num_cols)]
+        val_labels = [False for _ in range(num_cols)]
     
     return {"Label": val_labels}
 
@@ -139,7 +225,10 @@ def prep_eval_data(sample):
             prepped_sample[col] = ""
         else:
             if col in ["Jahr_ED", "entstanden", "Jahr_Zweitdruck", "Jahr_Drittdruck", "Kanon_Status"]:
-                prepped_sample[col] = int(val)
+                try:
+                    prepped_sample[col] = str(int(val))
+                except:
+                    prepped_sample[col] = str(val)
             elif col in ["seriell", "in_Deutscher_Novellenschatz_(Heyse)", "in_Pantheon", "in_B-v-Wiese"]:
                 if val.lower() in ["1", "true"]:
                     prepped_sample[col] = "true"
@@ -151,4 +240,6 @@ def prep_eval_data(sample):
 if __name__=="__main__":
     #read_output()
     #read_wiki_out()
-    evaluate_llama_8b()
+
+    #evaluate_llama_8b()
+    evaluate_wiki()

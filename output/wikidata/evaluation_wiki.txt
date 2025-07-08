@@ -1,0 +1,36 @@
+Evaluation:
+
+Total Accuracy: 0.07117384843982169
+
+Row with the highest Accuracy: 00801-00 - 0.24
+Row with the highest Accuracy: 00000-00 - 0.0
+
+Column with the highest Accuracy: Titel - 0.5817236255572066
+Column with the highest Accuracy: Gender - 0.0
+
+Accuracy per column:
+Nachname: 0.3462109955423477
+Vorname: 0.008915304606240713
+Pseudonym: 0.021545319465081723
+Gender: 0.0
+Titel: 0.5817236255572066
+Untertitel_im_Text: 0.004457652303120356
+Untertitel_im_Inhaltsverzeichnis: 0.0
+Jahr_ED: 0.4606240713224368
+entstanden: 0.0
+Gattungslabel_ED: 0.0
+Medium_ED: 0.0007429420505200594
+Medientyp_ED: 0.0
+Hg.: 0.004457652303120356
+Kanon_Status: 0.3476968796433878
+seriell: 0.0
+Seiten: 0.0007429420505200594
+Medium_Zweitdruck: 0.0
+Jahr_Zweitdruck: 0.002228826151560178
+Label_Zweitdruck: 0.0
+Medium_Drittdruck: 0.0
+Jahr_Drittdruck: 0.0
+Label_Drittdruck: 0.0
+in_Deutscher_Novellenschatz_(Heyse): 0.0
+in_Pantheon: 0.0
+in_B-v-Wiese: 0.0
