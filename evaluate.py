@@ -122,12 +122,12 @@ def validate_wiki_sample(sample, author_wiki_data, work_wiki_data, cols):
 
     return {f"Label": val_labels}
 
-def evaluate_llama_8b(experiment_mode = "dev"):
+def evaluate_llama(experiment_mode = "dev", model_id = "Llama3_70B"):
     output = "Evaluation:\n"
 
     data = Data()
 
-    path = f"./output/Llama3_8B/{experiment_mode}"
+    path = f"./output/{model_id}/{experiment_mode}"
     num_cols = len(data.eval_samples.features) - 1
 
     shot_dirs = [dir for dir in os.listdir(path) if dir.isdigit()]
@@ -135,7 +135,7 @@ def evaluate_llama_8b(experiment_mode = "dev"):
         output = "Evaluation:\n"
         eval_samples = data.eval_samples
         shot = int(shot)
-        model_out_file = f"{path}/{shot}/outputs_Llama3_8B_{experiment_mode}_{shot}.json"
+        model_out_file = f"{path}/{shot}/outputs_{model_id}_{experiment_mode}_{shot}.json"
 
         with open(model_out_file, 'r', encoding="utf-8") as f:
             model_out = json.load(f)
@@ -192,7 +192,7 @@ def evaluate_llama_8b(experiment_mode = "dev"):
         for col, acc in column_acc.items():
             output += f"{col}: {acc}\n"
         
-        with open(f"{path}/{shot}/evaluation_Llama3_8B_{experiment_mode}_{shot}.txt", 'w',encoding = "utf-8") as f:
+        with open(f"{path}/{shot}/evaluation_{model_id}_{experiment_mode}_{shot}.txt", 'w',encoding = "utf-8") as f:
             f.write(output)
 
 def validate_sample(sample, model_out, cols):
@@ -238,8 +238,5 @@ def prep_eval_data(sample):
     return prepped_sample
 
 if __name__=="__main__":
-    #read_output()
-    #read_wiki_out()
-
-    #evaluate_llama_8b()
-    evaluate_wiki()
+    #evaluate_wiki()
+    evaluate_llama()
