@@ -14,54 +14,62 @@ def evaluate_wiki():
     author_wiki_out = load_from_disk("output/wikidata/hf/author")
     work_wiki_out = load_from_disk("output/wikidata/hf/work")
 
-    cols = [feat for feat in eval_samples.features if feat != "Dokument_ID"]
-    eval_out = eval_samples.map(lambda x: validate_wiki_sample(sample = x, author_wiki_data=author_wiki_out, work_wiki_data = work_wiki_out, cols = cols))
+    # exclude columns that cannot be contained in wikidata
+    cols = [feat for feat in eval_samples.features if feat not in ["seriell", "in_Deutscher_Novellenschatz_(Heyse)", "in_Pantheon", "in_B-v-Wiese", "Kanon_Status", "Dokument_ID"]]
+    total_metrics, row_metrics, col_metrics = validate_wiki_samples(eval_samples, author_wiki_out, work_wiki_out, cols)
 
-    # accuracy
-    total_acc = 0.0
-    row_acc = defaultdict(float)
-    column_acc = {col: 0.0 for col in cols}
-    num_cols = len(cols)
-    num_rows = len(eval_out)
-
-    for i, val_lbls in enumerate(eval_out["Label"]):
-        corr_lbls = sum(val_lbls)
-        total_acc += corr_lbls # count correct labels
-        row_acc[eval_out["Dokument_ID"][i]] = corr_lbls/num_cols
-
-        for j, col in enumerate(cols): # TODO: ist das dieselbe Reihenfolge wie bei val_lbls?
-            if val_lbls[j]:
-                column_acc[col] += 1
+    outfile = f"output/wikidata/evaluation_wiki"
+    json.dump(total_metrics, open(outfile+"_total.json", 'w', encoding="utf-8"), indent=4)
+    json.dump(row_metrics, open(outfile+"_rows.json", 'w', encoding="utf-8"),  indent=4)
+    json.dump(col_metrics, open(outfile+"_cols.json", 'w', encoding="utf-8"),  indent=4)
     
-    total_acc = total_acc/(num_rows*num_cols)
+    # eval_out = eval_samples.map(lambda x: validate_wiki_sample(sample = x, author_wiki_data=author_wiki_out, work_wiki_data = work_wiki_out, cols = cols))
 
-    column_acc = {col:(corr/num_rows) for col, corr in column_acc.items()}
+    # # accuracy
+    # total_acc = 0.0
+    # row_acc = defaultdict(float)
+    # column_acc = {col: 0.0 for col in cols}
+    # num_cols = len(cols)
+    # num_rows = len(eval_out)
 
-    max_row_idx = max(row_acc, key = lambda x: row_acc[x])
-    min_row_idx = min(row_acc, key = lambda x: row_acc[x])
+    # for i, val_lbls in enumerate(eval_out["Label"]):
+    #     corr_lbls = sum(val_lbls)
+    #     total_acc += corr_lbls # count correct labels
+    #     row_acc[eval_out["Dokument_ID"][i]] = corr_lbls/num_cols
 
-    max_col_idx = max(column_acc, key = lambda x: column_acc[x])
-    min_col_idx = min(column_acc, key = lambda x: column_acc[x])
-
-    # TODO: format as 0.00
-    output = "Evaluation:\n"
-    output += f"\nTotal Accuracy: {total_acc}\n\n"
-    output += f"Row with the highest Accuracy: {max_row_idx} - {row_acc[max_row_idx]}\n"
-    output += f"Row with the highest Accuracy: {min_row_idx} - {row_acc[min_row_idx]}\n"
+    #     for j, col in enumerate(cols): # TODO: ist das dieselbe Reihenfolge wie bei val_lbls?
+    #         if val_lbls[j]:
+    #             column_acc[col] += 1
     
-    output += f"\nColumn with the highest Accuracy: {max_col_idx} - {column_acc[max_col_idx]}\n"
-    output += f"Column with the highest Accuracy: {min_col_idx} - {column_acc[min_col_idx]}\n"
+    # total_acc = total_acc/(num_rows*num_cols)
 
-    output += f"\nAccuracy per column:\n"
-    for col, acc in column_acc.items():
-        output += f"{col}: {acc}\n"
+    # column_acc = {col:(corr/num_rows) for col, corr in column_acc.items()}
 
-    output += f"\n Accuracy per row:\n"
-    for row, acc in row_acc.items():
-        output += f"{row}: {acc}\n"
+    # max_row_idx = max(row_acc, key = lambda x: row_acc[x])
+    # min_row_idx = min(row_acc, key = lambda x: row_acc[x])
+
+    # max_col_idx = max(column_acc, key = lambda x: column_acc[x])
+    # min_col_idx = min(column_acc, key = lambda x: column_acc[x])
+
+    # # TODO: format as 0.00
+    # output = "Evaluation:\n"
+    # output += f"\nTotal Accuracy: {total_acc}\n\n"
+    # output += f"Row with the highest Accuracy: {max_row_idx} - {row_acc[max_row_idx]}\n"
+    # output += f"Row with the highest Accuracy: {min_row_idx} - {row_acc[min_row_idx]}\n"
     
-    with open(f"output/wikidata/evaluation_wiki.txt", 'w',encoding = "utf-8") as f:
-        f.write(output)
+    # output += f"\nColumn with the highest Accuracy: {max_col_idx} - {column_acc[max_col_idx]}\n"
+    # output += f"Column with the highest Accuracy: {min_col_idx} - {column_acc[min_col_idx]}\n"
+
+    # output += f"\nAccuracy per column:\n"
+    # for col, acc in column_acc.items():
+    #     output += f"{col}: {acc}\n"
+
+    # output += f"\n Accuracy per row:\n"
+    # for row, acc in row_acc.items():
+    #     output += f"{row}: {acc}\n"
+    
+    # with open(f"output/wikidata/evaluation_wiki.txt", 'w',encoding = "utf-8") as f:
+    #     f.write(output)
 
 def validate_wiki_sample(sample, author_wiki_data, work_wiki_data, cols):
     val_labels = []
@@ -82,17 +90,77 @@ def validate_wiki_sample(sample, author_wiki_data, work_wiki_data, cols):
             wiki_vals.add(match.group(1))
 
     prepped_sample = prep_eval_data(sample)
-
     if len(wiki_vals) != 0: 
         for col in cols:
-            if prepped_sample[col] in wiki_vals or str(prepped_sample[col]).lower() in wiki_vals:
-                val_labels.append(True)
-            else:
-                val_labels.append(False)
+            if prepped_sample != "":
+                if prepped_sample[col] in wiki_vals or str(prepped_sample[col]).lower() in wiki_vals:
+                    val_labels.append(True)
+                else:
+                    val_labels.append(False)
     else:
         val_labels = [False for _ in range(len(cols))]
 
     return {f"Label": val_labels}
+
+def validate_wiki_samples(eval_samples, author_wiki_data, work_wiki_data, cols):
+    total_tp = 0.0
+    total_fn = 0.0
+
+    row_tp = defaultdict(float)
+    row_fn = defaultdict(float)
+
+    col_tp = {col: 0.0 for col in cols}
+    col_fn = {col: 0.0 for col in cols}
+
+    for sample in eval_samples:
+        idx = sample["Dokument_ID"]
+        author_wiki_sample = author_wiki_data.filter(lambda x: x["Dokument_ID"] == idx) 
+        work_wiki_sample = work_wiki_data.filter(lambda x: x["Dokument_ID"] == idx) 
+        wiki_vals = set(author_wiki_sample["Output"][0]).union(set(work_wiki_sample["Output"][0]))
+        
+        # get years from datestrings
+        for val in author_wiki_sample["Output"][0]:
+            match = re.match(r"(\d{4})-.*Z", val)
+            if match:
+                wiki_vals.add(match.group(1))
+
+        for val in work_wiki_sample["Output"][0]:
+            match = re.match(r"(\d{4})-.*Z", val)
+            if match:
+                wiki_vals.add(match.group(1))
+
+        prepped_sample = prep_eval_data(sample)
+        for col in cols:
+            if prepped_sample[col] not in [None, "unknown", ""]: # only compute recall
+                if prepped_sample[col] in wiki_vals or str(prepped_sample[col]).lower() in wiki_vals:
+                    total_tp += 1
+                    row_tp[idx] += 1
+                    col_tp[col] += 1
+                else:
+                    total_fn += 1
+                    row_fn[idx] += 1
+                    col_fn[col] += 1
+    
+    if total_tp != 0 or total_fn != 0:
+        total_metrics = {"recall": total_tp/(total_tp + total_fn)}
+    else:
+        total_metrics = {"recall": 0.0}
+
+    row_metrics = defaultdict(dict)
+    for idx in eval_samples["Dokument_ID"]:
+        if row_tp[idx] != 0 or row_fn[idx] != 0:
+            row_metrics[idx] = {"recall": row_tp[idx]/(row_tp[idx] + row_fn[idx])}
+        else: 
+            row_metrics = {"recall": 0.0}
+
+    col_metrics = defaultdict(dict)
+    for col in cols:
+        if col_tp[col] != 0 or col_fn[col] != 0:
+            col_metrics[col] = {"recall": col_tp[col]/(col_tp[col] + col_fn[col])}
+        else: 
+            col_metrics = {"recall": 0.0}
+    
+    return total_metrics, row_metrics, col_metrics
 
 def evaluate_llama(experiment_mode = "dev", model_id = "Llama3_70B"):
     """
@@ -260,6 +328,6 @@ def prep_eval_data(sample):
     return prepped_sample
 
 if __name__=="__main__":
-    #evaluate_wiki()
+    evaluate_wiki()
     #evaluate_llama(model_id="Llama3_70B")
-    evaluate_llama(model_id="Llama3_8B")
+    #evaluate_llama(model_id="Llama3_8B")
