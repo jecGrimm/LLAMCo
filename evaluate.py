@@ -7,35 +7,6 @@ import pandas as pd
 from data import Data
 import re
 
-def read_output():
-    with open("output/meta-llama/Llama-3.2-1B-Instruct/5/outputs_Llama-3.2-1B-Instruct_5.json", 'r', encoding="utf-8") as f:
-        out = json.load(f)
-    #print(out)
-
-    pred_meta_list = []
-    for item in out:
-        model_out = item[0]["generated_text"][-1]["content"]
-        
-        try:
-            dict_model_out = ast.literal_eval(clean_model_out(model_out))
-            
-            pred_meta_list.append(dict_model_out)
-        except:
-            pass
-
-    # [ast.literal_eval(item[0]["generated_text"][-1]["content"]) for item in out]
-    pred_meta = Dataset.from_list(pred_meta_list)
-    print(len(pred_meta))
-
-def clean_model_out(model_out: str):
-    cleaned_first = '{'+model_out.split("{")[-1]
-    cleaned = cleaned_first.split("}")[0]+'}' 
-    return cleaned
-
-def read_wiki_out():
-    author_wiki_out = load_from_disk("output/wikidata/hf/author")
-    print(len(author_wiki_out))
-
 def evaluate_wiki():
     data = Data()
     eval_samples = data.eval_samples
@@ -84,6 +55,10 @@ def evaluate_wiki():
     output += f"\nAccuracy per column:\n"
     for col, acc in column_acc.items():
         output += f"{col}: {acc}\n"
+
+    output += f"\n Accuracy per row:\n"
+    for row, acc in row_acc.items():
+        output += f"{row}: {acc}\n"
     
     with open(f"output/wikidata/evaluation_wiki.txt", 'w',encoding = "utf-8") as f:
         f.write(output)
@@ -107,9 +82,6 @@ def validate_wiki_sample(sample, author_wiki_data, work_wiki_data, cols):
             wiki_vals.add(match.group(1))
 
     prepped_sample = prep_eval_data(sample)
-    # eval_vals = set(prepped_sample.values())
-
-    # found_vals = eval_vals & wiki_vals
 
     if len(wiki_vals) != 0: 
         for col in cols:
@@ -123,16 +95,19 @@ def validate_wiki_sample(sample, author_wiki_data, work_wiki_data, cols):
     return {f"Label": val_labels}
 
 def evaluate_llama(experiment_mode = "dev", model_id = "Llama3_70B"):
-    output = "Evaluation:\n"
+    """
+    This function evaluates the outputs of the Llama models.
 
+    @params
+        experiment_mode: evaluate on dev or test split
+        model_id: model to evaluate
+    """
     data = Data()
 
     path = f"./output/{model_id}/{experiment_mode}"
-    num_cols = len(data.eval_samples.features) - 1
 
     shot_dirs = [dir for dir in os.listdir(path) if dir.isdigit()]
     for shot in shot_dirs:
-        output = "Evaluation:\n"
         eval_samples = data.eval_samples
         shot = int(shot)
         model_out_file = f"{path}/{shot}/outputs_{model_id}_{experiment_mode}_{shot}.json"
@@ -148,77 +123,124 @@ def evaluate_llama(experiment_mode = "dev", model_id = "Llama3_70B"):
         else:
             eval_samples = eval_samples.skip(10)
         
-        num_rows = len(eval_samples) # exclude dev samples and shots 
+        cols = [feat for feat in eval_samples.features if feat not in ["Dokument_ID", "Label"]]
 
-        # TODO: Fix bool-return bei shot = 5
-        eval_out = eval_samples
-        #eval_out = eval_samples.map(lambda x: prep_eval_data(x))
-        cols = [feat for feat in eval_out.features if feat not in ["Dokument_ID", "Label"]]
-        eval_out = eval_out.map(lambda x: validate_sample(x, model_out, cols = cols))    
-        
-        # accuracy
-        total_acc = 0.0
-        row_acc = defaultdict(float)
-        column_acc = {col: 0.0 for col in cols}
+        total_metrics, row_metrics, col_metrics = validate_samples(eval_samples, model_out, cols)
 
-        for i, val_lbls in enumerate(eval_out["Label"]):
-            corr_lbls = sum(val_lbls)
-            total_acc += corr_lbls # count correct labels
-            row_acc[eval_out["Dokument_ID"][i]] = corr_lbls/num_cols
+        outfile = f"{path}/{shot}/evaluation_{model_id}_{experiment_mode}_{shot}"
+        json.dump(total_metrics, open(outfile+"_total.json", 'w', encoding="utf-8"), indent=4)
+        json.dump(row_metrics, open(outfile+"_rows.json", 'w', encoding="utf-8"),  indent=4)
+        json.dump(col_metrics, open(outfile+"_cols.json", 'w', encoding="utf-8"),  indent=4)
 
-            for j, col in enumerate(cols): # TODO: ist das dieselbe Reihenfolge wie bei val_lbls?
-                if val_lbls[j]:
-                    column_acc[col] += 1
-        
-        total_acc = total_acc/(num_rows*num_cols)
+def validate_samples(eval_samples, model_out, cols):
+    """
+    This function counts the correctly generated values.
 
-        column_acc = {col:(corr/num_rows) for col, corr in column_acc.items()}
+    @params
+        eval_samples: correct sample values
+        model_out: generated values
+        cols: column names
+    @returns
+        total_metrics: dictionary with the accuracy, precision, recall, and f1 for all cells
+        row_metrics: dictionary with the accuracy, precision, recall, and f1 per instance
+        col_metrics: dictionary with the accuracy, precision, recall, and f1 per column 
+    """
+    total_tp = 0.0
+    total_tn = 0.0
+    total_fp = 0.0
+    total_fn = 0.0
 
-        max_row_idx = max(row_acc, key = lambda x: row_acc[x])
-        min_row_idx = min(row_acc, key = lambda x: row_acc[x])
+    row_tp = defaultdict(float)
+    row_tn = defaultdict(float)
+    row_fp = defaultdict(float)
+    row_fn = defaultdict(float)
 
-        max_col_idx = max(column_acc, key = lambda x: column_acc[x])
-        min_col_idx = min(column_acc, key = lambda x: column_acc[x])
+    col_tp = {col: 0.0 for col in cols}
+    col_tn = {col: 0.0 for col in cols}
+    col_fp = {col: 0.0 for col in cols}
+    col_fn = {col: 0.0 for col in cols}
 
-        output += f"\n{shot}-shot:\n\n"
-        output += f"Total Accuracy: {total_acc}\n\n"
-        output += f"Row with the highest Accuracy: {max_row_idx} - {row_acc[max_row_idx]}\n"
-        output += f"Row with the highest Accuracy: {min_row_idx} - {row_acc[min_row_idx]}\n"
-        
-        output += f"\nColumn with the highest Accuracy: {max_col_idx} - {column_acc[max_col_idx]}\n"
-        output += f"Column with the highest Accuracy: {min_col_idx} - {column_acc[min_col_idx]}\n"
+    for sample in eval_samples:
+        idx = sample["Dokument_ID"]
+        model_dict = model_out[idx]
 
-        output += f"\nAccuracy per column:\n"
-        for col, acc in column_acc.items():
-            output += f"{col}: {acc}\n"
-        
-        with open(f"{path}/{shot}/evaluation_{model_id}_{experiment_mode}_{shot}.txt", 'w',encoding = "utf-8") as f:
-            f.write(output)
-
-def validate_sample(sample, model_out, cols):
-    model_dict = model_out[sample["Dokument_ID"]]
-    num_cols = len(cols)
-
-    val_labels = []
-    if model_dict != "":
         prepped_sample = prep_eval_data(sample)
-        for col in cols:
-            model_val = model_dict[col]
+        if model_dict != "":
+            for col in cols:
+                model_val = model_dict[col]
 
-            # if model_val != "" and type(model_val) == str and type(prepped_sample[col]) == int:
-            #     model_val = int(model_val)
-
-            if (prepped_sample[col] == model_val) or (prepped_sample[col] in [None, "unknown"] and model_val == '') or (str(prepped_sample[col]).lower().strip() == str(model_val).lower().strip()):
-                val_labels.append(True)
-            else:
-                val_labels.append(False) #TODO: check for Kanon_Status and Jahr_ED
-            #val_labels.append((sample[col] == model_val))
-    else:
-        val_labels = [False for _ in range(num_cols)]
+                if prepped_sample[col] not in [None, "unknown", ""]:
+                    if prepped_sample[col] == model_val or (str(prepped_sample[col]).lower().strip() == str(model_val).lower().strip()):
+                        total_tp += 1
+                        row_tp[idx] += 1
+                        col_tp[col] += 1
+                    else:
+                        total_fn += 1
+                        row_fn[idx] += 1
+                        col_fn[col] += 1
+                else:
+                    if model_val not in [None, "unknown", ""]:
+                        total_fp += 1
+                        row_fp[idx] += 1
+                        col_fp[col] += 1
+                    else:
+                        total_tn += 1
+                        row_tn[idx] += 1
+                        col_tn[col] += 1
     
-    return {"Label": val_labels}
+    total_metrics = calculate_metrics(total_tp, total_tn, total_fp, total_fn)
+
+    row_metrics = defaultdict(dict)
+    for idx in eval_samples["Dokument_ID"]:
+        row_metrics[idx] = calculate_metrics(row_tp[idx], row_tn[idx], row_fp[idx], row_fn[idx])
+
+    col_metrics = defaultdict(dict)
+    for col in cols:
+        col_metrics[col] = calculate_metrics(col_tp[col], col_tn[col], col_fp[col], col_fn[col])
+    
+    return total_metrics, row_metrics, col_metrics
+
+def calculate_metrics(tp, tn, fp, fn):
+    """
+    This function calculates the evaluation metrics.
+
+    @params 
+        tp: true positives
+        tn: true negatives
+        fp: false positives
+        fn: false negatives
+    @returns dictionary containing the accuracy, precision, recall, and f1
+    """
+    if tp != 0 or fp != 0:
+        prec = tp/(tp + fp)
+    else:
+        prec = 0.0
+    
+    if tp != 0 or fn != 0:
+        rec = tp/(tp + fn)
+    else:
+        rec = 0.0
+
+    if prec != 0 or rec != 0:
+        f1 = (2*prec*rec)/(prec + rec)
+    else:
+        f1 = 0.0
+
+    if tp != 0 or fn != 0 or fp != 0 or tn != 0: # empty model_dict
+        acc = ((tp + tn)/(tp + tn + fp + fn))
+    else:
+        acc = 0.0
+    return {"accuracy": acc, "precision": prec, "recall": rec, "f1": f1}
 
 def prep_eval_data(sample):
+    """
+    This function preprocesses the evaluation samples for the comparison with the model.
+
+    @params
+        sample: evaluation sample
+    @returns
+        prepped_sample: preprocessed evaluation sample
+    """
     prepped_sample = sample
     for col, val in sample.items():
         if val == None:
@@ -239,4 +261,5 @@ def prep_eval_data(sample):
 
 if __name__=="__main__":
     #evaluate_wiki()
-    evaluate_llama()
+    #evaluate_llama(model_id="Llama3_70B")
+    evaluate_llama(model_id="Llama3_8B")

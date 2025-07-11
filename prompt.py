@@ -485,7 +485,7 @@ def prompt_model_dataset(prompt_dataset, eval_dataset, model_id = "meta-llama/Ll
     os.makedirs(f"./output/{model_id}/{shots}", exist_ok=True)
     # outputs.save_to_disc(f"./output/{model_id}/{shots}/hf")
     with open(f"./output/{model_id}/{shots}/outputs_{model_id.split('/')[-1]}_{shots}.json", "w", encoding = "utf-8") as f:
-        json.dump(outputs, f)
+        json.dump(outputs, f, indent=4)
     #outputs.to_json(f"./output/{model_id}/{shots}/outputs_{model_id}_{shots}.json")
 
 def sanity_check(answer, expected_keys):
@@ -598,9 +598,9 @@ def prompt_llama_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT_S
     except:
 
         with open(f"./output/{model_path_id}/{experiment_mode}/{shots}/outputs_{model_path_id}_{experiment_mode}_{shots}.json", "w", encoding = "utf-8") as f:
-            json.dump(outputs, f)
+            json.dump(outputs, f, indent=4)
         with open(f"./output/{model_path_id}/{experiment_mode}/{shots}/answers_{model_path_id}_{experiment_mode}_{shots}.json", "w", encoding = "utf-8") as f:
-            json.dump(answers, f)
+            json.dump(answers, f, indent=4)
 
     
 
