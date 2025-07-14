@@ -362,5 +362,6 @@ if __name__ == "__main__":
     data = Data()
     shots = [0, 1, 5]
     for shot in shots:
-        prompt_llama_dataset(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots = shot, model_id = "llama3:8B")
+        # llama3 = 8B
+        prompt_llama_dataset(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots = shot, model_id = "llama3")
         #prompt_llama_dataset(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots = shot, model_id = "llama3:70B")
