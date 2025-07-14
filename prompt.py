@@ -87,31 +87,31 @@ Wichtige Hinweise:
 
 ```python
 {
-    "Vorname": "",
-    "Nachname": "",
-    "Pseudonym": "",
-    "Gender": "",
-    "Titel": "",
-    "Untertitel_im_Text": "",
-    "Untertitel_im_Inhaltsverzeichnis": "",
-    "Jahr_ED": "",
-    "entstanden": "",
-    "Gattungslabel_ED": "",
-    "Medium_ED": "",
-    "Medientyp_ED": "",
-    "Hg.": "",
-    "Kanon_Status": "",
-    "seriell": "",
-    "Seiten": "",
-    "Medium_Zweitdruck": "",
-    "Jahr_Zweitdruck": "",
-    "Label_Zweitdruck": "",
-    "Medium_Drittdruck": "",
-    "Jahr_Drittdruck": "",
-    "Label_Drittdruck": "",
-    "in_Deutscher_Novellenschatz_(Heyse)": "",
-    "in_Pantheon": "",
-    "in_B-v-Wiese": ""
+    "Vorname": <answer>,
+    "Nachname": <answer>,
+    "Pseudonym": <answer>,
+    "Gender": <answer>,
+    "Titel": <answer>,
+    "Untertitel_im_Text": <answer>,
+    "Untertitel_im_Inhaltsverzeichnis": <answer>,
+    "Jahr_ED": <answer>,
+    "entstanden": <answer>,
+    "Gattungslabel_ED": <answer>,
+    "Medium_ED": <answer>,
+    "Medientyp_ED": <answer>,
+    "Hg.": <answer>,
+    "Kanon_Status": <answer>,
+    "seriell": <answer>,
+    "Seiten": <answer>,
+    "Medium_Zweitdruck": <answer>,
+    "Jahr_Zweitdruck": <answer>,
+    "Label_Zweitdruck": <answer>,
+    "Medium_Drittdruck": <answer>,
+    "Jahr_Drittdruck": <answer>,
+    "Label_Drittdruck": <answer>,
+    "in_Deutscher_Novellenschatz_(Heyse)": <answer>,
+    "in_Pantheon": <answer>,
+    "in_B-v-Wiese": <answer>
 }
 """
 
@@ -368,5 +368,6 @@ if __name__ == "__main__":
     shots = [0, 1, 5]
     for shot in shots:
         # llama3 = 8B
+        print(f"Processing {shot}-shot prompts...")
         prompt_llama_dataset(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots = shot, model_id = model_name)
         #prompt_llama_dataset(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots = shot, model_id = "llama3:70B")

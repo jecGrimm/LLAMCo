@@ -84,10 +84,10 @@
         "f1": 0.0
     },
     "seriell": {
-        "accuracy": 0.0,
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0
+        "accuracy": 0.2,
+        "precision": 1.0,
+        "recall": 0.2,
+        "f1": 0.33333333333333337
     },
     "Seiten": {
         "accuracy": 0.2,
@@ -132,21 +132,21 @@
         "f1": 0.0
     },
     "in_Deutscher_Novellenschatz_(Heyse)": {
-        "accuracy": 0.0,
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0
+        "accuracy": 0.3,
+        "precision": 1.0,
+        "recall": 0.3,
+        "f1": 0.4615384615384615
     },
     "in_Pantheon": {
-        "accuracy": 0.0,
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0
+        "accuracy": 0.3,
+        "precision": 1.0,
+        "recall": 0.3,
+        "f1": 0.4615384615384615
     },
     "in_B-v-Wiese": {
-        "accuracy": 0.0,
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0
+        "accuracy": 0.3,
+        "precision": 1.0,
+        "recall": 0.3,
+        "f1": 0.4615384615384615
     }
 }

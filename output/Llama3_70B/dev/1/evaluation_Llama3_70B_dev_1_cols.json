@@ -1,9 +1,9 @@
 {
     "Nachname": {
-        "accuracy": 1.0,
+        "accuracy": 0.9,
         "precision": 1.0,
-        "recall": 1.0,
-        "f1": 1.0
+        "recall": 0.9,
+        "f1": 0.9473684210526316
     },
     "Vorname": {
         "accuracy": 0.8,
@@ -24,19 +24,19 @@
         "f1": 0.8888888888888888
     },
     "Titel": {
-        "accuracy": 1.0,
+        "accuracy": 0.9,
         "precision": 1.0,
-        "recall": 1.0,
-        "f1": 1.0
+        "recall": 0.9,
+        "f1": 0.9473684210526316
     },
     "Untertitel_im_Text": {
-        "accuracy": 0.8,
+        "accuracy": 0.7,
         "precision": 0.0,
         "recall": 0.0,
         "f1": 0.0
     },
     "Untertitel_im_Inhaltsverzeichnis": {
-        "accuracy": 0.9,
+        "accuracy": 1.0,
         "precision": 0.0,
         "recall": 0.0,
         "f1": 0.0
@@ -48,16 +48,16 @@
         "f1": 0.0
     },
     "entstanden": {
-        "accuracy": 1.0,
+        "accuracy": 0.9,
         "precision": 0.0,
         "recall": 0.0,
         "f1": 0.0
     },
     "Gattungslabel_ED": {
-        "accuracy": 0.0,
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0
+        "accuracy": 0.1,
+        "precision": 1.0,
+        "recall": 0.1,
+        "f1": 0.18181818181818182
     },
     "Medium_ED": {
         "accuracy": 0.0,
@@ -84,10 +84,10 @@
         "f1": 0.0
     },
     "seriell": {
-        "accuracy": 0.2,
+        "accuracy": 0.3,
         "precision": 1.0,
-        "recall": 0.2,
-        "f1": 0.33333333333333337
+        "recall": 0.3,
+        "f1": 0.4615384615384615
     },
     "Seiten": {
         "accuracy": 0.0,
@@ -132,21 +132,21 @@
         "f1": 0.0
     },
     "in_Deutscher_Novellenschatz_(Heyse)": {
-        "accuracy": 0.6,
+        "accuracy": 1.0,
         "precision": 1.0,
-        "recall": 0.6,
-        "f1": 0.7499999999999999
+        "recall": 1.0,
+        "f1": 1.0
     },
     "in_Pantheon": {
-        "accuracy": 0.6,
+        "accuracy": 1.0,
         "precision": 1.0,
-        "recall": 0.6,
-        "f1": 0.7499999999999999
+        "recall": 1.0,
+        "f1": 1.0
     },
     "in_B-v-Wiese": {
-        "accuracy": 0.6,
+        "accuracy": 1.0,
         "precision": 1.0,
-        "recall": 0.6,
-        "f1": 0.7499999999999999
+        "recall": 1.0,
+        "f1": 1.0
     }
 }
