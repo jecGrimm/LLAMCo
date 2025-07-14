@@ -22,54 +22,6 @@ def evaluate_wiki():
     json.dump(total_metrics, open(outfile+"_total.json", 'w', encoding="utf-8"), indent=4)
     json.dump(row_metrics, open(outfile+"_rows.json", 'w', encoding="utf-8"),  indent=4)
     json.dump(col_metrics, open(outfile+"_cols.json", 'w', encoding="utf-8"),  indent=4)
-    
-    # eval_out = eval_samples.map(lambda x: validate_wiki_sample(sample = x, author_wiki_data=author_wiki_out, work_wiki_data = work_wiki_out, cols = cols))
-
-    # # accuracy
-    # total_acc = 0.0
-    # row_acc = defaultdict(float)
-    # column_acc = {col: 0.0 for col in cols}
-    # num_cols = len(cols)
-    # num_rows = len(eval_out)
-
-    # for i, val_lbls in enumerate(eval_out["Label"]):
-    #     corr_lbls = sum(val_lbls)
-    #     total_acc += corr_lbls # count correct labels
-    #     row_acc[eval_out["Dokument_ID"][i]] = corr_lbls/num_cols
-
-    #     for j, col in enumerate(cols): # TODO: ist das dieselbe Reihenfolge wie bei val_lbls?
-    #         if val_lbls[j]:
-    #             column_acc[col] += 1
-    
-    # total_acc = total_acc/(num_rows*num_cols)
-
-    # column_acc = {col:(corr/num_rows) for col, corr in column_acc.items()}
-
-    # max_row_idx = max(row_acc, key = lambda x: row_acc[x])
-    # min_row_idx = min(row_acc, key = lambda x: row_acc[x])
-
-    # max_col_idx = max(column_acc, key = lambda x: column_acc[x])
-    # min_col_idx = min(column_acc, key = lambda x: column_acc[x])
-
-    # # TODO: format as 0.00
-    # output = "Evaluation:\n"
-    # output += f"\nTotal Accuracy: {total_acc}\n\n"
-    # output += f"Row with the highest Accuracy: {max_row_idx} - {row_acc[max_row_idx]}\n"
-    # output += f"Row with the highest Accuracy: {min_row_idx} - {row_acc[min_row_idx]}\n"
-    
-    # output += f"\nColumn with the highest Accuracy: {max_col_idx} - {column_acc[max_col_idx]}\n"
-    # output += f"Column with the highest Accuracy: {min_col_idx} - {column_acc[min_col_idx]}\n"
-
-    # output += f"\nAccuracy per column:\n"
-    # for col, acc in column_acc.items():
-    #     output += f"{col}: {acc}\n"
-
-    # output += f"\n Accuracy per row:\n"
-    # for row, acc in row_acc.items():
-    #     output += f"{row}: {acc}\n"
-    
-    # with open(f"output/wikidata/evaluation_wiki.txt", 'w',encoding = "utf-8") as f:
-    #     f.write(output)
 
 def validate_wiki_sample(sample, author_wiki_data, work_wiki_data, cols):
     val_labels = []
@@ -328,6 +280,6 @@ def prep_eval_data(sample):
     return prepped_sample
 
 if __name__=="__main__":
-    evaluate_wiki()
+    #evaluate_wiki()
     #evaluate_llama(model_id="Llama3_70B")
-    #evaluate_llama(model_id="Llama3_8B")
+    evaluate_llama(model_id="Llama3_8B")
