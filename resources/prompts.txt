@@ -462,7 +462,7 @@ Wichtige Hinweise:
 }
 """
 
-DEFAULT_PROMPT_DE_5 replace empty string with <answer>:
+DEFAULT_PROMPT_DE_6 replace empty string with <answer>:
 """Du bist ein wissenschaftlicher Assistent und hast die Aufgabe, bibliografische und literaturwissenschaftliche Metadaten zu einem literarischen Werk zu erheben.
 
 Gegeben ist ein Input mit den drei Informationen:

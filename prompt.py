@@ -258,7 +258,6 @@ def sanity_check(answer, expected_keys):
     s = answer
 
     # Test if Dictionary is contained in the answer
-    # TODO: add retry
     try:
         if s.find("{") != -1:
 
@@ -278,7 +277,9 @@ def sanity_check(answer, expected_keys):
             return model_dict
         else:
             print(f"Dictionary does not have the correct format:\n{answer}")
+            print("expected keys:", expected_keys)
             print("model keys:", model_keys)
+            print("missing keys:", (expected_keys-model_keys))
             return ""
     except:
         print(f"Answer not correct:\n{answer}")
