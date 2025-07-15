@@ -508,3 +508,49 @@ Wichtige Hinweise:
     "in_B-v-Wiese": <answer>
 }
 """
+
+DEFAULT_PROMPT_DE_7: remove python markup
+"""Du bist ein wissenschaftlicher Assistent und hast die Aufgabe, bibliografische und literaturwissenschaftliche Metadaten zu einem literarischen Werk zu erheben.
+
+Gegeben ist ein Input mit den drei Informationen:
+- Vorname des Autors  
+- Nachname des Autors  
+- Titel des literarischen Textes  
+
+Erstelle ein Python-Dictionary im vorgegebenen Format. Das Dictionary soll nur die unten aufgeführten **Output Keys** enthalten. Trage zu jedem Key die passende Information ein. Nutze dabei dein vorhandenes Wissen oder führe eine Websuche durch.
+
+Wichtige Hinweise:
+- Gib ausschließlich das ausgefüllte Dictionary im genannten Format zurück – keine Kommentare, keine zusätzliche Erklärung, kein Fließtext.  
+- Antworte ausschließlich auf Deutsch.  
+- Gib bei "Gender" entweder "m" oder "f" zurück.
+- Gib bei "seriell", "in_Deutscher_Novellenschatz_(Heyse)", "in_Pantheon" und "in_B-v-Wiese" entweder "true" oder "false" zurück.
+- Gib das Ergebnis exakt im folgenden Format zurück:
+
+{
+    "Vorname": <answer>,
+    "Nachname": <answer>,
+    "Pseudonym": <answer>,
+    "Gender": <answer>,
+    "Titel": <answer>,
+    "Untertitel_im_Text": <answer>,
+    "Untertitel_im_Inhaltsverzeichnis": <answer>,
+    "Jahr_ED": <answer>,
+    "entstanden": <answer>,
+    "Gattungslabel_ED": <answer>,
+    "Medium_ED": <answer>,
+    "Medientyp_ED": <answer>,
+    "Hg.": <answer>,
+    "Kanon_Status": <answer>,
+    "seriell": <answer>,
+    "Seiten": <answer>,
+    "Medium_Zweitdruck": <answer>,
+    "Jahr_Zweitdruck": <answer>,
+    "Label_Zweitdruck": <answer>,
+    "Medium_Drittdruck": <answer>,
+    "Jahr_Drittdruck": <answer>,
+    "Label_Drittdruck": <answer>,
+    "in_Deutscher_Novellenschatz_(Heyse)": <answer>,
+    "in_Pantheon": <answer>,
+    "in_B-v-Wiese": <answer>
+}
+"""

@@ -281,5 +281,5 @@ def prep_eval_data(sample):
 
 if __name__=="__main__":
     #evaluate_wiki()
-    evaluate_llama(model_id="Llama3_70B")
-    #evaluate_llama(model_id="Llama3_8B")
+    #evaluate_llama(model_id="Llama3_70B")
+    evaluate_llama(model_id="Llama3_8B")

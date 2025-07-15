@@ -85,7 +85,6 @@ Wichtige Hinweise:
 - Gib bei "seriell", "in_Deutscher_Novellenschatz_(Heyse)", "in_Pantheon" und "in_B-v-Wiese" entweder "true" oder "false" zurück.
 - Gib das Ergebnis exakt im folgenden Format zurück:
 
-```python
 {
     "Vorname": <answer>,
     "Nachname": <answer>,
