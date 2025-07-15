@@ -102,10 +102,6 @@
       "dtype": "string",
       "_type": "Value"
     },
-    "in_RUB_Sammlung": {
-      "dtype": "string",
-      "_type": "Value"
-    },
     "in_B-v-Wiese": {
       "dtype": "string",
       "_type": "Value"
