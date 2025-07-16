@@ -189,7 +189,7 @@ def validate_samples(eval_samples, model_out, cols):
             for col in cols:
                 model_val = model_dict[col]
 
-                if prepped_sample[col] not in [None, "unknown", ""]:
+                if prepped_sample[col] not in [None, "unknown", "", "o.N.", "(unbekannt)"]:
                     if prepped_sample[col] == model_val or (str(prepped_sample[col]).lower().strip() == str(model_val).lower().strip()):
                         total_tp += 1
                         row_tp[idx] += 1
@@ -199,7 +199,7 @@ def validate_samples(eval_samples, model_out, cols):
                         row_fn[idx] += 1
                         col_fn[col] += 1
                 else:
-                    if model_val not in [None, "unknown", ""]:
+                    if model_val not in [None, "unknown", "",  "o.N.", "(unbekannt)"]:
                         total_fp += 1
                         row_fp[idx] += 1
                         col_fp[col] += 1

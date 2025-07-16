@@ -19,7 +19,8 @@ class Data:
         except: 
             # execute if the datasets are not yet stored locally
             self.whole_corpus = self.read_corpus() # whole metadata collection (including episode entries)
-            self.whole_idx_corpus = self.whole_corpus.filter(lambda x: re.match(r"^0+$", x["Dokument_ID"].split('-')[-1])) # filter out episode entries
+            self.whole_idx_corpus = self.whole_corpus.filter(lambda x: re.match(r"^0+$", x["Dokument_ID"].split('-')[-1])) # filter out episodes
+            self.whole_idx_corpus = self.whole_idx_corpus.filter(lambda x: x["Titel"]!=None) # filter out empty entries
 
             # create and store prompt dataset
             self.prompt_samples = self.create_prompt_samples()
