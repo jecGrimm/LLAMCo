@@ -363,12 +363,14 @@ def prompt_llama_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT_S
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--model_name', '-m', help='model to run the experiment with', default = "llama3")
+    parser.add_argument('--experiment_mode', '-e', help='experiment mode', default = "dev")
     model_name = parser.parse_args().model_name
+    experiment_mode = parser.parse_args().experiment_mode
 
     data = Data()
     shots = [0, 1, 5]
     for shot in shots:
         # llama3 = 8B
         print(f"Processing {shot}-shot prompts...")
-        prompt_llama_dataset(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots = shot, model_id = model_name)
+        prompt_llama_dataset(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots = shot, model_id = model_name, experiment_mode=experiment_mode)
         #prompt_llama_dataset(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots = shot, model_id = "llama3:70B")
