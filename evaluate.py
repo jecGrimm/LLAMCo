@@ -272,7 +272,7 @@ def prep_eval_data(sample):
                 except:
                     prepped_sample[col] = str(val)
             elif col in ["seriell", "in_Deutscher_Novellenschatz_(Heyse)", "in_Pantheon", "in_B-v-Wiese", "in_RUB_Sammlung"]:
-                if val.lower() in ["1", "true"]:
+                if str(val).lower() in ["1", "true"]:
                     prepped_sample[col] = "true"
                 else:
                     prepped_sample[col] = "false"
