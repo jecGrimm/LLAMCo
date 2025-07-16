@@ -15,7 +15,7 @@ def evaluate_wiki():
     work_wiki_out = load_from_disk("output/wikidata/hf/work")
 
     # exclude columns that cannot be contained in wikidata
-    cols = [feat for feat in eval_samples.features if feat not in ["seriell", "in_Deutscher_Novellenschatz_(Heyse)", "in_Pantheon", "in_B-v-Wiese", "Kanon_Status", "Dokument_ID"]]
+    cols = [feat for feat in eval_samples.features if feat not in ["seriell", "in_Deutscher_Novellenschatz_(Heyse)", "in_Pantheon", "in_B-v-Wiese", "in_RUB_Sammlung", "Kanon_Status", "Dokument_ID"]]
     total_metrics, row_metrics, col_metrics = validate_wiki_samples(eval_samples, author_wiki_out, work_wiki_out, cols)
 
     outfile = f"output/wikidata/evaluation_wiki"
@@ -271,7 +271,7 @@ def prep_eval_data(sample):
                     prepped_sample[col] = str(int(val))
                 except:
                     prepped_sample[col] = str(val)
-            elif col in ["seriell", "in_Deutscher_Novellenschatz_(Heyse)", "in_Pantheon", "in_B-v-Wiese"]:
+            elif col in ["seriell", "in_Deutscher_Novellenschatz_(Heyse)", "in_Pantheon", "in_B-v-Wiese", "in_RUB_Sammlung"]:
                 if val.lower() in ["1", "true"]:
                     prepped_sample[col] = "true"
                 else:

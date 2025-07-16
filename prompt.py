@@ -82,7 +82,7 @@ Wichtige Hinweise:
 - Gib ausschließlich das ausgefüllte Dictionary im genannten Format zurück – keine Kommentare, keine zusätzliche Erklärung, kein Fließtext.  
 - Antworte ausschließlich auf Deutsch.  
 - Gib bei "Gender" entweder "m" oder "f" zurück.
-- Gib bei "seriell", "in_Deutscher_Novellenschatz_(Heyse)", "in_Pantheon" und "in_B-v-Wiese" entweder "true" oder "false" zurück.
+- Gib bei "seriell", "in_Deutscher_Novellenschatz_(Heyse)", "in_Pantheon", "in_RUB_Sammlung" und "in_B-v-Wiese" entweder "true" oder "false" zurück.
 - Gib das Ergebnis exakt im folgenden Format zurück:
 
 {
@@ -110,7 +110,8 @@ Wichtige Hinweise:
     "Label_Drittdruck": "",
     "in_Deutscher_Novellenschatz_(Heyse)": "",
     "in_Pantheon": "",
-    "in_B-v-Wiese": ""
+    "in_B-v-Wiese": "",
+    "in_RUB_Sammlung": ""
 }
 """
 
