@@ -113,6 +113,8 @@ Wichtige Hinweise:
     "in_B-v-Wiese": "",
     "in_RUB_Sammlung": ""
 }
+
+Hinweise: "ED" steht für "Erstdruck", "Hg." bezieht sich auf den Herausgeber der Anthologie oder Almanachs etc., in dem der Text ggf. erschienen ist. "in_Pantheon" bedeutet, dass der Text in der Novellensammlung "Pantheon" erschienen ist. "in_B-v-Wiese" bedeutet, dass der Text in "Benno von Wiese: Die deutsche Novelle von Goethe bis Kafka. Interpretationen" erschienen ist. "In_RUB_Sammlung" bedeutet, dass der Text in "Erzählungen und Novellen des 19. Jahrhunderts" im Reclam-Verlag erschienen ist.
 """
 
 def create_messages(prompt, system_prompt = DEFAULT_SYSTEM_PROMPT_DE):
@@ -177,7 +179,6 @@ def generate_text(sample, pipe, few_shot, max_new_tokens = 500, instructions=DEF
         messages,
         max_new_tokens=max_new_tokens,
     )
-    # TODO: check for correctness + 3 tries to get it correct
     return {"outputs": outputs[0]["generated_text"][-1]} # dictionary to turn it automatically into a Huggingface dataset
 
 def create_message_dataset(sample, few_shot, instructions=DEFAULT_PROMPT_DE, system_prompt=DEFAULT_SYSTEM_PROMPT_DE):
@@ -373,4 +374,3 @@ if __name__ == "__main__":
         # llama3 = 8B
         print(f"Processing {shot}-shot prompts...")
         prompt_llama_dataset(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots = shot, model_id = model_name, experiment_mode=experiment_mode)
-        #prompt_llama_dataset(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots = shot, model_id = "llama3:70B")
