@@ -1,0 +1,158 @@
+{
+    "Nachname": {
+        "accuracy": 0.9,
+        "precision": 1.0,
+        "recall": 0.9,
+        "f1": 0.9473684210526316
+    },
+    "Vorname": {
+        "accuracy": 0.85,
+        "precision": 1.0,
+        "recall": 0.85,
+        "f1": 0.9189189189189189
+    },
+    "Pseudonym": {
+        "accuracy": 0.95,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Gender": {
+        "accuracy": 0.95,
+        "precision": 0.95,
+        "recall": 1.0,
+        "f1": 0.9743589743589743
+    },
+    "Titel": {
+        "accuracy": 0.95,
+        "precision": 1.0,
+        "recall": 0.95,
+        "f1": 0.9743589743589743
+    },
+    "Untertitel_im_Text": {
+        "accuracy": 0.2,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Untertitel_im_Inhaltsverzeichnis": {
+        "accuracy": 1.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Jahr_ED": {
+        "accuracy": 0.5,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6666666666666666
+    },
+    "entstanden": {
+        "accuracy": 1.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Gattungslabel_ED": {
+        "accuracy": 0.15,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Medium_ED": {
+        "accuracy": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Medientyp_ED": {
+        "accuracy": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Hg.": {
+        "accuracy": 0.95,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Kanon_Status": {
+        "accuracy": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "seriell": {
+        "accuracy": 0.9,
+        "precision": 1.0,
+        "recall": 0.9,
+        "f1": 0.9473684210526316
+    },
+    "Seiten": {
+        "accuracy": 0.65,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Medium_Zweitdruck": {
+        "accuracy": 1.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Jahr_Zweitdruck": {
+        "accuracy": 1.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Label_Zweitdruck": {
+        "accuracy": 1.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Medium_Drittdruck": {
+        "accuracy": 1.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Jahr_Drittdruck": {
+        "accuracy": 1.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Label_Drittdruck": {
+        "accuracy": 1.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "in_Deutscher_Novellenschatz_(Heyse)": {
+        "accuracy": 0.85,
+        "precision": 1.0,
+        "recall": 0.85,
+        "f1": 0.9189189189189189
+    },
+    "in_Pantheon": {
+        "accuracy": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+    },
+    "in_RUB_Sammlung": {
+        "accuracy": 0.95,
+        "precision": 1.0,
+        "recall": 0.95,
+        "f1": 0.9743589743589743
+    },
+    "in_B-v-Wiese": {
+        "accuracy": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+    }
+}

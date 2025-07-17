@@ -6,6 +6,7 @@ from collections import defaultdict
 import pandas as pd
 from data import Data
 import re
+import argparse
 
 def evaluate_wiki():
     data = Data()
@@ -114,7 +115,7 @@ def validate_wiki_samples(eval_samples, author_wiki_data, work_wiki_data, cols):
     
     return total_metrics, row_metrics, col_metrics
 
-def evaluate_llama(experiment_mode = "dev", model_id = "Llama3_70B"):
+def evaluate_llm(experiment_mode = "dev", model_id = "Llama3_70B"):
     """
     This function evaluates the outputs of the Llama models.
 
@@ -182,31 +183,33 @@ def validate_samples(eval_samples, model_out, cols):
 
     for sample in eval_samples:
         idx = sample["Dokument_ID"]
-        model_dict = model_out[idx]
 
-        prepped_sample = prep_eval_data(sample)
-        if model_dict != "":
-            for col in cols:
-                model_val = model_dict[col]
+        if idx in model_out.keys():
+            model_dict = model_out[idx]
 
-                if prepped_sample[col] not in [None, "unknown", "", "o.N.", "(unbekannt)"]:
-                    if prepped_sample[col] == model_val or (str(prepped_sample[col]).lower().strip() == str(model_val).lower().strip()):
-                        total_tp += 1
-                        row_tp[idx] += 1
-                        col_tp[col] += 1
+            prepped_sample = prep_eval_data(sample)
+            if model_dict != "":
+                for col in cols:
+                    model_val = model_dict[col]
+
+                    if prepped_sample[col] not in [None, "unknown", "", "o.N.", "(unbekannt)"]:
+                        if prepped_sample[col] == model_val or (str(prepped_sample[col]).lower().strip() == str(model_val).lower().strip()):
+                            total_tp += 1
+                            row_tp[idx] += 1
+                            col_tp[col] += 1
+                        else:
+                            total_fn += 1
+                            row_fn[idx] += 1
+                            col_fn[col] += 1
                     else:
-                        total_fn += 1
-                        row_fn[idx] += 1
-                        col_fn[col] += 1
-                else:
-                    if model_val not in [None, "unknown", "",  "o.N.", "(unbekannt)"]:
-                        total_fp += 1
-                        row_fp[idx] += 1
-                        col_fp[col] += 1
-                    else:
-                        total_tn += 1
-                        row_tn[idx] += 1
-                        col_tn[col] += 1
+                        if model_val not in [None, "unknown", "",  "o.N.", "(unbekannt)"]:
+                            total_fp += 1
+                            row_fp[idx] += 1
+                            col_fp[col] += 1
+                        else:
+                            total_tn += 1
+                            row_tn[idx] += 1
+                            col_tn[col] += 1
     
     total_metrics = calculate_metrics(total_tp, total_tn, total_fp, total_fn)
 
@@ -280,6 +283,11 @@ def prep_eval_data(sample):
     return prepped_sample
 
 if __name__=="__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--model_name', '-m', help='model to run the experiment with', default = "llama3")
+    parser.add_argument('--experiment_mode', '-e', help='experiment mode', default = "dev")
+    model_name = parser.parse_args().model_name
+    experiment_mode = parser.parse_args().experiment_mode
+
     #evaluate_wiki()
-    evaluate_llama(model_id="Llama3_70B")
-    #evaluate_llama(model_id="Llama3_8B")
+    evaluate_llm(model_id=model_name, experiment_mode=experiment_mode)
