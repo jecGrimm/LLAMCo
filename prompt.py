@@ -113,6 +113,8 @@ Wichtige Hinweise:
     "in_B-v-Wiese": "",
     "in_RUB_Sammlung": ""
 }
+
+Hinweise: "ED" steht für "Erstdruck", "Hg." bezieht sich auf den Herausgeber der Anthologie oder Almanachs etc., in dem der Text ggf. erschienen ist. "in_Pantheon" bedeutet, dass der Text in der Novellensammlung "Pantheon" erschienen ist. "in_B-v-Wiese" bedeutet, dass der Text in "Benno von Wiese: Die deutsche Novelle von Goethe bis Kafka. Interpretationen" erschienen ist. "In_RUB_Sammlung" bedeutet, dass der Text in "Erzählungen und Novellen des 19. Jahrhunderts" im Reclam-Verlag erschienen ist.
 """
 
 def create_messages(prompt, system_prompt = DEFAULT_SYSTEM_PROMPT_DE):
@@ -336,6 +338,16 @@ def prompt_llama_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT_S
             tries += 1
         
         outputs[prompt_sample["Dokument_ID"]] = model_dict
+
+        # Checkpoints
+        if i%10 == 0:
+            print(f"Saving checkpoint {i}...")
+            os.makedirs(f"./output/{model_path_id}/{experiment_mode}/{shots}", exist_ok=True)
+            with open(f"./output/{model_path_id}/{experiment_mode}/{shots}/outputs_{model_path_id}_{experiment_mode}_{shots}_ckp.json", "w", encoding = "utf-8") as f:
+                json.dump(outputs, f, indent=4)
+            with open(f"./output/{model_path_id}/{experiment_mode}/{shots}/answers_{model_path_id}_{experiment_mode}_{shots}_ckp.json", "w", encoding = "utf-8") as f:
+                json.dump(answers, f, indent=4)
+
 
     #print(outputs)
     model_path_id = ""
