@@ -295,6 +295,14 @@ def get_answer(chain, instructions, few_shots, prompt_sample, expected_keys):
 
 
 def prompt_llama_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT_SYSTEM_PROMPT_DE, instructions = DEFAULT_PROMPT_DE, shots=0, experiment_mode = "dev", model_id = "llama3"):
+    model_path_id = ""
+    if model_id.lower() == "llama3" or model_id.lower() == "llama3:8b":
+        model_path_id = "Llama3_8B"
+    elif model_id.lower() == "llama3:70b":
+        model_path_id = "Llama3_70B"
+    else:
+        model_path_id = model_id
+
     prompt = ChatPromptTemplate.from_messages([
     ("system", system_prompt),
     ("human", "{question}"),
@@ -350,13 +358,6 @@ def prompt_llama_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT_S
 
 
     #print(outputs)
-    model_path_id = ""
-    if model_id.lower() == "llama3" or model_id.lower() == "llama3:8b":
-        model_path_id = "Llama3_8B"
-    elif model_id.lower() == "llama3:70b":
-        model_path_id = "Llama3_70B"
-    else:
-        model_path_id = model_id
 
     os.makedirs(f"./output/{model_path_id}/{experiment_mode}/{shots}", exist_ok=True)
     try:
