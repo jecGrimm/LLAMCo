@@ -10,8 +10,6 @@ import ast
 from collections import defaultdict
 import argparse
 
-# TODO: Unsichere Prompts ausprobieren
-
 DEFAULT_SYSTEM_PROMPT = """\
 You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe.\n\
 Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content.\n\
@@ -325,11 +323,14 @@ def prompt_llama_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT_S
     answers["instructions"] = instructions
 
     ckp_file = f"./output/{model_path_id}/{experiment_mode}/{shots}/outputs_{model_path_id}_{experiment_mode}_{shots}_ckp.json"
+    #print("ckp_file:", ckp_file)
     ckp_data = load_ckp(ckp_file) # returns None or dict
+    #print("ckp_data:", ckp_data)
 
     if ckp_data:
         prompts_w_ckps = prompt_dataset
         prompt_dataset = prompts_w_ckps.filter(lambda x: x["Dokument_ID"] not in ckp_data.keys())
+        #print("first idx:", prompt_dataset["Dokument_ID"][0])
 
 	
     # TODO: Über mapping lösen
@@ -383,7 +384,8 @@ def prompt_llama_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT_S
 
 def load_ckp(ckp_file):
     try:
-        with open(ckp_file, "r", encoding = "uft-8") as f:
+        with open(ckp_file, "r", encoding = "utf-8") as f:
+            #print("loading")
             return f.load(ckp_file)
     except:
         return None
