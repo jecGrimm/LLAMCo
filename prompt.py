@@ -334,7 +334,7 @@ def prompt_llama_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT_S
 
 	
     # TODO: Über mapping lösen
-    for i, prompt_sample in enumerate(prompt_dataset):
+    for i, prompt_sample in tqdm(enumerate(prompt_dataset)):
         if i == 0:
             print("Starting with sample: ", prompt_sample["Dokument_ID"])
 
@@ -386,7 +386,7 @@ def load_ckp(ckp_file):
     try:
         with open(ckp_file, "r", encoding = "utf-8") as f:
             #print("loading")
-            return f.load(ckp_file)
+            return json.load(f)
     except:
         return None
 
