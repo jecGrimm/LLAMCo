@@ -1,0 +1,158 @@
+{
+    "Nachname": {
+        "accuracy": 0.012185215272136474,
+        "precision": 0.08064516129032258,
+        "recall": 0.00429553264604811,
+        "f1": 0.008156606851549756
+    },
+    "Vorname": {
+        "accuracy": 0.04061738424045491,
+        "precision": 0.0821917808219178,
+        "recall": 0.005357142857142857,
+        "f1": 0.010058675607711651
+    },
+    "Pseudonym": {
+        "accuracy": 0.826157595450853,
+        "precision": 1.0,
+        "recall": 0.004651162790697674,
+        "f1": 0.009259259259259259
+    },
+    "Gender": {
+        "accuracy": 0.6978066612510154,
+        "precision": 0.8710659898477158,
+        "recall": 0.7778785131459656,
+        "f1": 0.82183908045977
+    },
+    "Titel": {
+        "accuracy": 0.004061738424045491,
+        "precision": 1.0,
+        "recall": 0.004061738424045491,
+        "f1": 0.008090614886731391
+    },
+    "Untertitel_im_Text": {
+        "accuracy": 0.7668562144597888,
+        "precision": 1.0,
+        "recall": 0.006920415224913495,
+        "f1": 0.013745704467353952
+    },
+    "Untertitel_im_Inhaltsverzeichnis": {
+        "accuracy": 0.9431356620633631,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Jahr_ED": {
+        "accuracy": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "entstanden": {
+        "accuracy": 0.9943135662063363,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Gattungslabel_ED": {
+        "accuracy": 0.1502843216896832,
+        "precision": 1.0,
+        "recall": 0.0009551098376313276,
+        "f1": 0.0019083969465648856
+    },
+    "Medium_ED": {
+        "accuracy": 0.01380991064175467,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Medientyp_ED": {
+        "accuracy": 0.005686433793663688,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Hg.": {
+        "accuracy": 0.586515028432169,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Kanon_Status": {
+        "accuracy": 0.20471161657189277,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "seriell": {
+        "accuracy": 0.5751421608448416,
+        "precision": 1.0,
+        "recall": 0.5751421608448416,
+        "f1": 0.7302733367715317
+    },
+    "Seiten": {
+        "accuracy": 0.48659626320064986,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Medium_Zweitdruck": {
+        "accuracy": 0.9439480097481722,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Jahr_Zweitdruck": {
+        "accuracy": 0.9480097481722177,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Label_Zweitdruck": {
+        "accuracy": 0.974817221770918,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Medium_Drittdruck": {
+        "accuracy": 0.9796913078797725,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Jahr_Drittdruck": {
+        "accuracy": 0.9870024370430545,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Label_Drittdruck": {
+        "accuracy": 0.9894394800974817,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "in_Deutscher_Novellenschatz_(Heyse)": {
+        "accuracy": 0.9350121852152722,
+        "precision": 1.0,
+        "recall": 0.9350121852152722,
+        "f1": 0.966414777497901
+    },
+    "in_Pantheon": {
+        "accuracy": 0.9723801787164906,
+        "precision": 1.0,
+        "recall": 0.9723801787164906,
+        "f1": 0.9859967051070839
+    },
+    "in_RUB_Sammlung": {
+        "accuracy": 0.9935012185215272,
+        "precision": 1.0,
+        "recall": 0.9935012185215272,
+        "f1": 0.9967400162999184
+    },
+    "in_B-v-Wiese": {
+        "accuracy": 0.9951259138911455,
+        "precision": 1.0,
+        "recall": 0.9951259138911455,
+        "f1": 0.997557003257329
+    }
+}

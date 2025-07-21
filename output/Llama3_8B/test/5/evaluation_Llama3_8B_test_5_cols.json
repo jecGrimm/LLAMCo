@@ -1,0 +1,158 @@
+{
+    "Nachname": {
+        "accuracy": 0.11242138364779874,
+        "precision": 0.7608695652173914,
+        "recall": 0.08742714404662781,
+        "f1": 0.1568334578043316
+    },
+    "Vorname": {
+        "accuracy": 0.15172955974842767,
+        "precision": 0.8857142857142857,
+        "recall": 0.08017241379310344,
+        "f1": 0.14703557312252963
+    },
+    "Pseudonym": {
+        "accuracy": 0.824685534591195,
+        "precision": 1.0,
+        "recall": 0.004464285714285714,
+        "f1": 0.008888888888888887
+    },
+    "Gender": {
+        "accuracy": 0.7059748427672956,
+        "precision": 0.886317907444668,
+        "recall": 0.7714535901926445,
+        "f1": 0.8249063670411985
+    },
+    "Titel": {
+        "accuracy": 0.10220125786163523,
+        "precision": 1.0,
+        "recall": 0.10220125786163523,
+        "f1": 0.18544935805991444
+    },
+    "Untertitel_im_Text": {
+        "accuracy": 0.7759433962264151,
+        "precision": 1.0,
+        "recall": 0.006968641114982578,
+        "f1": 0.01384083044982699
+    },
+    "Untertitel_im_Inhaltsverzeichnis": {
+        "accuracy": 0.9426100628930818,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Jahr_ED": {
+        "accuracy": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "entstanden": {
+        "accuracy": 0.9937106918238994,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Gattungslabel_ED": {
+        "accuracy": 0.1501572327044025,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Medium_ED": {
+        "accuracy": 0.012578616352201259,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Medientyp_ED": {
+        "accuracy": 0.006289308176100629,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Hg.": {
+        "accuracy": 0.5872641509433962,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Kanon_Status": {
+        "accuracy": 0.20440251572327045,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "seriell": {
+        "accuracy": 0.5534591194968553,
+        "precision": 1.0,
+        "recall": 0.5534591194968553,
+        "f1": 0.7125506072874495
+    },
+    "Seiten": {
+        "accuracy": 0.4882075471698113,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Medium_Zweitdruck": {
+        "accuracy": 0.9433962264150944,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Jahr_Zweitdruck": {
+        "accuracy": 0.9488993710691824,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Label_Zweitdruck": {
+        "accuracy": 0.97562893081761,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Medium_Drittdruck": {
+        "accuracy": 0.9811320754716981,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Jahr_Drittdruck": {
+        "accuracy": 0.9882075471698113,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Label_Drittdruck": {
+        "accuracy": 0.9905660377358491,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "in_Deutscher_Novellenschatz_(Heyse)": {
+        "accuracy": 0.9009433962264151,
+        "precision": 1.0,
+        "recall": 0.9009433962264151,
+        "f1": 0.9478908188585607
+    },
+    "in_Pantheon": {
+        "accuracy": 0.9465408805031447,
+        "precision": 1.0,
+        "recall": 0.9465408805031447,
+        "f1": 0.9725363489499191
+    },
+    "in_RUB_Sammlung": {
+        "accuracy": 0.9638364779874213,
+        "precision": 1.0,
+        "recall": 0.9638364779874213,
+        "f1": 0.9815852682145716
+    },
+    "in_B-v-Wiese": {
+        "accuracy": 0.964622641509434,
+        "precision": 1.0,
+        "recall": 0.964622641509434,
+        "f1": 0.9819927971188476
+    }
+}
