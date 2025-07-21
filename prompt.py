@@ -323,9 +323,20 @@ def prompt_llama_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT_S
     answers = defaultdict(list)
     answers["system_prompt"] = system_prompt
     answers["instructions"] = instructions
+
+    ckp_file = f"./output/{model_path_id}/{experiment_mode}/{shots}/outputs_{model_path_id}_{experiment_mode}_{shots}_ckp.json"
+    ckp_data = load_ckp(ckp_file) # returns None or dict
+
+    if ckp_data:
+        prompts_w_ckps = prompt_dataset
+        prompt_dataset = prompts_w_ckps.filter(lambda x: x["Dokument_ID"] not in ckp_data.keys())
+
 	
     # TODO: Über mapping lösen
     for i, prompt_sample in enumerate(prompt_dataset):
+        if i == 0:
+            print("Starting with sample: ", prompt_sample["Dokument_ID"])
+
         tries = 0
         #print("curr sample: ", prompt_sample)
         template = "{instructions}{few_shots}Input: {prompt_sample}\nOutput: "
@@ -370,7 +381,12 @@ def prompt_llama_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT_S
         with open(f"./output/{model_path_id}/{experiment_mode}/{shots}/answers_{model_path_id}_{experiment_mode}_{shots}.json", "w", encoding = "utf-8") as f:
             json.dump(answers, f, indent=4)
 
-    
+def load_ckp(ckp_file):
+    try:
+        with open(ckp_file, "r", encoding = "uft-8") as f:
+            return f.load(ckp_file)
+    except:
+        return None
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
