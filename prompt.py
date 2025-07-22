@@ -322,16 +322,17 @@ def prompt_llama_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT_S
     answers["system_prompt"] = system_prompt
     answers["instructions"] = instructions
 
-    ckp_file = f"./output/{model_path_id}/{experiment_mode}/{shots}/outputs_{model_path_id}_{experiment_mode}_{shots}_ckp.json"
+    ckp_file_outputs = f"./output/{model_path_id}/{experiment_mode}/{shots}/outputs_{model_path_id}_{experiment_mode}_{shots}_ckp.json"
+    ckp_file_answers = f"./output/{model_path_id}/{experiment_mode}/{shots}/answers_{model_path_id}_{experiment_mode}_{shots}_ckp.json"
     #print("ckp_file:", ckp_file)
-    ckp_data = load_ckp(ckp_file) # returns None or dict
+    ckp_outputs = load_ckp(ckp_file_outputs) # returns None or dict
+    ckp_answers = load_ckp(ckp_file_answers)
     #print("ckp_data:", ckp_data)
 
-    if ckp_data:
+    if ckp_outputs:
         prompts_w_ckps = prompt_dataset
-        prompt_dataset = prompts_w_ckps.filter(lambda x: x["Dokument_ID"] not in ckp_data.keys())
+        prompt_dataset = prompts_w_ckps.filter(lambda x: x["Dokument_ID"] not in ckp_outputs.keys())
         #print("first idx:", prompt_dataset["Dokument_ID"][0])
-
 	
     # TODO: Über mapping lösen
     for i, prompt_sample in tqdm(enumerate(prompt_dataset)):
@@ -354,6 +355,7 @@ def prompt_llama_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT_S
         answer, model_dict = get_answer(chain, instructions, few_shots, prompt_sample, expected_keys)
         answers[prompt_sample["Dokument_ID"]].append(answer)
 
+
         while model_dict == "" and tries < 2:
             print(f"Try {tries+1} failed, prompting again...")
             answer, model_dict = get_answer(chain, instructions, few_shots, prompt_sample, expected_keys)
@@ -362,14 +364,20 @@ def prompt_llama_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT_S
         
         outputs[prompt_sample["Dokument_ID"]] = model_dict
 
+        if ckp_outputs:
+            ckp_outputs[prompt_sample["Dokument_ID"]] = model_dict
+   
+        if ckp_answers:
+            ckp_answers[prompt_sample["Dokument_ID"]] = answers[prompt_sample["Dokument_ID"]]
+
         # Checkpoints
         if i%10 == 0:
             print(f"Saving checkpoint {i}...")
             os.makedirs(f"./output/{model_path_id}/{experiment_mode}/{shots}", exist_ok=True)
-            with open(f"./output/{model_path_id}/{experiment_mode}/{shots}/outputs_{model_path_id}_{experiment_mode}_{shots}_ckp.json", "w", encoding = "utf-8") as f:
-                json.dump(outputs, f, indent=4)
-            with open(f"./output/{model_path_id}/{experiment_mode}/{shots}/answers_{model_path_id}_{experiment_mode}_{shots}_ckp.json", "w", encoding = "utf-8") as f:
-                json.dump(answers, f, indent=4)
+            with open(ckp_file_outputs, "w", encoding = "utf-8") as f:
+                json.dump(ckp_outputs, f, indent=4)
+            with open(ckp_answers, "w", encoding = "utf-8") as f:
+                json.dump(ckp_answers, f, indent=4)
 
 
     #print(outputs)
