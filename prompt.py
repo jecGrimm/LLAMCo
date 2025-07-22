@@ -338,13 +338,16 @@ def prompt_llama_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT_S
         if i == 0:
             print("Starting with sample: ", prompt_sample["Dokument_ID"])
 
-        tries = 0
+        if "70" not in model_id:
+            tries = 0
+        else:
+            tries = 2 # no retries, takes too long
         #print("curr sample: ", prompt_sample)
         template = "{instructions}{few_shots}Input: {prompt_sample}\nOutput: "
 
         prompt = ChatPromptTemplate.from_template(template)
 
-        model = OllamaLLM(model=model_id)
+        model = OllamaLLM(model=model_id, keep_alive = -1, num_threads = 32)
 
         chain = prompt | model
 
