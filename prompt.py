@@ -376,7 +376,7 @@ def prompt_llama_dataset(prompt_dataset, eval_dataset, system_prompt = DEFAULT_S
             os.makedirs(f"./output/{model_path_id}/{experiment_mode}/{shots}", exist_ok=True)
             with open(ckp_file_outputs, "w", encoding = "utf-8") as f:
                 json.dump(ckp_outputs, f, indent=4)
-            with open(ckp_answers, "w", encoding = "utf-8") as f:
+            with open(ckp_file_answers, "w", encoding = "utf-8") as f:
                 json.dump(ckp_answers, f, indent=4)
 
 
