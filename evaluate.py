@@ -7,6 +7,7 @@ import pandas as pd
 from data import Data
 import re
 import argparse
+import matplotlib.pyplot as plt
 
 def evaluate_wiki():
     data = Data()
@@ -197,6 +198,11 @@ def validate_samples(eval_samples, model_out, cols):
                             total_tp += 1
                             row_tp[idx] += 1
                             col_tp[col] += 1
+                        elif col == "Kanon_Status" and str(model_val).lower().strip() == "kanonisch" and str(prepped_sample[col]).lower().strip() in ["2", "3"]:
+                            # TODO: schauen wegen nicht kanonisch
+                            total_tp += 1
+                            row_tp[idx] += 1
+                            col_tp[col] += 1
                         else:
                             total_fn += 1
                             row_fn[idx] += 1
@@ -282,12 +288,30 @@ def prep_eval_data(sample):
                # sample[col] = bool(val)
     return prepped_sample
 
+def plot_cols(experiment_mode = "test", model_id = "Llama3_8B"):
+    path = f"./output/{model_id}/{experiment_mode}"
+
+    shot_dirs = [dir for dir in os.listdir(path) if dir.isdigit()]
+    col_recall = dict()
+    for shot in shot_dirs:
+        with open(f"{path}/{shot}/evaluation_{model_id}_{experiment_mode}_{shot}_cols.json", "r", encoding = "utf-8") as f:
+            col_metrics = json.load(f)
+        
+        col_recall[shot] = [metrics["recall"] for metrics in col_metrics.values()]
+    
+    df = pd.DataFrame(data = col_recall, index = col_metrics.keys(), columns = ["0", "1", "5"])
+    df.plot.bar()
+    plt.tight_layout()
+    plt.savefig(f"{path}/evaluation_{model_id}_{experiment_mode}_cols.png")
+
 if __name__=="__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--model_name', '-m', help='model to run the experiment with', default = "llama3")
-    parser.add_argument('--experiment_mode', '-e', help='experiment mode', default = "dev")
+    parser.add_argument('--model_name', '-m', help='model to run the experiment with', default = "Llama3_8B")
+    parser.add_argument('--experiment_mode', '-e', help='experiment mode', default = "test")
     model_name = parser.parse_args().model_name
     experiment_mode = parser.parse_args().experiment_mode
 
     #evaluate_wiki()
-    evaluate_llm(model_id=model_name, experiment_mode=experiment_mode)
+    #evaluate_llm(model_id=model_name, experiment_mode=experiment_mode)
+
+    plot_cols(model_id=model_name, experiment_mode=experiment_mode)
