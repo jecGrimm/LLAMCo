@@ -432,8 +432,6 @@ class Prompter:
         chain = self.prompt | model
 
         answer, model_dict = self.get_answer(chain, instructions, few_shots, prompt_sample, expected_keys)
-        print("answer: ", answer)
-        print("model_dict:", model_dict)
         self.answers[prompt_sample["Dokument_ID"]].append(answer)
 
         while model_dict == "" and tries < 2:
