@@ -405,7 +405,7 @@ class Prompter:
             with open(f"./output/{self.model_path_id}/{experiment_mode}/{shots}/answers_{self.model_path_id}_{experiment_mode}_{shots}.json", "w", encoding = "utf-8") as f:
                 json.dump(self.answers, f, indent=4)
 
-    def load_ckp(ckp_file):
+    def load_ckp(self, ckp_file):
         try:
             with open(ckp_file, "r", encoding = "utf-8") as f:
                 #print("loading")
