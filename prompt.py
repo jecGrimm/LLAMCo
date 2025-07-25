@@ -457,6 +457,8 @@ class Prompter:
                 json.dump(self.ckp_outputs, f, indent=4)
             with open(self.ckp_file_answers, "w", encoding = "utf-8") as f:
                 json.dump(self.ckp_answers, f, indent=4)
+        
+        self.i += 1
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
