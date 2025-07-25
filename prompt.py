@@ -298,6 +298,7 @@ class Prompter:
 
 
     def prompt_llama_dataset(self, prompt_dataset, eval_dataset, system_prompt = DEFAULT_SYSTEM_PROMPT_DE, instructions = DEFAULT_PROMPT_DE, shots=0, experiment_mode = "dev", model_id = "llama3"):
+        self.shots = shots
         self.model_path_id = ""
         if model_id.lower() == "llama3" or model_id.lower() == "llama3:8b":
             self.model_path_id = "Llama3_8B"
@@ -306,7 +307,7 @@ class Prompter:
         else:
             self.model_path_id = model_id
 
-        prompt = ChatPromptTemplate.from_messages([
+        self.prompt = ChatPromptTemplate.from_messages([
         ("system", system_prompt),
         ("human", "{question}"),
         ])
@@ -424,11 +425,11 @@ class Prompter:
         #print("curr sample: ", prompt_sample)
         template = "{instructions}{few_shots}Input: {prompt_sample}\nOutput: "
 
-        prompt = ChatPromptTemplate.from_template(template)
+        self.prompt = ChatPromptTemplate.from_template(template)
 
         model = OllamaLLM(model=self.model_id, keep_alive = -1, num_threads = 32)
 
-        chain = prompt | model
+        chain = self.prompt | model
 
         answer, model_dict = self.get_answer(chain, instructions, few_shots, prompt_sample, expected_keys)
         self.answers[prompt_sample["Dokument_ID"]].append(answer)
@@ -451,7 +452,7 @@ class Prompter:
         # Checkpoints
         if self.i%10 == 0:
             print(f"Saving checkpoint {self.i}...")
-            os.makedirs(f"./output/{self.model_path_id}/{experiment_mode}/{shots}", exist_ok=True)
+            os.makedirs(f"./output/{self.model_path_id}/{self.experiment_mode}/{self.shots}", exist_ok=True)
             with open(self.ckp_file_outputs, "w", encoding = "utf-8") as f:
                 json.dump(self.ckp_outputs, f, indent=4)
             with open(self.ckp_file_answers, "w", encoding = "utf-8") as f:
