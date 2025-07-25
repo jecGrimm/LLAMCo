@@ -432,8 +432,9 @@ class Prompter:
         chain = self.prompt | model
 
         answer, model_dict = self.get_answer(chain, instructions, few_shots, prompt_sample, expected_keys)
+        print("answer: ", answer)
+        print("model_dict:", model_dict)
         self.answers[prompt_sample["Dokument_ID"]].append(answer)
-
 
         while model_dict == "" and tries < 2:
             print(f"Try {tries+1} failed, prompting again...")
@@ -443,11 +444,8 @@ class Prompter:
         
         self.outputs[prompt_sample["Dokument_ID"]] = model_dict
 
-        if self.ckp_outputs:
-            self.ckp_outputs[prompt_sample["Dokument_ID"]] = model_dict
-
-        if self.ckp_answers:
-            self.ckp_answers[prompt_sample["Dokument_ID"]] = self.answers[prompt_sample["Dokument_ID"]]
+        self.ckp_outputs[prompt_sample["Dokument_ID"]] = model_dict
+        self.ckp_answers[prompt_sample["Dokument_ID"]] = self.answers[prompt_sample["Dokument_ID"]]
 
         # Checkpoints
         if self.i%10 == 0:
