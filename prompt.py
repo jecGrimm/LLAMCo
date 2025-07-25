@@ -461,13 +461,20 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--model_name', '-m', help='model to run the experiment with', default = "llama3")
     parser.add_argument('--experiment_mode', '-e', help='experiment mode', default = "dev")
+    parser.add_argument('--shot', '-s', help='shot', default = None)
     model_name = parser.parse_args().model_name
     experiment_mode = parser.parse_args().experiment_mode
+    arg_shot = parser.parse_args().shot
 
     data = Data()
     prompter = Prompter(model_id=model_name, experiment_mode=experiment_mode)
-    shots = [0, 1, 5]
-    for shot in shots:
-        # llama3 = 8B
-        print(f"Processing {shot}-shot prompts...")
-        prompter.prompt_llama_dataset(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots = shot, model_id = model_name, experiment_mode=experiment_mode)
+
+    if arg_shot:
+        print(f"Processing {arg_shot}-shot prompts...")
+        prompter.prompt_llama_dataset(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots = arg_shot, model_id = model_name, experiment_mode=experiment_mode)
+    else:
+        shots = [0, 1, 5]
+        for shot in shots:
+            # llama3 = 8B
+            print(f"Processing {shot}-shot prompts...")
+            prompter.prompt_llama_dataset(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots = shot, model_id = model_name, experiment_mode=experiment_mode)
