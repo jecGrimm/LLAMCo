@@ -471,7 +471,7 @@ if __name__ == "__main__":
 
     if arg_shot:
         print(f"Processing {arg_shot}-shot prompts...")
-        prompter.prompt_llama_dataset(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots = arg_shot, model_id = model_name, experiment_mode=experiment_mode)
+        prompter.prompt_llama_dataset(prompt_dataset=data.prompt_samples, eval_dataset=data.eval_samples, shots = int(arg_shot), model_id = model_name, experiment_mode=experiment_mode)
     else:
         shots = [0, 1, 5]
         for shot in shots:
