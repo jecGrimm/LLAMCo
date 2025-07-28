@@ -325,8 +325,6 @@ class Prompter:
 
         self.outputs = defaultdict(str)
         self.answers = defaultdict(list)
-        self.ckp_outputs = defaultdict(str)
-        self.ckp_answers = defaultdict(list)
         self.answers["system_prompt"] = system_prompt
         self.answers["instructions"] = instructions
 
@@ -337,7 +335,7 @@ class Prompter:
         self.ckp_answers = self.load_ckp(self.ckp_file_answers)
         #print("ckp_data:", ckp_data)
 
-        if len(self.ckp_outputs) != 0:
+        if self.ckp_outputs:
             prompts_w_ckps = prompt_dataset
             prompt_dataset = prompts_w_ckps.filter(lambda x: x["Dokument_ID"] not in self.ckp_outputs.keys())
             self.outputs = self.ckp_outputs
@@ -345,7 +343,7 @@ class Prompter:
         else:
             self.ckp_outputs = defaultdict(str)
         
-        if len(self.ckp_answers) == 0:
+        if not self.ckp_answers:
             self.ckp_answers = defaultdict(list)
         else:
             self.answers = self.ckp_answers
@@ -399,7 +397,8 @@ class Prompter:
 
 
         #print(outputs)
-
+        self.outputs = self.ckp_outputs | self.outputs
+        self.answers = self.ckp_answers | self.answers
         os.makedirs(f"./output/{self.model_path_id}/{experiment_mode}/{shots}", exist_ok=True)
         try:
             self.outputs.save_to_disk(f"./output/{self.model_path_id}/{experiment_mode}/{shots}/hf")
