@@ -1,0 +1,158 @@
+{
+    "Nachname": {
+        "accuracy": 0.988013698630137,
+        "precision": 0.9972627737226277,
+        "recall": 0.990036231884058,
+        "f1": 0.9936363636363637
+    },
+    "Vorname": {
+        "accuracy": 0.9717465753424658,
+        "precision": 0.9971070395371263,
+        "recall": 0.9718045112781954,
+        "f1": 0.9842931937172775
+    },
+    "Pseudonym": {
+        "accuracy": 0.8107876712328768,
+        "precision": 0.5,
+        "recall": 0.004524886877828055,
+        "f1": 0.008968609865470854
+    },
+    "Gender": {
+        "accuracy": 0.9452054794520548,
+        "precision": 0.9580223880597015,
+        "recall": 0.9818355640535373,
+        "f1": 0.9697828139754485
+    },
+    "Titel": {
+        "accuracy": 0.9811643835616438,
+        "precision": 1.0,
+        "recall": 0.9811643835616438,
+        "f1": 0.9904926534140016
+    },
+    "Untertitel_im_Text": {
+        "accuracy": 0.7636986301369864,
+        "precision": 0.25,
+        "recall": 0.007352941176470588,
+        "f1": 0.014285714285714287
+    },
+    "Untertitel_im_Inhaltsverzeichnis": {
+        "accuracy": 0.9434931506849316,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Jahr_ED": {
+        "accuracy": 0.09417808219178082,
+        "precision": 1.0,
+        "recall": 0.09417808219178082,
+        "f1": 0.17214397496087638
+    },
+    "entstanden": {
+        "accuracy": 0.5916095890410958,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Gattungslabel_ED": {
+        "accuracy": 0.24914383561643835,
+        "precision": 0.6776119402985075,
+        "recall": 0.22791164658634538,
+        "f1": 0.3410969196093163
+    },
+    "Medium_ED": {
+        "accuracy": 0.009417808219178082,
+        "precision": 0.47619047619047616,
+        "recall": 0.00865051903114187,
+        "f1": 0.016992353440951572
+    },
+    "Medientyp_ED": {
+        "accuracy": 0.004280821917808219,
+        "precision": 0.5,
+        "recall": 0.0034393809114359416,
+        "f1": 0.006831767719897524
+    },
+    "Hg.": {
+        "accuracy": 0.5702054794520548,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Kanon_Status": {
+        "accuracy": 0.3176369863013699,
+        "precision": 0.907608695652174,
+        "recall": 0.17634635691657866,
+        "f1": 0.29531388152077803
+    },
+    "seriell": {
+        "accuracy": 0.514554794520548,
+        "precision": 1.0,
+        "recall": 0.514554794520548,
+        "f1": 0.6794799321650651
+    },
+    "Seiten": {
+        "accuracy": 0.476027397260274,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Medium_Zweitdruck": {
+        "accuracy": 0.9486301369863014,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Jahr_Zweitdruck": {
+        "accuracy": 0.952054794520548,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Label_Zweitdruck": {
+        "accuracy": 0.9768835616438356,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Medium_Drittdruck": {
+        "accuracy": 0.9828767123287672,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Jahr_Drittdruck": {
+        "accuracy": 0.9897260273972602,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "Label_Drittdruck": {
+        "accuracy": 0.9922945205479452,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+    },
+    "in_Deutscher_Novellenschatz_(Heyse)": {
+        "accuracy": 0.5333904109589042,
+        "precision": 1.0,
+        "recall": 0.5333904109589042,
+        "f1": 0.6957007258514797
+    },
+    "in_Pantheon": {
+        "accuracy": 0.8767123287671232,
+        "precision": 1.0,
+        "recall": 0.8767123287671232,
+        "f1": 0.9343065693430657
+    },
+    "in_RUB_Sammlung": {
+        "accuracy": 0.8664383561643836,
+        "precision": 1.0,
+        "recall": 0.8664383561643836,
+        "f1": 0.9284403669724771
+    },
+    "in_B-v-Wiese": {
+        "accuracy": 0.6909246575342466,
+        "precision": 1.0,
+        "recall": 0.6909246575342466,
+        "f1": 0.8172151898734178
+    }
+}
