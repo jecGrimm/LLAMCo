@@ -338,15 +338,12 @@ class Prompter:
         if self.ckp_outputs:
             prompts_w_ckps = prompt_dataset
             prompt_dataset = prompts_w_ckps.filter(lambda x: x["Dokument_ID"] not in self.ckp_outputs.keys())
-            self.outputs = self.ckp_outputs
             #print("first idx:", prompt_dataset["Dokument_ID"][0])
         else:
             self.ckp_outputs = defaultdict(str)
         
         if not self.ckp_answers:
             self.ckp_answers = defaultdict(list)
-        else:
-            self.answers = self.ckp_answers
         
         # TODO: Über mapping lösen
         self.i = 0
