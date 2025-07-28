@@ -325,6 +325,8 @@ class Prompter:
 
         self.outputs = defaultdict(str)
         self.answers = defaultdict(list)
+        self.ckp_outputs = defaultdict(str)
+        self.ckp_answers = defaultdict(list)
         self.answers["system_prompt"] = system_prompt
         self.answers["instructions"] = instructions
 
@@ -335,7 +337,7 @@ class Prompter:
         self.ckp_answers = self.load_ckp(self.ckp_file_answers)
         #print("ckp_data:", ckp_data)
 
-        if self.ckp_outputs:
+        if len(self.ckp_outputs) != 0:
             prompts_w_ckps = prompt_dataset
             prompt_dataset = prompts_w_ckps.filter(lambda x: x["Dokument_ID"] not in self.ckp_outputs.keys())
             self.outputs = self.ckp_outputs
@@ -343,7 +345,7 @@ class Prompter:
         else:
             self.ckp_outputs = defaultdict(str)
         
-        if not self.ckp_answers:
+        if len(self.ckp_answers) == 0:
             self.ckp_answers = defaultdict(list)
         else:
             self.answers = self.ckp_answers
