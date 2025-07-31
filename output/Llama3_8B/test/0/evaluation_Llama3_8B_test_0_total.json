@@ -2,5 +2,10 @@
     "accuracy": 0.7340543054828769,
     "precision": 0.9838753757857338,
     "recall": 0.5462546153457084,
-    "f1": 0.7024847144529726
+    "f1": 0.7024847144529726,
+    "true_positive": 10800.0,
+    "true_negative": 14450.0,
+    "false_positive": 177.0,
+    "false_negative": 8971.0,
+    "amount": 34398.0
 }

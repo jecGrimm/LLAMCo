@@ -96,23 +96,65 @@ def validate_wiki_samples(eval_samples, author_wiki_data, work_wiki_data, cols):
                     col_fn[col] += 1
     
     if total_tp != 0 or total_fn != 0:
-        total_metrics = {"recall": total_tp/(total_tp + total_fn)}
+        total_metrics = {
+            "recall": total_tp/(total_tp + total_fn), 
+            "true_positive": total_tp, 
+            "true_negative": 0.0,
+            "false_positive": 0.0,
+            "false_negative": total_fn,
+            "amount": total_tp + total_fn
+        }
     else:
-        total_metrics = {"recall": 0.0}
+        total_metrics = {
+            "recall": 0.0,
+            "true_positive": total_tp, 
+            "true_negative": 0.0,
+            "false_positive": 0.0,
+            "false_negative": total_fn,
+            "amount": total_tp + total_fn
+        }
 
     row_metrics = defaultdict(dict)
     for idx in eval_samples["Dokument_ID"]:
         if row_tp[idx] != 0 or row_fn[idx] != 0:
-            row_metrics[idx] = {"recall": row_tp[idx]/(row_tp[idx] + row_fn[idx])}
+            row_metrics[idx] = {
+                "recall": row_tp[idx]/(row_tp[idx] + row_fn[idx]),
+                "true_positive": row_tp[idx], 
+                "true_negative": 0.0,
+                "false_positive": 0.0,
+                "false_negative": row_fn[idx],
+                "amount": row_tp[idx] + row_fn[idx]
+            }
         else: 
-            row_metrics = {"recall": 0.0}
+            row_metrics = {
+                "recall": 0.0,
+                "true_positive": row_tp[idx], 
+                "true_negative": 0.0,
+                "false_positive": 0.0,
+                "false_negative": row_fn[idx],
+                "amount": row_tp[idx] + row_fn[idx]
+            }
 
     col_metrics = defaultdict(dict)
     for col in cols:
         if col_tp[col] != 0 or col_fn[col] != 0:
-            col_metrics[col] = {"recall": col_tp[col]/(col_tp[col] + col_fn[col])}
+            col_metrics[col] = {
+                "recall": col_tp[col]/(col_tp[col] + col_fn[col]),
+                "true_positive": col_tp[col], 
+                "true_negative": 0.0,
+                "false_positive": 0.0,
+                "false_negative": col_fn[col],
+                "amount": col_tp[col] + col_fn[col]
+            }
         else: 
-            col_metrics = {"recall": 0.0}
+            col_metrics = {
+                "recall": 0.0,
+                "true_positive": col_tp[col], 
+                "true_negative": 0.0,
+                "false_positive": 0.0,
+                "false_negative": col_fn[col],
+                "amount": col_tp[col] + col_fn[col]
+            }
     
     return total_metrics, row_metrics, col_metrics
 
@@ -217,15 +259,31 @@ def validate_samples(eval_samples, model_out, cols):
                             row_tn[idx] += 1
                             col_tn[col] += 1
     
+    total_metrics = defaultdict(float)
     total_metrics = calculate_metrics(total_tp, total_tn, total_fp, total_fn)
+    total_metrics["true_positive"] = total_tp
+    total_metrics["true_negative"] = total_tn
+    total_metrics["false_positive"] = total_fp
+    total_metrics["false_negative"] = total_fn
+    total_metrics["amount"] = total_tp + total_tn + total_fp + total_fn
 
     row_metrics = defaultdict(dict)
     for idx in eval_samples["Dokument_ID"]:
         row_metrics[idx] = calculate_metrics(row_tp[idx], row_tn[idx], row_fp[idx], row_fn[idx])
+        row_metrics[idx]["true_positive"] = row_tp[idx]
+        row_metrics[idx]["true_negative"] = row_tn[idx]
+        row_metrics[idx]["false_positive"] = row_fp[idx]
+        row_metrics[idx]["false_negative"] = row_fn[idx] 
+        row_metrics[idx]["amount"] = row_tp[idx] + row_tn[idx] + row_fp[idx] + row_fn[idx]
 
     col_metrics = defaultdict(dict)
     for col in cols:
         col_metrics[col] = calculate_metrics(col_tp[col], col_tn[col], col_fp[col], col_fn[col])
+        col_metrics[col]["true_positive"] = col_tp[col]
+        col_metrics[col]["true_negative"] = col_tn[col]
+        col_metrics[col]["false_positive"] = col_fp[col]
+        col_metrics[col]["false_negative"] = col_fn[col] 
+        col_metrics[col]["amount"] = col_tp[col] + col_tn[col] + col_fp[col] + col_fn[col]
     
     return total_metrics, row_metrics, col_metrics
 
@@ -312,7 +370,7 @@ if __name__=="__main__":
     model_name = parser.parse_args().model_name
     experiment_mode = parser.parse_args().experiment_mode
 
-    #evaluate_wiki()
-    evaluate_llm(model_id=model_name, experiment_mode=experiment_mode)
+    evaluate_wiki()
+    #evaluate_llm(model_id=model_name, experiment_mode=experiment_mode)
 
-    plot_cols(model_id=model_name, experiment_mode=experiment_mode)
+    #plot_cols(model_id=model_name, experiment_mode=experiment_mode)

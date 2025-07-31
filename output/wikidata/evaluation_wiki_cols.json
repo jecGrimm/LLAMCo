@@ -1,62 +1,162 @@
 {
     "Nachname": {
-        "recall": 0.35383447228549736
+        "recall": 0.3535276073619632,
+        "true_positive": 461.0,
+        "true_negative": 0.0,
+        "false_positive": 0.0,
+        "false_negative": 843.0,
+        "amount": 1304.0
     },
     "Vorname": {
-        "recall": 0.009501187648456057
+        "recall": 0.009345794392523364,
+        "true_positive": 12.0,
+        "true_negative": 0.0,
+        "false_positive": 0.0,
+        "false_negative": 1272.0,
+        "amount": 1284.0
     },
     "Pseudonym": {
-        "recall": 0.2265625
+        "recall": 0.3446808510638298,
+        "true_positive": 81.0,
+        "true_negative": 0.0,
+        "false_positive": 0.0,
+        "false_negative": 154.0,
+        "amount": 235.0
     },
     "Gender": {
-        "recall": 0.0
+        "recall": 0.0,
+        "true_positive": 0.0,
+        "true_negative": 0.0,
+        "false_positive": 0.0,
+        "false_negative": 1195.0,
+        "amount": 1195.0
     },
     "Titel": {
-        "recall": 0.5821561338289963
+        "recall": 0.5836459114778695,
+        "true_positive": 778.0,
+        "true_negative": 0.0,
+        "false_positive": 0.0,
+        "false_negative": 555.0,
+        "amount": 1333.0
     },
     "Untertitel_im_Text": {
-        "recall": 0.02040816326530612
+        "recall": 0.022435897435897436,
+        "true_positive": 7.0,
+        "true_negative": 0.0,
+        "false_positive": 0.0,
+        "false_negative": 305.0,
+        "amount": 312.0
     },
     "Untertitel_im_Inhaltsverzeichnis": {
-        "recall": 0.0
+        "recall": 0.0,
+        "true_positive": 0.0,
+        "true_negative": 0.0,
+        "false_positive": 0.0,
+        "false_negative": 78.0,
+        "amount": 78.0
     },
     "Jahr_ED": {
-        "recall": 0.46096654275092935
+        "recall": 0.46211552888222057,
+        "true_positive": 616.0,
+        "true_negative": 0.0,
+        "false_positive": 0.0,
+        "false_negative": 717.0,
+        "amount": 1333.0
     },
     "entstanden": {
-        "recall": 0.0
+        "recall": 0.0,
+        "true_positive": 0.0,
+        "true_negative": 0.0,
+        "false_positive": 0.0,
+        "false_negative": 8.0,
+        "amount": 8.0
     },
     "Gattungslabel_ED": {
-        "recall": 0.0
+        "recall": 0.00353045013239188,
+        "true_positive": 4.0,
+        "true_negative": 0.0,
+        "false_positive": 0.0,
+        "false_negative": 1129.0,
+        "amount": 1133.0
     },
     "Medium_ED": {
-        "recall": 0.0007462686567164179
+        "recall": 0.0007575757575757576,
+        "true_positive": 1.0,
+        "true_negative": 0.0,
+        "false_positive": 0.0,
+        "false_negative": 1319.0,
+        "amount": 1320.0
     },
     "Medientyp_ED": {
-        "recall": 0.0
+        "recall": 0.0,
+        "true_positive": 0.0,
+        "true_negative": 0.0,
+        "false_positive": 0.0,
+        "false_negative": 1332.0,
+        "amount": 1332.0
     },
     "Hg.": {
-        "recall": 0.01107011070110701
+        "recall": 0.01107011070110701,
+        "true_positive": 6.0,
+        "true_negative": 0.0,
+        "false_positive": 0.0,
+        "false_negative": 536.0,
+        "amount": 542.0
     },
     "Seiten": {
-        "recall": 0.0014492753623188406
+        "recall": 0.0014577259475218659,
+        "true_positive": 1.0,
+        "true_negative": 0.0,
+        "false_positive": 0.0,
+        "false_negative": 685.0,
+        "amount": 686.0
     },
     "Medium_Zweitdruck": {
-        "recall": 0.0
+        "recall": 0.0,
+        "true_positive": 0.0,
+        "true_negative": 0.0,
+        "false_positive": 0.0,
+        "false_negative": 73.0,
+        "amount": 73.0
     },
     "Jahr_Zweitdruck": {
-        "recall": 0.046153846153846156
+        "recall": 0.045454545454545456,
+        "true_positive": 3.0,
+        "true_negative": 0.0,
+        "false_positive": 0.0,
+        "false_negative": 63.0,
+        "amount": 66.0
     },
     "Label_Zweitdruck": {
-        "recall": 0.0
+        "recall": 0.0,
+        "true_positive": 0.0,
+        "true_negative": 0.0,
+        "false_positive": 0.0,
+        "false_negative": 32.0,
+        "amount": 32.0
     },
     "Medium_Drittdruck": {
-        "recall": 0.0
+        "recall": 0.0,
+        "true_positive": 0.0,
+        "true_negative": 0.0,
+        "false_positive": 0.0,
+        "false_negative": 25.0,
+        "amount": 25.0
     },
     "Jahr_Drittdruck": {
-        "recall": 0.0
+        "recall": 0.0,
+        "true_positive": 0.0,
+        "true_negative": 0.0,
+        "false_positive": 0.0,
+        "false_negative": 16.0,
+        "amount": 16.0
     },
     "Label_Drittdruck": {
-        "recall": 0.0
+        "recall": 0.0,
+        "true_positive": 0.0,
+        "true_negative": 0.0,
+        "false_positive": 0.0,
+        "false_negative": 13.0,
+        "amount": 13.0
     }
 }

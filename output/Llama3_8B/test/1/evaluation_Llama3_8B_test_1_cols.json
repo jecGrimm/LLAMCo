@@ -3,156 +3,286 @@
         "accuracy": 0.012185215272136474,
         "precision": 0.08064516129032258,
         "recall": 0.00429553264604811,
-        "f1": 0.008156606851549756
+        "f1": 0.008156606851549756,
+        "true_positive": 5.0,
+        "true_negative": 10.0,
+        "false_positive": 57.0,
+        "false_negative": 1159.0,
+        "amount": 1231.0
     },
     "Vorname": {
         "accuracy": 0.04061738424045491,
         "precision": 0.0821917808219178,
         "recall": 0.005357142857142857,
-        "f1": 0.010058675607711651
+        "f1": 0.010058675607711651,
+        "true_positive": 6.0,
+        "true_negative": 44.0,
+        "false_positive": 67.0,
+        "false_negative": 1114.0,
+        "amount": 1231.0
     },
     "Pseudonym": {
         "accuracy": 0.826157595450853,
         "precision": 1.0,
         "recall": 0.004651162790697674,
-        "f1": 0.009259259259259259
+        "f1": 0.009259259259259259,
+        "true_positive": 1.0,
+        "true_negative": 1016.0,
+        "false_positive": 0.0,
+        "false_negative": 214.0,
+        "amount": 1231.0
     },
     "Gender": {
         "accuracy": 0.6978066612510154,
         "precision": 0.8710659898477158,
         "recall": 0.7778785131459656,
-        "f1": 0.82183908045977
+        "f1": 0.82183908045977,
+        "true_positive": 858.0,
+        "true_negative": 1.0,
+        "false_positive": 127.0,
+        "false_negative": 245.0,
+        "amount": 1231.0
     },
     "Titel": {
         "accuracy": 0.004061738424045491,
         "precision": 1.0,
         "recall": 0.004061738424045491,
-        "f1": 0.008090614886731391
+        "f1": 0.008090614886731391,
+        "true_positive": 5.0,
+        "true_negative": 0.0,
+        "false_positive": 0.0,
+        "false_negative": 1226.0,
+        "amount": 1231.0
     },
     "Untertitel_im_Text": {
         "accuracy": 0.7668562144597888,
         "precision": 1.0,
         "recall": 0.006920415224913495,
-        "f1": 0.013745704467353952
+        "f1": 0.013745704467353952,
+        "true_positive": 2.0,
+        "true_negative": 942.0,
+        "false_positive": 0.0,
+        "false_negative": 287.0,
+        "amount": 1231.0
     },
     "Untertitel_im_Inhaltsverzeichnis": {
         "accuracy": 0.9431356620633631,
         "precision": 0.0,
         "recall": 0.0,
-        "f1": 0.0
+        "f1": 0.0,
+        "true_positive": 0.0,
+        "true_negative": 1161.0,
+        "false_positive": 0.0,
+        "false_negative": 70.0,
+        "amount": 1231.0
     },
     "Jahr_ED": {
         "accuracy": 0.0,
         "precision": 0.0,
         "recall": 0.0,
-        "f1": 0.0
+        "f1": 0.0,
+        "true_positive": 0.0,
+        "true_negative": 0.0,
+        "false_positive": 0.0,
+        "false_negative": 1231.0,
+        "amount": 1231.0
     },
     "entstanden": {
         "accuracy": 0.9943135662063363,
         "precision": 0.0,
         "recall": 0.0,
-        "f1": 0.0
+        "f1": 0.0,
+        "true_positive": 0.0,
+        "true_negative": 1224.0,
+        "false_positive": 0.0,
+        "false_negative": 7.0,
+        "amount": 1231.0
     },
     "Gattungslabel_ED": {
         "accuracy": 0.1502843216896832,
         "precision": 1.0,
         "recall": 0.0009551098376313276,
-        "f1": 0.0019083969465648856
+        "f1": 0.0019083969465648856,
+        "true_positive": 1.0,
+        "true_negative": 184.0,
+        "false_positive": 0.0,
+        "false_negative": 1046.0,
+        "amount": 1231.0
     },
     "Medium_ED": {
         "accuracy": 0.01380991064175467,
         "precision": 0.0,
         "recall": 0.0,
-        "f1": 0.0
+        "f1": 0.0,
+        "true_positive": 0.0,
+        "true_negative": 17.0,
+        "false_positive": 0.0,
+        "false_negative": 1214.0,
+        "amount": 1231.0
     },
     "Medientyp_ED": {
         "accuracy": 0.005686433793663688,
         "precision": 0.0,
         "recall": 0.0,
-        "f1": 0.0
+        "f1": 0.0,
+        "true_positive": 0.0,
+        "true_negative": 7.0,
+        "false_positive": 0.0,
+        "false_negative": 1224.0,
+        "amount": 1231.0
     },
     "Hg.": {
         "accuracy": 0.586515028432169,
         "precision": 0.0,
         "recall": 0.0,
-        "f1": 0.0
+        "f1": 0.0,
+        "true_positive": 0.0,
+        "true_negative": 722.0,
+        "false_positive": 0.0,
+        "false_negative": 509.0,
+        "amount": 1231.0
     },
     "Kanon_Status": {
         "accuracy": 0.20471161657189277,
         "precision": 0.0,
         "recall": 0.0,
-        "f1": 0.0
+        "f1": 0.0,
+        "true_positive": 0.0,
+        "true_negative": 252.0,
+        "false_positive": 0.0,
+        "false_negative": 979.0,
+        "amount": 1231.0
     },
     "seriell": {
         "accuracy": 0.5751421608448416,
         "precision": 1.0,
         "recall": 0.5751421608448416,
-        "f1": 0.7302733367715317
+        "f1": 0.7302733367715317,
+        "true_positive": 708.0,
+        "true_negative": 0.0,
+        "false_positive": 0.0,
+        "false_negative": 523.0,
+        "amount": 1231.0
     },
     "Seiten": {
         "accuracy": 0.48659626320064986,
         "precision": 0.0,
         "recall": 0.0,
-        "f1": 0.0
+        "f1": 0.0,
+        "true_positive": 0.0,
+        "true_negative": 599.0,
+        "false_positive": 0.0,
+        "false_negative": 632.0,
+        "amount": 1231.0
     },
     "Medium_Zweitdruck": {
         "accuracy": 0.9439480097481722,
         "precision": 0.0,
         "recall": 0.0,
-        "f1": 0.0
+        "f1": 0.0,
+        "true_positive": 0.0,
+        "true_negative": 1162.0,
+        "false_positive": 0.0,
+        "false_negative": 69.0,
+        "amount": 1231.0
     },
     "Jahr_Zweitdruck": {
         "accuracy": 0.9480097481722177,
         "precision": 0.0,
         "recall": 0.0,
-        "f1": 0.0
+        "f1": 0.0,
+        "true_positive": 0.0,
+        "true_negative": 1167.0,
+        "false_positive": 0.0,
+        "false_negative": 64.0,
+        "amount": 1231.0
     },
     "Label_Zweitdruck": {
         "accuracy": 0.974817221770918,
         "precision": 0.0,
         "recall": 0.0,
-        "f1": 0.0
+        "f1": 0.0,
+        "true_positive": 0.0,
+        "true_negative": 1200.0,
+        "false_positive": 0.0,
+        "false_negative": 31.0,
+        "amount": 1231.0
     },
     "Medium_Drittdruck": {
         "accuracy": 0.9796913078797725,
         "precision": 0.0,
         "recall": 0.0,
-        "f1": 0.0
+        "f1": 0.0,
+        "true_positive": 0.0,
+        "true_negative": 1206.0,
+        "false_positive": 0.0,
+        "false_negative": 25.0,
+        "amount": 1231.0
     },
     "Jahr_Drittdruck": {
         "accuracy": 0.9870024370430545,
         "precision": 0.0,
         "recall": 0.0,
-        "f1": 0.0
+        "f1": 0.0,
+        "true_positive": 0.0,
+        "true_negative": 1215.0,
+        "false_positive": 0.0,
+        "false_negative": 16.0,
+        "amount": 1231.0
     },
     "Label_Drittdruck": {
         "accuracy": 0.9894394800974817,
         "precision": 0.0,
         "recall": 0.0,
-        "f1": 0.0
+        "f1": 0.0,
+        "true_positive": 0.0,
+        "true_negative": 1218.0,
+        "false_positive": 0.0,
+        "false_negative": 13.0,
+        "amount": 1231.0
     },
     "in_Deutscher_Novellenschatz_(Heyse)": {
         "accuracy": 0.9350121852152722,
         "precision": 1.0,
         "recall": 0.9350121852152722,
-        "f1": 0.966414777497901
+        "f1": 0.966414777497901,
+        "true_positive": 1151.0,
+        "true_negative": 0.0,
+        "false_positive": 0.0,
+        "false_negative": 80.0,
+        "amount": 1231.0
     },
     "in_Pantheon": {
         "accuracy": 0.9723801787164906,
         "precision": 1.0,
         "recall": 0.9723801787164906,
-        "f1": 0.9859967051070839
+        "f1": 0.9859967051070839,
+        "true_positive": 1197.0,
+        "true_negative": 0.0,
+        "false_positive": 0.0,
+        "false_negative": 34.0,
+        "amount": 1231.0
     },
     "in_RUB_Sammlung": {
         "accuracy": 0.9935012185215272,
         "precision": 1.0,
         "recall": 0.9935012185215272,
-        "f1": 0.9967400162999184
+        "f1": 0.9967400162999184,
+        "true_positive": 1223.0,
+        "true_negative": 0.0,
+        "false_positive": 0.0,
+        "false_negative": 8.0,
+        "amount": 1231.0
     },
     "in_B-v-Wiese": {
         "accuracy": 0.9951259138911455,
         "precision": 1.0,
         "recall": 0.9951259138911455,
-        "f1": 0.997557003257329
+        "f1": 0.997557003257329,
+        "true_positive": 1225.0,
+        "true_negative": 0.0,
+        "false_positive": 0.0,
+        "false_negative": 6.0,
+        "amount": 1231.0
     }
 }
