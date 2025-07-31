@@ -198,7 +198,7 @@ def validate_samples(eval_samples, model_out, cols):
                             total_tp += 1
                             row_tp[idx] += 1
                             col_tp[col] += 1
-                        elif col == "Kanon_Status" and str(model_val).lower().strip() in ["kanonisch", "kanonisiert", "Kanon"] and str(prepped_sample[col]).lower().strip() in ["2", "3"]:
+                        elif col == "Kanon_Status" and str(model_val).lower().strip() in ["kanonisch", "kanonisiert", "kanon", "canon"] and str(prepped_sample[col]).lower().strip() in ["2", "3"]:
                             # TODO: schauen wegen nicht kanonisch
                             total_tp += 1
                             row_tp[idx] += 1
@@ -300,7 +300,7 @@ def plot_cols(experiment_mode = "test", model_id = "Llama3_8B"):
         col_recall[shot] = [metrics["recall"] for metrics in col_metrics.values()]
     
     df = pd.DataFrame(data = col_recall, index = col_metrics.keys(), columns = ["0", "1", "5"])
-    df.plot.bar(ylabel = "Recall", xlabel = "Column", title = f"Recall per column: {model_id}")
+    df.plot.bar(ylabel = "Recall", xlabel = "Metadata category", title = f"Recall per metadata category: {model_id.replace("_", "-")}")
     plt.legend(title = "Shots", loc=(0.3, 0.48), fontsize = "x-small", title_fontsize = "x-small")
     plt.tight_layout()
     plt.savefig(f"{path}/evaluation_{model_id}_{experiment_mode}_cols.png")
@@ -315,4 +315,4 @@ if __name__=="__main__":
     #evaluate_wiki()
     evaluate_llm(model_id=model_name, experiment_mode=experiment_mode)
 
-    #plot_cols(model_id=model_name, experiment_mode=experiment_mode)
+    plot_cols(model_id=model_name, experiment_mode=experiment_mode)

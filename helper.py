@@ -1,4 +1,5 @@
 import json
+import argparse
 
 def merge_ckpts():
     ckp_file_1 = "output/Llama3_70B/test/1/outputs_Llama3_70B_test_1_ckp.json"
@@ -16,8 +17,8 @@ def merge_ckpts():
     with open("output/Llama3_70B/test/1/outputs_Llama3_70B_test_1.json", "w", encoding = "utf-8") as f:
         json.dump(ckp_data, f, indent=4)
 
-def count_model_dicts():
-    model_out_file = f"output/Llama3_70B/test/1/outputs_Llama3_70B_test_1.json"
+def count_model_dicts(model_name, shot):
+    model_out_file = f"output/{model_name}/test/{shot}/outputs_{model_name}_test_{shot}.json"
 
     with open(model_out_file, 'r', encoding="utf-8") as f:
         model_out = json.load(f)
@@ -34,5 +35,11 @@ def count_model_dicts():
     print("Full rows: ", full_counter)
 
 if __name__ == "__main__":
-    merge_ckpts()
-    count_model_dicts()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--model_name', '-m', help='model to run the experiment with', default = "Llama3_8B")
+    parser.add_argument('--shot', '-s', help='shot', default = "0")
+    model_name = parser.parse_args().model_name
+    arg_shot = int(parser.parse_args().shot)
+
+    #merge_ckpts()
+    count_model_dicts(model_name = model_name, shot=arg_shot)
