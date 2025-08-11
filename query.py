@@ -1,17 +1,16 @@
 import requests
 import os
 from data import Data
-import json
-from tqdm import tqdm
-import argparse
-# https://query.wikidata.org/bigdata/namespace/wdq/sparql?query={SPARQL}
 
-def scrape_API(sample, modus = "author"):
+def scrape_API(sample, modus: str = "author"):
     """
     This method is a helpers-function to scrape the wiki-API.
 
-    @params params: dictionary with parameters that should be used to scrape the API
-    @returns DATA: a json-object with the results of the API-search
+    @params 
+        sample: sample to collect information for
+        modus: query for author or publication data
+    @returns 
+        dictionary with the collected information
     """
     S = requests.Session()
 
@@ -23,6 +22,7 @@ def scrape_API(sample, modus = "author"):
     if not sample["Nachname"]:
         sample["Nachname"] = ""
 
+    # define query
     query = ""
     if modus == "author":
         query = f'PREFIX prop: <http://www.wikidata.org/prop/direct/>\
@@ -78,6 +78,7 @@ def scrape_API(sample, modus = "author"):
 
     HEADERS = {'User-Agent': 'LLAMCoWikiBot/0.0 (j.grimm@campus.lmu.de) python-request/0.0'}
 
+    # get query result
     R = S.get(url=URL, params=PARAMS, headers = HEADERS)
     
     try:
@@ -93,15 +94,28 @@ def scrape_API(sample, modus = "author"):
         print(f"Sample {sample["Dokument_ID"]} could not be processed:\n\t{R.reason}")
 
 def filter_api_result(api_data):
+    """
+    This function returns the values of the query result.
+
+    @params
+        api_data: API result
+    @returns
+        values: list of the values in the query result
+    """
     values = {entry["info"]["value"] for entry in api_data["results"]["bindings"]}
     return values
 
-def fetch_info(modus = "author"):
+def fetch_info(modus: str = "author"):
+    """
+    This function queries the wikidata API.
+
+    @params
+        modus: query for author or publication data
+    """
     print("Fetching corpus data...")
     corpus_data = Data()
 
     print(f"Posting SPARQL queries for '{modus}'...")
-    #outputs = {sample["Dokument_ID"]: scrape_API(sample, modus=modus) for sample in tqdm(corpus_data.prompt_samples)}
     outputs = corpus_data.prompt_samples.map(lambda x: scrape_API(sample = x, modus = modus))
 
     print("Saving output...")
@@ -109,12 +123,6 @@ def fetch_info(modus = "author"):
     outputs.save_to_disk(f"./output/wikidata/hf/{modus}")
     outputs.to_json(f"./output/wikidata/{modus}_outputs_wikidata_hf.json")
 
-    # with open(f"./output/wikidata/{modus}_outputs_wikidata.json", "w", encoding = "utf-8") as f:
-    #     json.dump(outputs, f)
-
 if __name__ == "__main__":
     fetch_info(modus="author")
     fetch_info(modus="work")
-
-    # outputs = load_from_disk("./output/wikidata/hf")
-    # print(outputs)
