@@ -370,7 +370,7 @@ if __name__=="__main__":
     model_name = parser.parse_args().model_name
     experiment_mode = parser.parse_args().experiment_mode
 
-    evaluate_wiki()
+    #evaluate_wiki()
     #evaluate_llm(model_id=model_name, experiment_mode=experiment_mode)
 
-    #plot_cols(model_id=model_name, experiment_mode=experiment_mode)
+    plot_cols(model_id=model_name, experiment_mode=experiment_mode)
