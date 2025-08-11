@@ -19,7 +19,7 @@ def merge_ckpts():
     with open("output/Llama3_70B/test/1/outputs_Llama3_70B_test_1.json", "w", encoding = "utf-8") as f:
         json.dump(ckp_data, f, indent=4)
 
-def count_model_dicts(model_name, shot):
+def count_model_dicts(model_name: str, shot: int):
     """
     This function counts the number of empty model outputs.
 

@@ -142,7 +142,7 @@ def validate_wiki_samples(eval_samples, author_wiki_data, work_wiki_data, cols: 
     
     return total_metrics, row_metrics, col_metrics
 
-def evaluate_llm(experiment_mode = "dev", model_id = "Llama3_70B"):
+def evaluate_llm(experiment_mode: str = "dev", model_id: str = "Llama3_70B"):
     """
     This function evaluates the outputs of the Llama models.
 
@@ -271,7 +271,7 @@ def validate_samples(eval_samples, model_out: dict, cols: list):
     
     return total_metrics, row_metrics, col_metrics
 
-def calculate_metrics(tp, tn, fp, fn):
+def calculate_metrics(tp: int, tn: int, fp: int, fn: int):
     """
     This function calculates the evaluation metrics.
 
@@ -329,7 +329,7 @@ def prep_eval_data(sample):
                     prepped_sample[col] = "false"
     return prepped_sample
 
-def plot_cols(experiment_mode = "test", model_id = "Llama3_8B"):
+def plot_cols(experiment_mode: str = "test", model_id: str = "Llama3_8B"):
     """
     This function creates a plot for the column metrics.
 

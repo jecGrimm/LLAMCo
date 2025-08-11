@@ -2,7 +2,6 @@ import torch
 from transformers import pipeline
 import os
 from data import Data
-from tqdm.auto import tqdm
 import json
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_ollama.llms import OllamaLLM
@@ -116,26 +115,18 @@ Hinweise: "ED" steht für "Erstdruck", "Hg." bezieht sich auf den Herausgeber de
 """
 
 class Prompter:
-    def __init__(self, model_id, experiment_mode):
+    def __init__(self, model_id: str, experiment_mode: str):
+        """
+        This method initializes the class Prompter.
+
+        @params
+            model_id: name of the model that is prompted
+            experiment_mode: datasplit that is prompted (dev or test)
+        """
         self.model_id = model_id
         self.experiment_mode = experiment_mode
 
-    def create_messages(self, prompt, system_prompt = DEFAULT_SYSTEM_PROMPT_DE):
-        """
-        This function creates the prompt template for Llama.
-
-        @params
-            prompt: x-shot prompt
-            system_prompt: system prompt
-        @returns messages: x-shot and system prompt combined in the llama chat template
-        """
-        messages= [\
-            {"role": "system", "content": system_prompt},\
-            {"role": "user", "content": prompt},\
-        ]
-        return messages
-
-    def create_few_shot_samples(self, eval_dataset, shots = 0):
+    def create_few_shot_samples(self, eval_dataset, shots: int = 0):
         """
         This function turns the few-shot samples into a prompting format.
 
@@ -150,115 +141,17 @@ class Prompter:
             few_shots += f"Output: {eval_dataset.select([shot])}\n"
         return few_shots
 
-    def create_prompt(self, prompt_sample, few_shots, instructions=DEFAULT_PROMPT_DE):
+    def sanity_check(self, answer, expected_keys: set):
         """
-        This function combines the parts of the prompt.
+        This method extracts the dictionary from the answer of the model.
 
         @params
-            prompt_sample: current sample 
-            few_shots: x-shot samples
-            instructions: prompt instructions
-        @returns full prompt consisting of the instruction, x examples and the current sample
+            answer: model output
+            expected_keys: keys that should be contained in the dictionary
+        @returns
+            model_dict: output dictionary
+            empty string: if no (correct) dictionary is contained in the answer
         """
-        return instructions + few_shots + f"Input: {prompt_sample}\nOutput: "
-
-    def generate_text(self, sample, pipe, few_shot, max_new_tokens = 500, instructions=DEFAULT_PROMPT_DE, system_prompt=DEFAULT_SYSTEM_PROMPT_DE):
-        """
-        This function creates the prompts the model and returns the output text.
-
-        @params
-            sample: current metadata sample
-            pipe: text generation pipeline
-            few_shot: x-shot examples
-            max_new_tokens: token generation limit
-            instructions: prompt instructions
-            system_prompt: system prompt instructions 
-        @returns dictionary containing the output text
-        """
-        prompt = self.create_prompt(sample, few_shots=few_shot, instructions=instructions)
-        messages = self.create_messages(prompt, system_prompt=system_prompt)
-
-        outputs = pipe(
-            messages,
-            max_new_tokens=max_new_tokens,
-        )
-        return {"outputs": outputs[0]["generated_text"][-1]} # dictionary to turn it automatically into a Huggingface dataset
-
-    def create_message_dataset(self, sample, few_shot, instructions=DEFAULT_PROMPT_DE, system_prompt=DEFAULT_SYSTEM_PROMPT_DE):
-        prompt = self.create_prompt(sample, few_shots=few_shot, instructions=instructions)
-        messages = self.create_messages(prompt, system_prompt=system_prompt)
-        return {"messages": messages}
-
-    def prompt_model(self, prompt_dataset, eval_dataset, model_id = "meta-llama/Llama-3.2-1B-Instruct", shots = 0, max_new_tokens = 500, instructions=DEFAULT_PROMPT_DE, system_prompt=DEFAULT_SYSTEM_PROMPT_DE):
-        """
-        @deprected: Use prompt_model_dataset instead
-        This function prompts the whole dataset to the model in a x-shot manner. Saves the generated text as a Huggingface dataset (not human readable) and as a json file (human readable).
-
-        @params
-            prompt_dataset: prompt samples
-            eval_dataset: evaluation samples
-            model_id: Huggingface model name
-            shots: number of examples in the instructions
-            max_new_tokens: limit of the number of generated tokens
-            instructions: model instructions
-            system_prompt: general system instructions 
-        """
-        pipe = pipeline(
-            "text-generation",
-            model=model_id,
-            torch_dtype=torch.bfloat16,
-            device_map="auto",
-        )
-
-        few_shots = self.create_few_shot_samples(eval_dataset, shots)
-        
-        prompt_dataset = prompt_dataset.select([i for i in range(shots, len(prompt_dataset))]) # Remove few-shot-examples
-        
-        outputs = prompt_dataset.map(lambda x: self.generate_text(sample=x, pipe=pipe, few_shot=few_shots, max_new_tokens=max_new_tokens, instructions=instructions, system_prompt=system_prompt))
-
-        os.makedirs(f"./output/{model_id}/{shots}", exist_ok = True)
-        outputs.save_to_disc(f"./output/{model_id}/{shots}/hf")
-        outputs.to_json(f"./output/{model_id}/{shots}/outputs_{model_id}_{shots}.json")
-
-    def prompt_model_dataset(self, prompt_dataset, eval_dataset, model_id = "meta-llama/Llama-3.2-1B-Instruct", shots = 0, max_new_tokens = 1000, instructions=DEFAULT_PROMPT_DE, system_prompt=DEFAULT_SYSTEM_PROMPT_DE):
-        """
-        This function prompts the whole dataset to the model in a x-shot manner. Saves the generated text as a Huggingface dataset (not human readable) and as a json file (human readable).
-
-        @params
-            prompt_dataset: prompt samples
-            eval_dataset: evaluation samples
-            model_id: Huggingface model name
-            shots: number of examples in the instructions
-            max_new_tokens: limit of the number of generated tokens
-            instructions: model instructions
-            system_prompt: general system instructions 
-        """
-        pipe = pipeline(
-            "text-generation",
-            model=model_id,
-            torch_dtype=torch.bfloat16,
-            device_map="auto",
-        )
-
-        few_shots = self.create_few_shot_samples(eval_dataset, shots)
-        
-        #prompt_dataset = prompt_dataset.select([i for i in range(shots, len(prompt_dataset))]) # Remove few-shot-examples
-        prompt_dataset = prompt_dataset.skip(shots)
-        
-        message_dataset = prompt_dataset.select(range(10)).map(lambda x: self.create_message_dataset(sample=x, few_shot=few_shots, instructions=instructions, system_prompt=system_prompt))
-
-        outputs = pipe(message_dataset["messages"], max_new_tokens = max_new_tokens)
-
-        print(outputs)
-        # for out in tqdm(pipe(message_dataset)):
-        #     print(out)
-        os.makedirs(f"./output/{model_id}/{shots}", exist_ok=True)
-        # outputs.save_to_disc(f"./output/{model_id}/{shots}/hf")
-        with open(f"./output/{model_id}/{shots}/outputs_{model_id.split('/')[-1]}_{shots}.json", "w", encoding = "utf-8") as f:
-            json.dump(outputs, f, indent=4)
-        #outputs.to_json(f"./output/{model_id}/{shots}/outputs_{model_id}_{shots}.json")
-
-    def sanity_check(self, answer, expected_keys):
         s = answer
 
         # Test if Dictionary is contained in the answer
@@ -271,11 +164,9 @@ class Prompter:
                 s = s[:s.find("}")+1]
 
             answer = str(s)
-            #print("Found Dictionary:", s)
 
             # Save dict
             model_dict = ast.literal_eval(answer)
-            #print("Parsed dict: ", model_dict)
             model_keys = set(model_dict.keys())
             if len(model_keys) == len(expected_keys)-1 and len(model_keys & expected_keys) == len(expected_keys)-1: # -1 to exclude Dokument_ID
                 return model_dict
@@ -289,16 +180,42 @@ class Prompter:
             print(f"Answer not correct:\n{answer}")
             return ""
         
-    def get_answer(self, chain, instructions, few_shots, prompt_sample, expected_keys):
+    def get_answer(self, chain, instructions: str, few_shots: str, prompt_sample, expected_keys: set):
+        """
+        This method retrieves the answer of the model.
+
+        @params
+            chain: prompting chain
+            instructions: prompt without x-shot samples
+            few_shots: x-shot samples
+            prompt_sample: sample to prompt
+            expected_keys: keys that should be in the output dictionary
+        @returns
+            answer: model answer
+            model_dict: output dictionary
+        """
         answer = chain.invoke({"instructions": instructions, "few_shots": few_shots, "prompt_sample": str(prompt_sample)})
 
         model_dict = self.sanity_check(answer, expected_keys)
 
         return answer, model_dict
 
+    def prompt_llama_dataset(self, prompt_dataset, eval_dataset, system_prompt: str = DEFAULT_SYSTEM_PROMPT_DE, instructions: str = DEFAULT_PROMPT_DE, shots: int = 0, experiment_mode: str = "dev", model_id: str = "llama3"):
+        """
+        This method prompts the Llama models with langchain and ollama.
 
-    def prompt_llama_dataset(self, prompt_dataset, eval_dataset, system_prompt = DEFAULT_SYSTEM_PROMPT_DE, instructions = DEFAULT_PROMPT_DE, shots=0, experiment_mode = "dev", model_id = "llama3"):
+        @params
+            prompt_dataset: dataset with the prompt samples
+            eval_dataset: dataset with the evaluation samples
+            system_prompt: system prompt
+            instructions: prompt without x-shot samples
+            shots: number of shots
+            experiment_mode: data split to be prompted (dev or test)
+            model_id: ollama model id
+        """
         self.shots = shots
+
+        # output path        
         self.model_path_id = ""
         if model_id.lower() == "llama3" or model_id.lower() == "llama3:8b":
             self.model_path_id = "Llama3_8B"
@@ -314,8 +231,8 @@ class Prompter:
 
         few_shots = self.create_few_shot_samples(eval_dataset, shots)
         expected_keys = set(eval_dataset.features)
-        #print("expected_keys:", expected_keys)
-        
+
+        # select samples        
         prompt_dataset = prompt_dataset.skip(shots)
 
         if experiment_mode == "dev":
@@ -328,102 +245,74 @@ class Prompter:
         self.answers["system_prompt"] = system_prompt
         self.answers["instructions"] = instructions
 
+        # get checkpoints
         self.ckp_file_outputs = f"./output/{self.model_path_id}/{experiment_mode}/{shots}/outputs_{self.model_path_id}_{experiment_mode}_{shots}_ckp.json"
         self.ckp_file_answers = f"./output/{self.model_path_id}/{experiment_mode}/{shots}/answers_{self.model_path_id}_{experiment_mode}_{shots}_ckp.json"
-        #print("ckp_file:", ckp_file)
         self.ckp_outputs = self.load_ckp(self.ckp_file_outputs) # returns None or dict
         self.ckp_answers = self.load_ckp(self.ckp_file_answers)
-        #print("ckp_data:", ckp_data)
 
         if self.ckp_outputs:
             prompts_w_ckps = prompt_dataset
             prompt_dataset = prompts_w_ckps.filter(lambda x: x["Dokument_ID"] not in self.ckp_outputs.keys())
-            #print("first idx:", prompt_dataset["Dokument_ID"][0])
         else:
             self.ckp_outputs = defaultdict(str)
         
         if not self.ckp_answers:
             self.ckp_answers = defaultdict(list)
         
-        # TODO: Über mapping lösen
         self.i = 0
+        # prompt
         prompt_dataset.map(lambda x: self.prompt_sample(x, instructions, few_shots, expected_keys))
-        # for i, prompt_sample in tqdm(enumerate(prompt_dataset)):
-        #     if i == 0:
-        #         print("Starting with sample: ", prompt_sample["Dokument_ID"])
 
-        #     if "70" not in model_id:
-        #         tries = 0
-        #     else:
-        #         tries = 2 # no retries, takes too long
-        #     #print("curr sample: ", prompt_sample)
-        #     template = "{instructions}{few_shots}Input: {prompt_sample}\nOutput: "
-
-        #     prompt = ChatPromptTemplate.from_template(template)
-
-        #     model = OllamaLLM(model=model_id, keep_alive = -1, num_threads = 32)
-
-        #     chain = prompt | model
-
-        #     answer, model_dict = self.get_answer(chain, instructions, few_shots, prompt_sample, expected_keys)
-        #     answers[prompt_sample["Dokument_ID"]].append(answer)
-
-
-        #     while model_dict == "" and tries < 2:
-        #         print(f"Try {tries+1} failed, prompting again...")
-        #         answer, model_dict = self.get_answer(chain, instructions, few_shots, prompt_sample, expected_keys)
-        #         answers[prompt_sample["Dokument_ID"]].append(answer)
-        #         tries += 1
-            
-        #     outputs[prompt_sample["Dokument_ID"]] = model_dict
-
-        #     if ckp_outputs:
-        #         ckp_outputs[prompt_sample["Dokument_ID"]] = model_dict
-    
-        #     if ckp_answers:
-        #         ckp_answers[prompt_sample["Dokument_ID"]] = answers[prompt_sample["Dokument_ID"]]
-
-        #     # Checkpoints
-        #     if i%10 == 0:
-        #         print(f"Saving checkpoint {i}...")
-        #         os.makedirs(f"./output/{model_path_id}/{experiment_mode}/{shots}", exist_ok=True)
-        #         with open(ckp_file_outputs, "w", encoding = "utf-8") as f:
-        #             json.dump(ckp_outputs, f, indent=4)
-        #         with open(ckp_file_answers, "w", encoding = "utf-8") as f:
-        #             json.dump(ckp_answers, f, indent=4)
-
-
-        #print(outputs)
         self.outputs = self.ckp_outputs | self.outputs
         self.answers = self.ckp_answers | self.answers
+
+        # store output
         os.makedirs(f"./output/{self.model_path_id}/{experiment_mode}/{shots}", exist_ok=True)
         try:
             self.outputs.save_to_disk(f"./output/{self.model_path_id}/{experiment_mode}/{shots}/hf")
             self.outputs.to_json(f"./output/{self.model_path_id}/{experiment_mode}/{shots}/outputs_{self.model_path_id}_{experiment_mode}_{shots}.json")
         except:
-
             with open(f"./output/{self.model_path_id}/{experiment_mode}/{shots}/outputs_{self.model_path_id}_{experiment_mode}_{shots}.json", "w", encoding = "utf-8") as f:
                 json.dump(self.outputs, f, indent=4)
             with open(f"./output/{self.model_path_id}/{experiment_mode}/{shots}/answers_{self.model_path_id}_{experiment_mode}_{shots}.json", "w", encoding = "utf-8") as f:
                 json.dump(self.answers, f, indent=4)
 
-    def load_ckp(self, ckp_file):
+    def load_ckp(self, ckp_file: str):
+        """
+        This method loads the checkpoints.
+
+        @params
+            ckp_file: file with the checkpoints
+        @returns
+            checkpoint dictionary or None (if no checkpoints are available) 
+        """
         try:
             with open(ckp_file, "r", encoding = "utf-8") as f:
-                #print("loading")
                 return json.load(f)
         except:
             return None
         
-    def prompt_sample(self, prompt_sample, instructions, few_shots, expected_keys):
+    def prompt_sample(self, prompt_sample, instructions: str, few_shots: str, expected_keys: set):
+        """
+        This method prompts a single sample to the model.
+
+        @params
+            prompt_sample: sample to prompt
+            instructions: prompt without x-shot samples
+            few_shots: x-shot samples
+            expected_keys: keys that should be in the output dictionary
+        """
+        # Sanity check
         if self.i == 0:
             print("Starting with sample: ", prompt_sample["Dokument_ID"])
 
+        # only use three tries for Llama3-8B
         if "70" not in self.model_id:
             tries = 0
         else:
-            tries = 2 # no retries, takes too long
-        #print("curr sample: ", prompt_sample)
+            tries = 2 
+
         template = "{instructions}{few_shots}Input: {prompt_sample}\nOutput: "
 
         self.prompt = ChatPromptTemplate.from_template(template)
@@ -446,7 +335,7 @@ class Prompter:
         self.ckp_outputs[prompt_sample["Dokument_ID"]] = model_dict
         self.ckp_answers[prompt_sample["Dokument_ID"]] = self.answers[prompt_sample["Dokument_ID"]]
 
-        # Checkpoints
+        # Save checkpoints
         if self.i%10 == 0:
             print(f"Saving checkpoint {self.i}...")
             os.makedirs(f"./output/{self.model_path_id}/{self.experiment_mode}/{self.shots}", exist_ok=True)
