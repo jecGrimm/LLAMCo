@@ -2,6 +2,9 @@ import json
 import argparse
 
 def merge_ckpts():
+    """
+    This function merges two checkpoint files into one.
+    """
     ckp_file_1 = "output/Llama3_70B/test/1/outputs_Llama3_70B_test_1_ckp.json"
     ckp_file_2 = "output/Llama3_70B/test/1/outputs_Llama3_70B_test_1_old.json"
 
@@ -9,7 +12,6 @@ def merge_ckpts():
         ckp_data_1 = json.load(f)
 
     with open(ckp_file_2, "r", encoding = "utf-8") as f:
-        #print("loading")
         ckp_data_2 = json.load(f)
 
     ckp_data = ckp_data_1 | ckp_data_2
@@ -18,6 +20,13 @@ def merge_ckpts():
         json.dump(ckp_data, f, indent=4)
 
 def count_model_dicts(model_name, shot):
+    """
+    This function counts the number of empty model outputs.
+
+    @params
+        model_name: model that created the outputs
+        shot: x-shot experiment
+    """
     model_out_file = f"output/{model_name}/test/{shot}/outputs_{model_name}_test_{shot}.json"
 
     with open(model_out_file, 'r', encoding="utf-8") as f:
