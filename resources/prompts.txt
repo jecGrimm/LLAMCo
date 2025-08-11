@@ -1,4 +1,4 @@
-Prompting Chat-GPT to enhance DEFAULT_PROMPT_DE_0 to generate better answers with Llama3-8B:
+Prompting ChatGPT to enhance DEFAULT_PROMPT_DE_0 to generate better answers with Llama3-8B:
 """Könntest du bitte den folgenden Prompt so umschreiben, dass Llama-3-8B die beste mögliche Antwort gibt?
 
 Input: "Du bist ein wissenschaftlicher Assistent, der Metadaten über die Veröffentlichung eines literarischen Textes sammelt.\n\
@@ -261,7 +261,7 @@ Output Format:\n\
 \n\
 """
 
-DEFAULT_PROMPT_DE_2 simpler prompt without Output Format:
+DEFAULT_PROMPT_DE_2 simpler prompt without output format:
 """\
 Du bist ein wissenschaftlicher Assistent, der Metadaten über die Veröffentlichung eines literarischen Textes sammelt.\n\
 Bitte sammle die Informationen selbst entweder aus deinem Wissen oder mit einer Websuche.\n\
@@ -304,7 +304,7 @@ Output Keys:\n\
 \n\
 """
 
-DEFAULT_PROMPT_DE_3 Output of Chat-GPT optimized for Llama3-8B:
+DEFAULT_PROMPT_DE_3 output of ChatGPT optimized for Llama3-8B:
 """Du bist ein wissenschaftlicher Assistent und hast die Aufgabe, bibliografische und literaturwissenschaftliche Metadaten zu einem literarischen Werk zu erheben.
 
 Gegeben ist ein Input mit den drei Informationen:
@@ -350,7 +350,7 @@ Wichtige Hinweise:
 }
 """
 
-DEFAULT_PROMPT_DE_4 Output of Chat-GPT optimized for Llama3-8B with value assignments:
+DEFAULT_PROMPT_DE_4 output of ChatGPT optimized for Llama3-8B with value assignments:
 """Du bist ein wissenschaftlicher Assistent und hast die Aufgabe, bibliografische und literaturwissenschaftliche Metadaten zu einem literarischen Werk zu erheben.
 
 Gegeben ist ein Input mit den drei Informationen:
@@ -601,7 +601,7 @@ Wichtige Hinweise:
 }
 """
 
-DEFAULT_PROMPT_DE_9: RUB_Sammlung hinzugefügt
+DEFAULT_PROMPT_DE_9: added column "RUB_Sammlung"
 """Du bist ein wissenschaftlicher Assistent und hast die Aufgabe, bibliografische und literaturwissenschaftliche Metadaten zu einem literarischen Werk zu erheben.
 
 Gegeben ist ein Input mit den drei Informationen:
@@ -648,7 +648,7 @@ Wichtige Hinweise:
 }
 """
 
-DEFAULT_PROMPT_DE_10 Hinweise zu Spalten:
+DEFAULT_PROMPT_DE_10 additional remarks to the columns:
 """Du bist ein wissenschaftlicher Assistent und hast die Aufgabe, bibliografische und literaturwissenschaftliche Metadaten zu einem literarischen Werk zu erheben.
 
 Gegeben ist ein Input mit den drei Informationen:
@@ -697,7 +697,7 @@ Wichtige Hinweise:
 Hinweise: "ED" steht für "Erstdruck", "Hg." bezieht sich auf den Herausgeber der Anthologie oder Almanachs etc., in dem der Text ggf. erschienen ist. "in_Pantheon" bedeutet, dass der Text in der Novellensammlung "Pantheon" erschienen ist. "in_B-v-Wiese" bedeutet, dass der Text in "Benno von Wiese: Die deutsche Novelle von Goethe bis Kafka. Interpretationen" erschienen ist. "In_RUB_Sammlung" bedeutet, dass der Text in "Erzählungen und Novellen des 19. Jahrhunderts" im Reclam-Verlag erschienen ist.
 """
 
-Prompt für ChatGPT:
+Prompt used for ChatGPT:
 """Du bist ein wissenschaftlicher Assistent und hast die Aufgabe, bibliografische und literaturwissenschaftliche Metadaten zu einem literarischen Werk zu erheben.
 
 Gegeben ist eine csv-Datei mit Tab-Separation im Anhang mit drei Spalten, wobei jede Zeile einen eigenen Datensatz darstellt. Der Input enthält drei Informationen und in der ersten Spalte eine Dokument_ID:
