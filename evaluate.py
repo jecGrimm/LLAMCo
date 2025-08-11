@@ -1,6 +1,5 @@
 import json
-from datasets import Dataset, load_from_disk
-import ast
+from datasets import load_from_disk
 import os
 from collections import defaultdict
 import pandas as pd
@@ -10,6 +9,9 @@ import argparse
 import matplotlib.pyplot as plt
 
 def evaluate_wiki():
+    """
+    This function evaluates the information retrieved by wikidata.
+    """
     data = Data()
     eval_samples = data.eval_samples
 
@@ -25,38 +27,20 @@ def evaluate_wiki():
     json.dump(row_metrics, open(outfile+"_rows.json", 'w', encoding="utf-8"),  indent=4)
     json.dump(col_metrics, open(outfile+"_cols.json", 'w', encoding="utf-8"),  indent=4)
 
-def validate_wiki_sample(sample, author_wiki_data, work_wiki_data, cols):
-    val_labels = []
-    author_wiki_sample = author_wiki_data.filter(lambda x: x["Dokument_ID"] == sample["Dokument_ID"]) 
-    work_wiki_sample = work_wiki_data.filter(lambda x: x["Dokument_ID"] == sample["Dokument_ID"]) 
-    
-    wiki_vals = set(author_wiki_sample["Output"][0]).union(set(work_wiki_sample["Output"][0]))
-        
-    # get years from datestrings
-    for val in author_wiki_sample["Output"][0]:
-        match = re.match(r"(\d{4})-.*Z", val)
-        if match:
-            wiki_vals.add(match.group(1))
+def validate_wiki_samples(eval_samples, author_wiki_data, work_wiki_data, cols: list):
+    """
+    This function compares the wikidata samples with the corpus samples.
 
-    for val in work_wiki_sample["Output"][0]:
-        match = re.match(r"(\d{4})-.*Z", val)
-        if match:
-            wiki_vals.add(match.group(1))
-
-    prepped_sample = prep_eval_data(sample)
-    if len(wiki_vals) != 0: 
-        for col in cols:
-            if prepped_sample != "":
-                if prepped_sample[col] in wiki_vals or str(prepped_sample[col]).lower() in wiki_vals:
-                    val_labels.append(True)
-                else:
-                    val_labels.append(False)
-    else:
-        val_labels = [False for _ in range(len(cols))]
-
-    return {f"Label": val_labels}
-
-def validate_wiki_samples(eval_samples, author_wiki_data, work_wiki_data, cols):
+    @params
+        eval_samples: evaluation corpus
+        author_wiki_data: information about the author retrieved from wikidata
+        work_wiki_data: information about the publication retrieved from wikidata
+        cols: evaluated columns
+    @returns
+        total_metrics: metrics for all cells in the corpus
+        row_metrics: metrics per row in the corpus
+        col_metrics: metrics per column in the corpus
+    """
     total_tp = 0.0
     total_fn = 0.0
 
@@ -196,7 +180,7 @@ def evaluate_llm(experiment_mode = "dev", model_id = "Llama3_70B"):
         json.dump(row_metrics, open(outfile+"_rows.json", 'w', encoding="utf-8"),  indent=4)
         json.dump(col_metrics, open(outfile+"_cols.json", 'w', encoding="utf-8"),  indent=4)
 
-def validate_samples(eval_samples, model_out, cols):
+def validate_samples(eval_samples, model_out: dict, cols: list):
     """
     This function counts the correctly generated values.
 
@@ -343,10 +327,16 @@ def prep_eval_data(sample):
                     prepped_sample[col] = "true"
                 else:
                     prepped_sample[col] = "false"
-               # sample[col] = bool(val)
     return prepped_sample
 
 def plot_cols(experiment_mode = "test", model_id = "Llama3_8B"):
+    """
+    This function creates a plot for the column metrics.
+
+    @params
+        experiment_mode: evaluate on dev or test split
+        model_id: model to evaluate 
+    """
     path = f"./output/{model_id}/{experiment_mode}"
 
     shot_dirs = [dir for dir in os.listdir(path) if dir.isdigit()]
@@ -371,6 +361,5 @@ if __name__=="__main__":
     experiment_mode = parser.parse_args().experiment_mode
 
     #evaluate_wiki()
-    #evaluate_llm(model_id=model_name, experiment_mode=experiment_mode)
-
+    evaluate_llm(model_id=model_name, experiment_mode=experiment_mode)
     plot_cols(model_id=model_name, experiment_mode=experiment_mode)
